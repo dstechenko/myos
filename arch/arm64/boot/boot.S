@@ -12,11 +12,11 @@
 .org 0x80000
 
 // Registers:
-// x0 -> 32 bit pointer to DTB in memory (primary core only) / 0 (secondary cores)
-// x1 -> 0
-// x2 -> 0
-// x3 -> 0
-// x4 -> 32 bit kernel entry point, _start location
+//   x0 -> 32 bit pointer to DTB in memory (primary core only) / 0 (secondary cores).
+//   x1 -> 0.
+//   x2 -> 0.
+//   x3 -> 0.
+//   x4 -> 32 bit kernel entry point, _start location.
 
 _start:
     // Entry point for the kernel.
