@@ -1,0 +1,7 @@
+# .clang-format
+# Copyright (C) Dmytro Stechenko
+# License: http://www.gnu.org/licenses/gpl.html
+
+BasedOnStyle: GNU
+---
+Language: C
