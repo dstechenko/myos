@@ -5,4 +5,4 @@
 bin/*
 build/*
 gen/*
-tools/cross/*
+tools/cc/*
