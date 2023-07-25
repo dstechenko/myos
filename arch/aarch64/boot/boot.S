@@ -28,18 +28,18 @@ _start:
     ldr     w6, =__bss_size
 
 loop_clear_bss:
-    cbz     w6, jump_kernel_entry
+    cbz     w6, jump_boot_entry
     str     xzr, [x5], #8
     sub     w6, w6, #1
     cbnz    w6, loop_clear_bss
 
-jump_kernel_entry:
+jump_boot_entry:
     // Jump to the kernel entry point.
     // This should not return.
-    bl      kernel_entry
+    bl      boot_entry
 
 halt_forever:
     // For failsafe, halt this core.
     // We should not reach here, but if we do - we cannot recover.
-    wfe
-    b       halt_forever
+    // wfe
+    // b       halt_forever
