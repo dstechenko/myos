@@ -26,7 +26,7 @@ OC  := $(TOOLCHAIN)-objcopy
 VM  := qemu-system-$(TARGET_ARCH)
 
 ASFLAGS  := -g
-CFLAGS   := -g -ffreestanding -Wall -Wextra
+CFLAGS   := -g -ffreestanding -nostdlib -nostartfiles -mgeneral-regs-only -Wall -Wextra -MMD
 LDFLAGS  := -g -ffreestanding -nostdlib
 LDLIBS   := -lgcc
 VMFLAGS  := -M raspi3b -serial stdio -no-reboot
