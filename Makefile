@@ -13,7 +13,7 @@ KERNEL_DIR  := kernel
 TOOLS_DIR   := tools
 
 KERNEL_ELF :=$(BIN_DIR)/kernel.elf
-KERNEL_IMG :=$(BIN_DIR)/kernel.img
+KERNEL_IMG :=$(BIN_DIR)/kernel8.img
 
 TOOLCHAIN := $(TOOLS_DIR)/cc/bin/$(TARGET_ARCH)-elf
 
@@ -29,7 +29,7 @@ ASFLAGS  := -g
 CFLAGS   := -g -ffreestanding -Wall -Wextra
 LDFLAGS  := -g -ffreestanding -nostdlib
 LDLIBS   := -lgcc
-VMFLAGS  := -no-reboot -drive
+VMFLAGS  := -M raspi3b -serial stdio -no-reboot
 ODFLAGS  := -D
 
 INC_FILES := $(shell dir $(INC_DIR))
@@ -42,7 +42,7 @@ KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.S=$(BUILD_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.c=$(BUILD_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:%.c=$(BUILD_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:%.S=$(BUILD_DIR)/%.o)
-KERNEL_OBJS := $(BUILD_DIR)/boot/boot.o $(BUILD_DIR)/kernel/entry.o $(KERNEL_GENS) $(KERNEL_OBJS)
+KERNEL_OBJS := $(BUILD_DIR)/boot/boot.o $(BUILD_DIR)/boot/entry.o $(KERNEL_GENS) $(KERNEL_OBJS)
 
 $(KERNEL_IMG): $(KERNEL_OBJS)
 	mkdir -p $(@D)
@@ -81,3 +81,7 @@ install_deps:
 .PHONY: install_cc
 install_cc:
 	$(TOOLS_DIR)/install_cc.sh
+
+.PHONY: vm_boot
+vm_boot: $(KERNEL_IMG)
+	$(VM) $(VMFLAGS) -kernel bin/kernel8.img &
