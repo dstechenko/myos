@@ -41,5 +41,5 @@ jump_boot_entry:
 halt_forever:
     // For failsafe, halt this core.
     // We should not reach here, but if we do - we cannot recover.
-    // wfe
-    // b       halt_forever
+    wfe
+    b       halt_forever
