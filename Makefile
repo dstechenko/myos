@@ -32,9 +32,6 @@ LDLIBS   := -lgcc
 VMFLAGS  := -M raspi3b -serial stdio -no-reboot
 ODFLAGS  := -D
 
-INC_FILES := $(shell dir $(INC_DIR))
-INC_FILES := $(INCS:%=-I$(INC_DIR)/%)
-
 KERNEL_GENS := $(KERNEL_GENS:$(GEN_DIR)/%.c=$(BUILD_DIR)/%.o)
 KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR)
 KERNEL_OBJS := $(shell find $(KERNEL_DIRS) -type f -name *.c -or -name *.S)
@@ -59,11 +56,11 @@ $(BUILD_DIR)/%.o: %.S
 
 $(BUILD_DIR)/%.o: $(ARCH_DIR)/%.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INC_FILES) -I$(<D) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(<D) -c $< -o $@
 
 $(BUILD_DIR)/%.o: %.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INC_FILES) -I$(<D) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(<D) -c $< -o $@
 
 .PHONY: clean
 clean:

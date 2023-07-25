@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void kernel_entry();
+#include <kernel/entry.h>
 
 void boot_entry(uint64_t x0, uint64_t x1, uint64_t x2, uint64_t x3)
 {
