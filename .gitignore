@@ -1,7 +1,5 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
-bin/*
-build/*
-gen/*
+out/*
 tools/cc/*

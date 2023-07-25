@@ -2,18 +2,17 @@
 # License: http://www.gnu.org/licenses/gpl.html
 
 TARGET_ARCH := aarch64
+TARGET_SOC  := bcm2837
 
 ARCH_DIR    := arch/$(TARGET_ARCH)
-BIN_DIR     := bin
 BOOT_DIR    := $(ARCH_DIR)/boot
-BUILD_DIR   := build
-GEN_DIR     := gen
+OUT_DIR     := out
 INC_DIR     := include
 KERNEL_DIR  := kernel
 TOOLS_DIR   := tools
 
-KERNEL_ELF :=$(BIN_DIR)/kernel.elf
-KERNEL_IMG :=$(BIN_DIR)/kernel8.img
+KERNEL_ELF :=$(OUT_DIR)/kernel.elf
+KERNEL_IMG :=$(OUT_DIR)/kernel8.img
 
 TOOLCHAIN := $(TOOLS_DIR)/cc/bin/$(TARGET_ARCH)-elf
 
@@ -32,39 +31,38 @@ LDLIBS   := -lgcc
 VMFLAGS  := -M raspi3b -serial stdio -no-reboot
 ODFLAGS  := -D
 
-KERNEL_GENS := $(KERNEL_GENS:$(GEN_DIR)/%.c=$(BUILD_DIR)/%.o)
 KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR)
 KERNEL_OBJS := $(shell find $(KERNEL_DIRS) -type f -name *.c -or -name *.S)
-KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.S=$(BUILD_DIR)/%.o)
-KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.c=$(BUILD_DIR)/%.o)
-KERNEL_OBJS := $(KERNEL_OBJS:%.c=$(BUILD_DIR)/%.o)
-KERNEL_OBJS := $(KERNEL_OBJS:%.S=$(BUILD_DIR)/%.o)
-KERNEL_OBJS := $(BUILD_DIR)/boot/boot.o $(BUILD_DIR)/boot/entry.o $(KERNEL_GENS) $(KERNEL_OBJS)
+KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.S=$(OUT_DIR)/%.o)
+KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.c=$(OUT_DIR)/%.o)
+KERNEL_OBJS := $(KERNEL_OBJS:%.c=$(OUT_DIR)/%.o)
+KERNEL_OBJS := $(KERNEL_OBJS:%.S=$(OUT_DIR)/%.o)
+KERNEL_OBJS := $(OUT_DIR)/boot/boot.o $(OUT_DIR)/boot/entry.o $(KERNEL_OBJS)
 
 $(KERNEL_IMG): $(KERNEL_OBJS)
 	mkdir -p $(@D)
 	$(LD) $(LDFLAGS) -T $(BOOT_DIR)/link.ld -o $(KERNEL_ELF) $^ $(LDLIBS)
 	$(OC) $(KERNEL_ELF) -O binary $(KERNEL_IMG)
 
-$(BUILD_DIR)/%.o: $(ARCH_DIR)/%.S
+$(OUT_DIR)/%.o: $(ARCH_DIR)/%.S
 	mkdir -p $(@D)
 	$(AS) $(ASFLAGS) -c -I$(<D) $< -o $@
 
-$(BUILD_DIR)/%.o: %.S
+$(OUT_DIR)/%.o: %.S
 	mkdir -p $(@D)
 	$(AS) $(ASFLAGS) -c -I$(<D) $< -o $@
 
-$(BUILD_DIR)/%.o: $(ARCH_DIR)/%.c
+$(OUT_DIR)/%.o: $(ARCH_DIR)/%.c
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(<D) -c $< -o $@
 
-$(BUILD_DIR)/%.o: %.c
+$(OUT_DIR)/%.o: %.c
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(<D) -c $< -o $@
 
 .PHONY: clean
 clean:
-	rm -rf $(BIN_DIR) $(BUILD_DIR) $(GEN_DIR)
+	rm -rf $(OUT_DIR)
 
 .PHONY: format
 format:
@@ -81,4 +79,4 @@ install_cc:
 
 .PHONY: vm_boot
 vm_boot: $(KERNEL_IMG)
-	$(VM) $(VMFLAGS) -kernel bin/kernel8.img &
+	$(VM) $(VMFLAGS) -kernel $(KERNEL_IMG) &
