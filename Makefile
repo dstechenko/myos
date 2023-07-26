@@ -1,11 +1,12 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
-TARGET_ARCH := aarch64
-TARGET_SOC  := bcm2837
+TARGET_ARCH  := aarch64
+TARGET_BOARD := bcm2837
 
 ARCH_DIR    := arch/$(TARGET_ARCH)
 BOOT_DIR    := $(ARCH_DIR)/boot
+DRIVERS_DIR := drivers
 OUT_DIR     := out
 INC_DIR     := include
 KERNEL_DIR  := kernel
@@ -31,7 +32,7 @@ LDLIBS   := -lgcc
 VMFLAGS  := -M raspi3b -serial stdio -no-reboot
 ODFLAGS  := -D
 
-KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR)
+KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR) $(DRIVERS_DIR)
 KERNEL_OBJS := $(shell find $(KERNEL_DIRS) -type f -name *.c -or -name *.S)
 KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.S=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.c=$(OUT_DIR)/%.o)
