@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include <aux.h>
+#include <gpio.h>
 
 void uart_init(void)
 {
