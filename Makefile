@@ -27,9 +27,9 @@ VM  := qemu-system-$(TARGET_ARCH)
 
 ASFLAGS  := -g
 CFLAGS   := -g -ffreestanding -nostdlib -nostartfiles -mgeneral-regs-only -Wall -Wextra -MMD
-LDFLAGS  := -g -ffreestanding -nostdlib
+LDFLAGS  := -g -ffreestanding -nostdlib -nostartfiles
 LDLIBS   := -lgcc
-VMFLAGS  := -M raspi3b -serial stdio -no-reboot
+VMFLAGS  := -M raspi3b -serial null -serial stdio
 ODFLAGS  := -D
 
 KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR) $(DRIVERS_DIR)
@@ -80,4 +80,4 @@ install_cc:
 
 .PHONY: vm_boot
 vm_boot: $(KERNEL_IMG)
-	$(VM) $(VMFLAGS) -kernel $(KERNEL_IMG) &
+	$(VM) $(VMFLAGS) -kernel $(KERNEL_IMG)
