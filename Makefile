@@ -20,6 +20,7 @@ TOOLCHAIN := $(TOOLS_DIR)/cc/bin/$(TARGET_ARCH)-elf
 AS  := $(TOOLCHAIN)-as
 CPP := $(TOOLCHAIN)-cpp
 CC  := $(TOOLCHAIN)-gcc
+DBG := gdb
 LD  := $(TOOLCHAIN)-gcc
 OD  := $(TOOLCHAIN)-objdump
 OC  := $(TOOLCHAIN)-objcopy
@@ -27,6 +28,7 @@ VM  := qemu-system-$(TARGET_ARCH)
 
 ASFLAGS  := -g
 CFLAGS   := -g -ffreestanding -nostdlib -nostartfiles -mgeneral-regs-only -Wall -Wextra -MMD
+DBGFLAGS := -q -iex "target remote localhost:1234"
 LDFLAGS  := -g -ffreestanding -nostdlib -nostartfiles
 LDLIBS   := -lgcc
 VMFLAGS  := -M raspi3b -serial null -serial stdio
@@ -81,3 +83,8 @@ install_cc:
 .PHONY: vm_boot
 vm_boot: $(KERNEL_IMG)
 	$(VM) $(VMFLAGS) -kernel $(KERNEL_IMG)
+
+.PHONY: vm_debug
+vm_debug: $(KERNEL_IMG)
+	$(VM) $(VMFLAGS) -s -S -kernel $(KERNEL_IMG) &
+	$(DBG) $(DBGFLAGS) -s $(KERNEL_ELF)
