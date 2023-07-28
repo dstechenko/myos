@@ -4,6 +4,8 @@
 #ifndef KERNEL_DELAY_H
 #define KERNEL_DELAY_H
 
-void delay(unsigned long cycles);
+void cdelay(unsigned long cycles);
+void udelay(unsigned long micros);
+void mdelay(unsigned long millis);
 
-#endif // KERNEL_DELAY_H
+#endif // !KERNEL_DELAY_H

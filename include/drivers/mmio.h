@@ -16,4 +16,4 @@ uint16_t mmio_read16(uint32_t reg);
 uint32_t mmio_read32(uint32_t reg);
 uint64_t mmio_read64(uint32_t reg);
 
-#endif // DRIVERS_MMIO_H
+#endif // !DRIVERS_MMIO_H
