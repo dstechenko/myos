@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef DRIVERS_BOARD_BCM2837_AUX
-#define DRIVERS_BOARD_BCM2837_AUX
+#ifndef DRIVERS_BOARD_BCM2837_AUX_H
+#define DRIVERS_BOARD_BCM2837_AUX_H
 
 /**
  * Auxiliary peripherals register map.
@@ -36,4 +36,4 @@
 #define AUX_SPI2_IO_REG    0x002150D0
 #define AUX_SPI2_PEEK_REG  0x002150D4
 
-#endif // !DRIVERS_BOARD_BCM2837_AUX
+#endif // DRIVERS_BOARD_BCM2837_AUX_H

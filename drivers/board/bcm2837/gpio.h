@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef DRIVERS_BOARD_BCM2837_GPIO
-#define DRIVERS_BOARD_BCM2837_GPIO
+#ifndef DRIVERS_BOARD_BCM2837_GPIO_H
+#define DRIVERS_BOARD_BCM2837_GPIO_H
 
 /**
  * There are 54 general-purpose I/O (GPIO) lines split into two banks. All GPIO pins have at
@@ -28,4 +28,4 @@
 #define GPPUD     0x00200094
 #define GPPUDCLK0 0x00200098
 
-#endif // !DRIVERS_BOARD_BCM2837_GPIO
+#endif // DRIVERS_BOARD_BCM2837_GPIO_H

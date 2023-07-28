@@ -6,4 +6,4 @@
 
 void kernel_entry(void);
 
-#endif // !MYOS_KERNEL_ENTRY_H
+#endif // MYOS_KERNEL_ENTRY_H

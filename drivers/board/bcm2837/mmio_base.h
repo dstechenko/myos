@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef DRIVERS_BOARD_BCM2837_MMIO_BASE
-#define DRIVERS_BOARD_BCM2837_MMIO_BASE
+#ifndef DRIVERS_BOARD_BCM2837_MMIO_BASE_H
+#define DRIVERS_BOARD_BCM2837_MMIO_BASE_H
 
 /**
  * ARM physical addresses for peripherals range from 0x3F000000 to 0x3FFFFFFF.
@@ -12,4 +12,4 @@
 
 #define MMIO_BASE 0x3F000000
 
-#endif // !DRIVERS_BOARD_BCM2837_MMIO_BASE
+#endif // DRIVERS_BOARD_BCM2837_MMIO_BASE_H

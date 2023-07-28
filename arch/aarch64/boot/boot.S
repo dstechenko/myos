@@ -8,7 +8,7 @@
 .globl _start
 
 // In 64-bit mode the boot code is loaded at 0x80000 and not 0x8000 like in 32-bit.
-.org 0x80000
+// .org 0x00080000
 
 // Registers:
 //   x0 -> 32 bit pointer to DTB in memory (primary core only) / 0 (secondary cores).
@@ -24,8 +24,7 @@ _start:
     // Check a multiprocessor affinity register to id it (0 is primary core).
     mrs     x5, mpidr_el1
     and     x5, x5, #0xFF
-    cbz     x5, boot_init_kernel
-    b       boot_halt_forever
+    cbnz    x5, boot_halt_forever
 
 boot_init_kernel:
     // Set stack before we jump into kernel.

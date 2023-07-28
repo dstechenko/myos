@@ -24,4 +24,4 @@
 #define LOW_WORD(dw)  ((uint16_t)MASK_LOW_WORD(dw))
 #define HIGH_WORD(dw) ((LOW_WORD(dw >> 16)))
 
-#endif // !MYOS_KERNEL_BITS_H
+#endif // MYOS_KERNEL_BITS_H
