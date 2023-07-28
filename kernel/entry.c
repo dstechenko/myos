@@ -8,5 +8,5 @@
 void kernel_entry(void)
 {
 	uart_init();
-	uart_send_str("MyOS boot complete!\r\n");
+	uart_puts("MyOS boot complete!\r\n");
 }

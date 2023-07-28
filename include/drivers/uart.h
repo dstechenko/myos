@@ -4,9 +4,9 @@
 #ifndef DRIVERS_UART_H
 #define DRIVERS_UART_H
 
-void uart_init(void);
-unsigned char uart_recv(void);
-void uart_send(char c);
-void uart_send_str(const char *s);
+int uart_init(void);
+unsigned char uart_getc(void);
+void uart_putc(char c);
+void uart_puts(const char *s);
 
 #endif // DRIVERS_UART_H
