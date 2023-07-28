@@ -1,0 +1,7 @@
+# Copyright (C) Dmytro Stechenko
+# License: http://www.gnu.org/licenses/gpl.html
+
+UART_ENABLED 1
+UART_MINI_ENABLED 1
+UART_GPIO_TX 14
+UART_GPIO_RX 15
