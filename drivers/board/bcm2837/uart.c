@@ -30,9 +30,9 @@ static int uart_init_dev()
 	mmio_write32(GPFSEL1, selector);
 
 	mmio_write32(GPPUD, 0);
-	delay(150);
+	cdelay(150);
 	mmio_write32(GPPUDCLK0, (1 << 14) | (1 << 15));
-	delay(150);
+	cdelay(150);
 	mmio_write32(GPPUDCLK0, 0);
 
 	// Enable mini uart (this also enables access to its registers)
