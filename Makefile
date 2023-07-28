@@ -3,14 +3,22 @@
 
 TARGET_ARCH  := aarch64
 TARGET_BOARD := bcm2837
+TARGET_MODE  := debug
 
-ARCH_DIR    := arch/$(TARGET_ARCH)
-BOOT_DIR    := $(ARCH_DIR)/boot
+ARCH_DIR    := arch
+CONFIGS_DIR := configs
 DRIVERS_DIR := drivers
 OUT_DIR     := out
 INC_DIR     := include
 KERNEL_DIR  := kernel
 TOOLS_DIR   := tools
+
+ARCH_DIR := $(ARCH_DIR)/$(TARGET_ARCH)
+BOOT_DIR := $(ARCH_DIR)/boot
+GEN_DIR  := $(OUT_DIR)/gen
+
+CONFIGS_ARCH_DIR  := $(ARCH_DIR)/configs
+CONFIGS_BOARD_DIR := $(CONFIGS_DIR)/board/$(TARGET_BOARD)
 
 KERNEL_ELF :=$(OUT_DIR)/kernel.elf
 KERNEL_IMG :=$(OUT_DIR)/kernel8.img
@@ -42,10 +50,24 @@ KERNEL_OBJS := $(KERNEL_OBJS:%.c=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:%.S=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(OUT_DIR)/boot/boot.o $(OUT_DIR)/boot/entry.o $(KERNEL_OBJS)
 
-$(KERNEL_IMG): $(KERNEL_OBJS)
+KERNEL_CONF       := $(GEN_DIR)/include/kconfig.h
+KERNEL_CONF_DIRS  := $(CONFIGS_DIR) $(CONFIGS_ARCH_DIR) $(CONFIGS_BOARD_DIR)
+KERNEL_CONF_FILES := $(KERNEL_CONF_DIRS:%=%/kconfig)
+
+ifeq ($(TARGET_MODE),)
+KERNEL_CONF_MODE_FILES :=
+else
+KERNEL_CONF_MODE_FILES := $(KERNEL_CONF_DIRS:%=%/kconfig_$(TARGET_MODE))
+endif
+
+KERNEL_CONF_FILES := $(KERNEL_CONF_FILES) $(KERNEL_CONF_MODE_FILES)
+
+.PHONY: clean build-gen build-all build-pre build-post build-main
+.PHONY: format install_deps install_cc vm_boot vm_debug
+
+$(KERNEL_CONF):
 	mkdir -p $(@D)
-	$(LD) $(LDFLAGS) -T $(BOOT_DIR)/link.ld -o $(KERNEL_ELF) $^ $(LDLIBS)
-	$(OC) $(KERNEL_ELF) -O binary $(KERNEL_IMG)
+	$(TOOLS_DIR)/gen_kconfig.sh $@ $(KERNEL_CONF_FILES)
 
 $(OUT_DIR)/%.o: $(ARCH_DIR)/%.S
 	mkdir -p $(@D)
@@ -57,34 +79,43 @@ $(OUT_DIR)/%.o: %.S
 
 $(OUT_DIR)/%.o: $(ARCH_DIR)/%.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(<D) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(GEN_DIR)/include -I$(<D) -c $< -o $@
 
 $(OUT_DIR)/%.o: %.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(<D) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(GEN_DIR)/include -I$(<D) -c $< -o $@
 
-.PHONY: clean
+build-target: $(KERNEL_OBJS)
+	mkdir -p $(@D)
+	$(LD) $(LDFLAGS) -T $(BOOT_DIR)/link.ld -o $(KERNEL_ELF) $^ $(LDLIBS)
+	$(OC) $(KERNEL_ELF) -O binary $(KERNEL_IMG)
+
+build-gen:	$(KERNEL_CONF)
+
+build-pre: build-gen
+
+build-main: build-pre build-target
+
+build-post: build-main
+
+build-all: build-post
+
 clean:
 	rm -rf $(OUT_DIR)
 
-.PHONY: format
 format:
 	find $(SRC_DIR) -name *.c -or -name *.h | xargs clang-format -i --style=file
 	find $(INC_DIR)               -name *.h | xargs clang-format -i --style=file
 
-.PHONY: install_deps
-install_deps:
+install-deps:
 	$(TOOLS_DIR)/install_deps.sh
 
-.PHONY: install_cc
-install_cc:
+install-cc:
 	$(TOOLS_DIR)/install_cc.sh
 
-.PHONY: vm_boot
-vm_boot: $(KERNEL_IMG)
+boot-vm: build-all
 	$(VM) $(VMFLAGS) -kernel $(KERNEL_IMG)
 
-.PHONY: vm_debug
-vm_debug: $(KERNEL_IMG)
+debug-vm: build-all
 	$(VM) $(VMFLAGS) -s -S -kernel $(KERNEL_IMG) &
 	$(DBG) $(DBGFLAGS) -s $(KERNEL_ELF)
