@@ -17,9 +17,9 @@ for CONFIG_FILE in $CONFIG_IN
 do
     cat "$CONFIG_FILE" | while read CONFIG_LINE
     do
-        if [[ "${CONFIG_LINE}" != \#* ]]; then
-            echo "#define CONFIG_${CONFIG_LINE}"       >> $CONFIG_OUT
-        fi
+        [[ "${CONFIG_LINE}" = \#* ]] && continue
+        [[ "${CONFIG_LINE}" = ""  ]] && continue
+        echo "#define CONFIG_${CONFIG_LINE}"           >> $CONFIG_OUT
     done
 done
 echo ""                                                >> $CONFIG_OUT
