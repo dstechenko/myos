@@ -50,7 +50,7 @@ KERNEL_OBJS := $(KERNEL_OBJS:%.c=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:%.S=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(OUT_DIR)/boot/boot.o $(OUT_DIR)/boot/entry.o $(KERNEL_OBJS)
 
-KERNEL_CONF       := $(GEN_DIR)/include/kconfig.h
+KERNEL_CONF       := $(GEN_DIR)/include/kernel/kconfig.h
 KERNEL_CONF_DIRS  := $(CONFIGS_DIR) $(CONFIGS_ARCH_DIR) $(CONFIGS_BOARD_DIR)
 KERNEL_CONF_FILES := $(KERNEL_CONF_DIRS:%=%/kconfig)
 
