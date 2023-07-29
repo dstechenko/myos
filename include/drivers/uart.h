@@ -4,7 +4,7 @@
 #ifndef DRIVERS_UART_H
 #define DRIVERS_UART_H
 
-int uart_init(void);
+void uart_init(void);
 unsigned char uart_getc(void);
 void uart_putc(char c);
 void uart_puts(const char *s);
