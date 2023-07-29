@@ -30,20 +30,19 @@ void uart_mini_init(void)
 	cdelay(150);
 	mmio_write32(GPPUDCLK0, 0);
 
-	// Enable mini uart (this also enables access to its registers)
+	// Enable Mini UART (this also enables access to its registers).
 	mmio_write32(AUX_ENABLES, 1);
-	// Disable auto flow control and disable receiver and transmitter (for
-	// now)
+	// Disable auto flow control and disable receiver/transmitter (for now).
 	mmio_write32(AUX_MU_CNTL_REG, 0);
-	// Disable receive and transmit interrupts
+	// Disable receive/transmit interrupts.
 	mmio_write32(AUX_MU_IER_REG, 0);
-	// Enable 8 bit mode
+	// Enable 8 bit mode.
 	mmio_write32(AUX_MU_LCR_REG, 3);
-	// Set RTS line to be always high
+	// Set RTS line to be always high.
 	mmio_write32(AUX_MU_MCR_REG, 0);
-	// Set baud rate to 115200
+	// Set baud rate to 115200.
 	mmio_write32(AUX_MU_BAUD_REG, 270);
-	// Finally, enable transmitter and receiver
+	// Finally, enable receiver/transmitter.
 	mmio_write32(AUX_MU_CNTL_REG, 3);
 }
 
