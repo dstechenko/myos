@@ -42,59 +42,62 @@
  * 6. Write to GPPUDCLK0/1 to remove the clock.
  */
 
+#define UART_MINI_BAUDRATE                                                     \
+	((CONFIG_SYSTEM_CLOCK_FREQ / (8 * CONFIG_UART_BAUDRATE)) - 1)
+
 void uart_mini_init(void)
 {
-  unsigned int selector;
+	unsigned int gpio_reg;
 
-  // GPIO pins should be set up first the before enabling the UART.
-  selector = mmio_read32(GPFSEL1);
-  // Clean and set alt5 for pin 14.
-  selector &= ~(7 << 12);
-  selector |= 2 << 12;
-  // Clean and set alt5 for pin 15.
-  selector &= ~(7 << 15);
-  selector |= 2 << 15;
-  mmio_write32(GPFSEL1, selector);
+	// GPIO pins should be set up first the before enabling the UART.
+	gpio_reg = mmio_read32(GPFSEL1);
+	// Clean and set alt5 for pin 14.
+	gpio_reg &= ~(7 << 12);
+	gpio_reg |= 2 << 12;
+	// Clean and set alt5 for pin 15.
+	gpio_reg &= ~(7 << 15);
+	gpio_reg |= 2 << 15;
+	mmio_write32(GPFSEL1, gpio_reg);
+	// Remove pull-up/down state from pins 14,15 and flush it.
+	mmio_write32(GPPUD, 0);
+	cdelay(150);
+	mmio_write32(GPPUDCLK0, (1 << 14) | (1 << 15));
+	cdelay(150);
+	mmio_write32(GPPUDCLK0, 0);
 
-  // Remove pull-up/down state from pins 14,15 and flush it.
-  mmio_write32(GPPUD, 0);
-  cdelay(150);
-  mmio_write32(GPPUDCLK0, (1 << 14) | (1 << 15));
-  cdelay(150);
-  mmio_write32(GPPUDCLK0, 0);
-
-  // Enable Mini UART (this also enables access to its registers).
-  mmio_write32(AUX_ENABLES, 1);
-  // Disable auto flow control and disable receiver/transmitter (for now).
-  mmio_write32(AUX_MU_CNTL_REG, 0);
-  // Disable receive/transmit interrupts.
-  mmio_write32(AUX_MU_IER_REG, 0);
-  // Enable 8 bit mode.
-  mmio_write32(AUX_MU_LCR_REG, 3);
-  // Set RTS line to be always high.
-  mmio_write32(AUX_MU_MCR_REG, 0);
-  // Set baud rate to 115200.
-  // Calculated: baudrate = system_clock_freq / (8 * (baudrate_reg + 1)).
-  // The system_clock_freq is 250 MHz, so the value of baudrate_reg should be 270.
-  mmio_write32(AUX_MU_BAUD_REG, (CONFIG_SYSTEM_CLOCK_FREQ / (8 * CONFIG_UART_BAUDRATE)) - 1);
-  // Finally, enable receiver/transmitter.
-  mmio_write32(AUX_MU_CNTL_REG, 3);
+	// Enable Mini UART (this also enables access to its registers).
+	mmio_write32(AUX_ENABLES, 1);
+	// Disable auto flow control and disable receiver/transmitter (for now).
+	mmio_write32(AUX_MU_CNTL_REG, 0);
+	// Disable receive/transmit interrupts.
+	mmio_write32(AUX_MU_IER_REG, 0);
+	// Enable 8 bit mode.
+	mmio_write32(AUX_MU_LCR_REG, 3);
+	// Set RTS line to be always high.
+	mmio_write32(AUX_MU_MCR_REG, 0);
+	// Set baud rate to 115200.
+	// Calculated: baudrate = system_clock_freq / (8 * (baudrate_reg + 1)).
+	// The system_clock_freq is 250 MHz, so the value of baudrate_reg should
+	// be 270.
+	mmio_write32(AUX_MU_BAUD_REG, UART_MINI_BAUDRATE);
+	// Finally, enable receiver/transmitter.
+	mmio_write32(AUX_MU_CNTL_REG, 3);
 }
 
 unsigned char uart_mini_getc(void)
 {
-  _Bool b = 1;
-  while (b)
-    if (mmio_read32(AUX_MU_LSR_REG) & BIT(0))
-      break;
-  return (MASK_LOW_BYTE(mmio_read32(AUX_MU_IO_REG)));
+	_Bool b = 1;
+	while (b)
+		if (mmio_read32(AUX_MU_LSR_REG) & BIT(0))
+			break;
+	return (MASK_LOW_BYTE(mmio_read32(AUX_MU_IO_REG)));
 }
 
 void uart_mini_putc(const char c)
 {
-  _Bool b = 1;
-  while (b)
-    if (mmio_read32(AUX_MU_LSR_REG) & BIT(5))
-      break;
-  mmio_write32(AUX_MU_IO_REG, c);
+	_Bool b = 1;
+	while (b)
+		if (mmio_read32(AUX_MU_LSR_REG) & BIT(5))
+			break;
+	mmio_write32(AUX_MU_IO_REG, c);
 }
