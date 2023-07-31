@@ -7,3 +7,4 @@ todos:
 - add kernel logging
 - add build info dump
 - add libc primitives
+- extract asm code into arch and add primitives
