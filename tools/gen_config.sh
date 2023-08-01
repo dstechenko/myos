@@ -13,6 +13,8 @@ echo ""                                                 >> $CONFIG_OUT
 echo "#ifndef KERNEL_CONFIG_H"                          >> $CONFIG_OUT
 echo "#define KERNEL_CONFIG_H"                          >> $CONFIG_OUT
 echo ""                                                 >> $CONFIG_OUT
+echo "#include <kernel/config_util.h>"                  >> $CONFIG_OUT
+echo ""                                                 >> $CONFIG_OUT
 for CONFIG_FILE in $CONFIG_IN
 do
     cat "$CONFIG_FILE" | while read CONFIG_LINE

@@ -7,39 +7,39 @@
 
 #include <kernel/config.h>
 
-#ifdef CONFIG_UART_USE_MINI
+#if CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 #include "uart_mini.h"
-#else // !CONFIG_UART_USE_MINI
+#else // !CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 #include "uart_pl001.h"
-#endif // CONFIG_UART_USE_MINI
+#endif // CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 
 void uart_init(void)
 {
-#ifdef CONFIG_UART_USE_MINI
+#if CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 	uart_mini_init();
-#else  // !CONFIG_UART_USE_MINI
+#else  // !CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 	uart_pl001_init();
-#endif // CONFIG_UART_USE_MINI
+#endif // CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 }
 
 char uart_getc(void)
 {
 	// TODO: convert \r -> \n?
-#ifdef CONFIG_UART_USE_MINI
+#if CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 	return uart_mini_getc();
-#else  // !CONFIG_UART_USE_MINI
+#else  // !CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 	return uart_pl001_getc();
-#endif // CONFIG_UART_USE_MINI
+#endif // CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 }
 
 void uart_putc(const char c)
 {
 // TODO: convert \n -> \r\n?
-#ifdef CONFIG_UART_USE_MINI
+#if CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 	uart_mini_putc(c);
-#else  // !CONFIG_UART_USE_MINI
+#else  // !CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 	uart_pl001_putc(c);
-#endif // CONFIG_UART_USE_MINI
+#endif // CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 }
 
 void uart_puts(const char *s)
