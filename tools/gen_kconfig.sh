@@ -23,4 +23,4 @@ do
     done
 done
 echo ""                                                >> $CONFIG_OUT
-echo "#endif // KERNEL_KCONFIG_H"                      >> $CONFIG_OUT
+echo "#endif // !KERNEL_KCONFIG_H"                     >> $CONFIG_OUT
