@@ -1,2 +1,5 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
+
+UART_ON   false
+LOG_LEVEL 1

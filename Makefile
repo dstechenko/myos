@@ -100,7 +100,7 @@ build-target: $(KERNEL_OBJS)
 	$(LD) $(LDFLAGS) -T $(BOOT_DIR)/link.ld -o $(KERNEL_ELF) $^ $(LDLIBS)
 	$(OC) $(KERNEL_ELF) -O binary $(KERNEL_IMG)
 
-build-gen:	$(KERNEL_CONF) $(KERNEL_BUILD_INFO)
+build-gen: $(KERNEL_CONF) $(KERNEL_BUILD_INFO)
 
 build-pre: build-gen
 
