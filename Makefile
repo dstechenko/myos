@@ -56,14 +56,14 @@ KERNEL_OBJS := $(KERNEL_OBJS:%.S=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(OUT_DIR)/boot/boot.o $(OUT_DIR)/boot/entry.o $(KERNEL_OBJS)
 
 KERNEL_BUILD_INFO := $(GEN_DIR)/include/kernel/build_info.h
-KERNEL_CONF       := $(GEN_DIR)/include/kernel/kconfig.h
+KERNEL_CONF       := $(GEN_DIR)/include/kernel/config.h
 KERNEL_CONF_DIRS  := $(CONFIGS_DIR) $(CONFIGS_ARCH_DIR) $(CONFIGS_BOARD_DIR)
-KERNEL_CONF_FILES := $(KERNEL_CONF_DIRS:%=%/kconfig)
+KERNEL_CONF_FILES := $(KERNEL_CONF_DIRS:%=%/config)
 
 ifeq ($(TARGET_MODE),)
 KERNEL_CONF_MODE_FILES :=
 else
-KERNEL_CONF_MODE_FILES := $(KERNEL_CONF_DIRS:%=%/kconfig_$(TARGET_MODE))
+KERNEL_CONF_MODE_FILES := $(KERNEL_CONF_DIRS:%=%/config_$(TARGET_MODE))
 endif
 
 KERNEL_CONF_FILES := $(KERNEL_CONF_FILES) $(KERNEL_CONF_MODE_FILES)
@@ -73,7 +73,7 @@ KERNEL_CONF_FILES := $(KERNEL_CONF_FILES) $(KERNEL_CONF_MODE_FILES)
 
 $(KERNEL_CONF):
 	mkdir -p $(@D)
-	$(TOOLS_DIR)/gen_kconfig.sh $@ $(KERNEL_CONF_FILES)
+	$(TOOLS_DIR)/gen_config.sh $@ $(KERNEL_CONF_FILES)
 
 $(KERNEL_BUILD_INFO):
 	mkdir -p $(@D)

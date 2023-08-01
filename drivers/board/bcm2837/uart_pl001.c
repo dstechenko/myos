@@ -8,7 +8,7 @@
 #include <drivers/mmio.h>
 #include <kernel/bits.h>
 #include <kernel/delay.h>
-#include <kernel/kconfig.h>
+#include <kernel/config.h>
 #include <kernel/math.h>
 
 #include "aux.h"

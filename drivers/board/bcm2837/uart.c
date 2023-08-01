@@ -5,7 +5,7 @@
 
 #include <stddef.h>
 
-#include <kernel/kconfig.h>
+#include <kernel/config.h>
 
 #ifdef CONFIG_UART_USE_MINI
 #include "uart_mini.h"

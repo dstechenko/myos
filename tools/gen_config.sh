@@ -10,8 +10,8 @@ CONFIG_OUT="${1}"
 echo "// Copyright (C) Dmytro Stechenko"                >> $CONFIG_OUT
 echo "// License: http://www.gnu.org/licenses/gpl.html" >> $CONFIG_OUT
 echo ""                                                 >> $CONFIG_OUT
-echo "#ifndef KERNEL_KCONFIG_H"                         >> $CONFIG_OUT
-echo "#define KERNEL_KCONFIG_H"                         >> $CONFIG_OUT
+echo "#ifndef KERNEL_CONFIG_H"                          >> $CONFIG_OUT
+echo "#define KERNEL_CONFIG_H"                          >> $CONFIG_OUT
 echo ""                                                 >> $CONFIG_OUT
 for CONFIG_FILE in $CONFIG_IN
 do
@@ -23,4 +23,4 @@ do
     done
 done
 echo ""                                                >> $CONFIG_OUT
-echo "#endif // !KERNEL_KCONFIG_H"                     >> $CONFIG_OUT
+echo "#endif // !KERNEL_CONFIG_H"                      >> $CONFIG_OUT

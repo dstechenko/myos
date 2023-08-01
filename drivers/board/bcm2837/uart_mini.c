@@ -9,7 +9,7 @@
 #include <kernel/bits.h>
 #include <kernel/bool.h>
 #include <kernel/delay.h>
-#include <kernel/kconfig.h>
+#include <kernel/config.h>
 
 #include "aux.h"
 #include "gpio.h"
