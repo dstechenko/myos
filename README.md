@@ -1,10 +1,9 @@
 # myos
 
 todos:
-- add uart0/uart1 switch and test it
-- test on bcm board
-- add kernel error codes
+- test run on bcm board
 - add kernel logging
 - add build info dump
-- add libc primitives
+- add libc primitives?
 - extract asm code into arch and add primitives
+- implement assert/bug_on/bug functionality

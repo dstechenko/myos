@@ -3,8 +3,11 @@
 
 #include "uart_mini.h"
 
+#include <stdint.h>
+
 #include <drivers/mmio.h>
 #include <kernel/bits.h>
+#include <kernel/bool.h>
 #include <kernel/delay.h>
 #include <kernel/kconfig.h>
 
@@ -42,26 +45,23 @@
  * 6. Write to GPPUDCLK0/1 to remove the clock.
  */
 
-#define UART_MINI_BAUDRATE                                                     \
-	((CONFIG_SYSTEM_CLOCK_FREQ / (8 * CONFIG_UART_BAUDRATE)) - 1)
-
 void uart_mini_init(void)
 {
-	unsigned int gpio_reg;
+	uint32_t reg;
 
 	// GPIO pins should be set up first the before enabling the UART.
-	gpio_reg = mmio_read32(GPFSEL1);
+	reg = mmio_read32(GPFSEL1);
 	// Clean and set alt5 for pin 14.
-	gpio_reg &= ~(7 << 12);
-	gpio_reg |= 2 << 12;
+	reg &= ~(7 << 12);
+	reg |= 2 << 12;
 	// Clean and set alt5 for pin 15.
-	gpio_reg &= ~(7 << 15);
-	gpio_reg |= 2 << 15;
-	mmio_write32(GPFSEL1, gpio_reg);
+	reg &= ~(7 << 15);
+	reg |= 2 << 15;
+	mmio_write32(GPFSEL1, reg);
 	// Remove pull-up/down state from pins 14,15 and flush it.
 	mmio_write32(GPPUD, 0);
 	cdelay(150);
-	mmio_write32(GPPUDCLK0, (1 << 14) | (1 << 15));
+	mmio_write32(GPPUDCLK0, BIT(14) | BIT(15));
 	cdelay(150);
 	mmio_write32(GPPUDCLK0, 0);
 
@@ -75,19 +75,16 @@ void uart_mini_init(void)
 	mmio_write32(AUX_MU_LCR_REG, 3);
 	// Set RTS line to be always high.
 	mmio_write32(AUX_MU_MCR_REG, 0);
-	// Set baud rate to 115200.
 	// Calculated: baudrate = system_clock_freq / (8 * (baudrate_reg + 1)).
-	// The system_clock_freq is 250 MHz, so the value of baudrate_reg should
-	// be 270.
-	mmio_write32(AUX_MU_BAUD_REG, UART_MINI_BAUDRATE);
+	reg = (CONFIG_SYSTEM_CLOCK_FREQ / (8 * CONFIG_UART_BAUDRATE)) - 1;
+	mmio_write32(AUX_MU_BAUD_REG, reg);
 	// Finally, enable receiver/transmitter.
 	mmio_write32(AUX_MU_CNTL_REG, 3);
 }
 
-unsigned char uart_mini_getc(void)
+char uart_mini_getc(void)
 {
-	_Bool b = 1;
-	while (b)
+	while (true)
 		if (mmio_read32(AUX_MU_LSR_REG) & BIT(0))
 			break;
 	return (MASK_LOW_BYTE(mmio_read32(AUX_MU_IO_REG)));
@@ -95,8 +92,7 @@ unsigned char uart_mini_getc(void)
 
 void uart_mini_putc(const char c)
 {
-	_Bool b = 1;
-	while (b)
+	while (true)
 		if (mmio_read32(AUX_MU_LSR_REG) & BIT(5))
 			break;
 	mmio_write32(AUX_MU_IO_REG, c);

@@ -4,7 +4,7 @@
 #ifndef KERNEL_BOOL_H
 #define KERNEL_BOOL_H
 
-typedef bool _Bool;
+typedef _Bool bool;
 
 #define true 1
 #define false 0

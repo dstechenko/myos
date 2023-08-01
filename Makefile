@@ -35,7 +35,7 @@ OC  := $(TOOLCHAIN)-objcopy
 VM  := qemu-system-$(TARGET_ARCH)
 
 ASFLAGS  := -g
-CFLAGS   := -g -ffreestanding -nostdlib -nostartfiles -mgeneral-regs-only -Wall -Wextra -MMD
+CFLAGS   := -g -ffreestanding -nostdlib -nostartfiles -Wall -Wextra -MMD
 DBGFLAGS := -q -iex "target remote localhost:1234"
 LDFLAGS  := -g -ffreestanding -nostdlib -nostartfiles
 LDLIBS   := -lgcc

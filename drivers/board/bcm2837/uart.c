@@ -22,8 +22,9 @@ void uart_init(void)
 #endif // CONFIG_UART_USE_MINI
 }
 
-unsigned char uart_getc(void)
+char uart_getc(void)
 {
+	// TODO: convert \r -> \n?
 #ifdef CONFIG_UART_USE_MINI
 	return uart_mini_getc();
 #else  // !CONFIG_UART_USE_MINI
@@ -33,6 +34,7 @@ unsigned char uart_getc(void)
 
 void uart_putc(const char c)
 {
+// TODO: convert \n -> \r\n?
 #ifdef CONFIG_UART_USE_MINI
 	uart_mini_putc(c);
 #else  // !CONFIG_UART_USE_MINI
