@@ -19,26 +19,25 @@
 #define MBOX_CONFIG (MBOX_BASE + 0x1C)
 #define MBOX_WRITE (MBOX_BASE + 0x20)
 
-int mbox_send(unsigned char channel, const mbox_data_t *data)
-{
-	unsigned int msg;
+int mbox_send(unsigned char channel, const mbox_data_t *data) {
+  unsigned int msg;
 
-	// TODO: add asserts...
+  // TODO: add asserts...
 
-	// Wait until we can write to the mailbox.
-	while (mmio_read32(MBOX_STATUS) & MBOX_FULL)
-		// TODO: replace with NOPs?
-		cdelay(1);
+  // Wait until we can write to the mailbox.
+  while (mmio_read32(MBOX_STATUS) & MBOX_FULL)
+    // TODO: replace with NOPs?
+    cdelay(1);
 
-	// Write the address of the message and channel identifier.
-	msg = ((uintptr_t)data & ~0xF) | MASK_LOW_HALF_BYTE(channel);
-	mmio_write32(MBOX_WRITE, msg);
+  // Write the address of the message and channel identifier.
+  msg = ((uintptr_t)data & ~0xF) | MASK_LOW_HALF_BYTE(channel);
+  mmio_write32(MBOX_WRITE, msg);
 
-	// Send the message and wait for the response, check if ours/valid.
-	while ((mmio_read32(MBOX_STATUS) & MBOX_EMPTY) ||
-	       (mmio_read32(MBOX_READ) != msg))
-		// TODO: replace with NOPs?
-		cdelay(1);
+  // Send the message and wait for the response, check if ours/valid.
+  while ((mmio_read32(MBOX_STATUS) & MBOX_EMPTY) ||
+         (mmio_read32(MBOX_READ) != msg))
+    // TODO: replace with NOPs?
+    cdelay(1);
 
-	return data[1] == MBOX_RESPONSE;
+  return data[1] == MBOX_RESPONSE;
 }

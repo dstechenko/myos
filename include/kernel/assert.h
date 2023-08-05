@@ -11,14 +11,14 @@
 #define ASSERT(cond) assert(cond, #cond)
 #else // !CONFIG_ENABLED(CONFIG_DEBUG)
 #define ABORT()                                                                \
-	do {                                                                   \
-	} while (false)
+  do {                                                                         \
+  } while (false)
 #define ASSERT(cond)                                                           \
-	do {                                                                   \
-	} while (false)
+  do {                                                                         \
+  } while (false)
 #endif // CONFIG_ENABLED(CONFIG_DEBUG)
 
-void abort();
+void abort(void);
 void assert(bool cond, const char *ctx);
 
 #endif // !KERNEL_ASSERT_H

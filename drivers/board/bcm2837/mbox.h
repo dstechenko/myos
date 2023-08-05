@@ -11,8 +11,9 @@
  * This file lists the available mailboxes/channels.
  * Each mailbox is an 8-deep FIFO of 32-bit words, which can be
  * read(popped)/written(pushed) by the ARM and VC. Only mailbox 0's status can
- * trigger interrupts on the ARM, so MB 0 is always for communication from VC to
- * ARM and MB 1 is for ARM to VC. The ARM should never write MB 0 or read MB 1.
+ * trigger interrupts on the ARM, so MB 0 is always for communication from VC
+ * to ARM and MB 1 is for ARM to VC. The ARM should never write MB 0 or read
+ * MB 1.
  */
 
 #define MBOX_REQUEST 0
@@ -33,7 +34,7 @@
 
 typedef volatile unsigned int mbox_data_t;
 
-#define DEFINE_MBOX(name) mbox_data_t ALIGNED(16) name[36];
+#define DEFINE_MBOX(name) mbox_data_t ALIGNED(16) name[36]
 
 int mbox_send(unsigned char channel, const mbox_data_t *data);
 

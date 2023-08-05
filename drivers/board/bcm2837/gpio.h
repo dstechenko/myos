@@ -11,9 +11,9 @@
  * each bank to allow flexibility on the choice of IO voltage. The GPIO
  * peripheral has three dedicated interrupt lines. These lines are triggered by
  * the setting of bits in the event detect status register. Each bank has its’
- * own interrupt line with the third line shared between all bits. The Alternate
- * function table also has the pull state (pull-up/pull-down) which is applied
- * after a power down.
+ * own interrupt line with the third line shared between all bits. The
+ * Alternate function table also has the pull state (pull-up/pull-down) which
+ * is applied after a power down.
  */
 
 #define GPIO_BASE 0x00200000

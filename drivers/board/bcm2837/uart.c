@@ -13,38 +13,34 @@
 #include "uart_pl001.h"
 #endif // CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 
-void uart_init(void)
-{
+void uart_init(void) {
 #if CONFIG_ENABLED(CONFIG_UART_USE_MINI)
-	uart_mini_init();
+  uart_mini_init();
 #else  // !CONFIG_ENABLED(CONFIG_UART_USE_MINI)
-	uart_pl001_init();
+  uart_pl001_init();
 #endif // CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 }
 
-char uart_getc(void)
-{
-	// TODO: convert \r -> \n?
+char uart_getc(void) {
+  // TODO: convert \r -> \n?
 #if CONFIG_ENABLED(CONFIG_UART_USE_MINI)
-	return uart_mini_getc();
+  return uart_mini_getc();
 #else  // !CONFIG_ENABLED(CONFIG_UART_USE_MINI)
-	return uart_pl001_getc();
+  return uart_pl001_getc();
 #endif // CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 }
 
-void uart_putc(const char c)
-{
+void uart_putc(const char c) {
 // TODO: convert \n -> \r\n?
 #if CONFIG_ENABLED(CONFIG_UART_USE_MINI)
-	uart_mini_putc(c);
+  uart_mini_putc(c);
 #else  // !CONFIG_ENABLED(CONFIG_UART_USE_MINI)
-	uart_pl001_putc(c);
+  uart_pl001_putc(c);
 #endif // CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 }
 
-void uart_puts(const char *s)
-{
-	for (size_t i = 0; s[i] != '\0'; i++) {
-		uart_putc(s[i]);
-	}
+void uart_puts(const char *s) {
+  for (size_t i = 0; s[i] != '\0'; i++) {
+    uart_putc(s[i]);
+  }
 }
