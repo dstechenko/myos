@@ -3,6 +3,7 @@
 
 #include <kernel/entry.h>
 
+#include <kernel/assert.h>
 #include <kernel/build_info.h>
 #include <kernel/config.h>
 #include <kernel/log.h>
@@ -25,4 +26,6 @@ void kernel_entry(void)
 	log_debug("%o", 123);
 	log_debug("%x", 123);
 	log_info("Spinning now...");
+	ASSERT(1 > 2);
+	log_error("Should be unreachable");
 }
