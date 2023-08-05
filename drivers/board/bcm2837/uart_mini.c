@@ -5,11 +5,11 @@
 
 #include <stdint.h>
 
+#include <asm/delay.h>
 #include <drivers/mmio.h>
 #include <kernel/bits.h>
 #include <kernel/bool.h>
 #include <kernel/config.h>
-#include <kernel/delay.h>
 
 #include "aux.h"
 #include "gpio.h"
