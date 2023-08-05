@@ -12,12 +12,31 @@
 #define LOG_INFO 1
 #define LOG_DEBUG 2
 
-#define log_error(line) log(LOG_ERROR, line)
-#define log_info(line) log(LOG_INFO, line)
-#define log_debug(line) log(LOG_DEBUG, line)
-#define log(level, line) log_impl(level, line)
+#if (CONFIG_LOG_LEVEL >= LOG_ERROR)
+#define log_error(format, ...) log(LOG_ERROR, format, ##__VA_ARGS__)
+#else // (CONFIG_LOG_LEVEL >= LOG_ERROR)
+#define log_error(format, ...)                                                 \
+	do {                                                                   \
+	} while (false)
+#endif // !(CONFIG_LOG_LEVEL >= LOG_ERROR)
+
+#if (CONFIG_LOG_LEVEL >= LOG_INFO)
+#define log_info(format, ...) log(LOG_INFO, format, ##__VA_ARGS__)
+#else // (CONFIG_LOG_LEVEL >= LOG_INFO)
+#define log_info(format, ...)                                                  \
+	do {                                                                   \
+	} while (false)
+#endif // !(CONFIG_LOG_LEVEL >= LOG_INFO)
+
+#if (CONFIG_LOG_LEVEL >= LOG_DEBUG)
+#define log_debug(format, ...) log(LOG_DEBUG, format, ##__VA_ARGS__)
+#else // (CONFIG_LOG_LEVEL >= LOG_DEBUG)
+#define log_debug(format, ...)                                                 \
+	do {                                                                   \
+	} while (false)
+#endif // !(CONFIG_LOG_LEVEL >= LOG_DEBUG)
 
 int log_init();
-void log_impl(uint8_t, const char *line);
+void log(uint8_t level, const char *format, ...);
 
 #endif // !KERNEL_LOG_H
