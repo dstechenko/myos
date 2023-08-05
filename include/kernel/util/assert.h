@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef KERNEL_ASSERT_H
-#define KERNEL_ASSERT_H
+#ifndef KERNEL_UTIL_ASSERT_H
+#define KERNEL_UTIL_ASSERT_H
 
 #include <kernel/config.h>
 
@@ -21,4 +21,4 @@
 void abort(void);
 void assert(bool cond, const char *ctx);
 
-#endif // !KERNEL_ASSERT_H
+#endif // !KERNEL_UTIL_ASSERT_H

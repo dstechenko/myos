@@ -1,12 +1,12 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/entry.h>
+#include <kernel/init/entry.h>
 
-#include <kernel/assert.h>
 #include <kernel/build_info.h>
 #include <kernel/config.h>
 #include <kernel/log.h>
+#include <kernel/util/assert.h>
 
 void kernel_entry(void) {
   log_init();

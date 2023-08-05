@@ -3,12 +3,13 @@
 
 #include "uart_mini.h"
 
+#include <stdint.h>
+
 #include <asm/delay.h>
 #include <drivers/mmio.h>
-#include <kernel/bits.h>
-#include <kernel/bool.h>
 #include <kernel/config.h>
-#include <stdint.h>
+#include <kernel/util/bits.h>
+#include <kernel/util/bool.h>
 
 #include "aux.h"
 #include "gpio.h"

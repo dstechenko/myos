@@ -5,7 +5,7 @@
 
 #include <asm/delay.h>
 #include <drivers/mmio.h>
-#include <kernel/bits.h>
+#include <kernel/util/bits.h>
 
 #define MBOX_BASE 0x0000B880
 #define MBOX_RESPONSE 0x80000000
@@ -19,7 +19,7 @@
 #define MBOX_CONFIG (MBOX_BASE + 0x1C)
 #define MBOX_WRITE (MBOX_BASE + 0x20)
 
-int mbox_send(unsigned char channel, const mbox_data_t *data) {
+int mbox_send(const unsigned char channel, const mbox_data_t *data) {
   unsigned int msg;
 
   // TODO: add asserts...

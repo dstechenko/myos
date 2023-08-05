@@ -3,12 +3,13 @@
 
 #include "uart_pl001.h"
 
+#include <stdint.h>
+
 #include <asm/delay.h>
 #include <drivers/mmio.h>
-#include <kernel/bits.h>
 #include <kernel/config.h>
-#include <kernel/math.h>
-#include <stdint.h>
+#include <kernel/util/bits.h>
+#include <kernel/util/math.h>
 
 #include "aux.h"
 #include "gpio.h"

@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef KERNEL_BITS_H
-#define KERNEL_BITS_H
+#ifndef KERNEL_UTIL_BITS_H
+#define KERNEL_UTIL_BITS_H
 
 #include <stdint.h>
 
@@ -26,4 +26,4 @@
 #define LOW_WORD(dw) ((uint16_t)MASK_LOW_WORD(dw))
 #define HIGH_WORD(dw) ((LOW_WORD(dw >> 16)))
 
-#endif // !KERNEL_BITS_H
+#endif // !KERNEL_UTIL_BITS_H
