@@ -21,14 +21,14 @@ static const char *log_level_to_string(const uint8_t level)
 {
 	switch (level) {
 	case LOG_ERROR:
-		return "ERROR";
+		return "[ERROR]";
 	case LOG_INFO:
-		return "INFO";
+		return " [INFO]";
 	case LOG_DEBUG:
-		return "DEBUG";
+		return "[DEBUG]";
 	}
 	// TODO: should assert here and fail?
-	return "ERROR";
+	return "[ERROR]";
 }
 
 static void log_convert(int num, const uint8_t base)
@@ -100,9 +100,8 @@ void log(const uint8_t level, const char *format, ...)
 	if (CONFIG_LOG_LEVEL < level)
 		return;
 
-	log_puts("[");
 	log_puts(log_level_to_string(level));
-	log_puts("] ");
+	log_puts(" ");
 	va_start(args, format);
 	for (cursor = format; *cursor != '\0'; cursor++) {
 		if (*cursor == '%') {
