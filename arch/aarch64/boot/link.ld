@@ -1,3 +1,8 @@
+/*
+Copyright (C) Dmytro Stechenko
+License: http://www.gnu.org/licenses/gpl.html
+*/
+
 ENTRY(_start)
 
 SECTIONS
