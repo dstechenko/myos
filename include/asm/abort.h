@@ -4,6 +4,6 @@
 #ifndef ASM_ABORT_H
 #define ASM_ABORT_H
 
-void sys_abort();
+void abort();
 
 #endif // !ASM_ABORT_H

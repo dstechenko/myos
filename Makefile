@@ -30,8 +30,7 @@ KERNEL_IMG :=$(OUT_DIR)/kernel.img
 
 TOOLCHAIN := $(TOOLS_DIR)/cc/bin/$(TARGET_ARCH)-elf
 
-AS  := $(TOOLCHAIN)-as
-CPP := $(TOOLCHAIN)-cpp
+AS  := $(TOOLCHAIN)-gcc
 CC  := $(TOOLCHAIN)-gcc
 DBG := gdb
 LD  := $(TOOLCHAIN)-gcc
@@ -39,13 +38,13 @@ OD  := $(TOOLCHAIN)-objdump
 OC  := $(TOOLCHAIN)-objcopy
 VM  := qemu-system-$(TARGET_ARCH)
 
-ASFLAGS  := -g
-CFLAGS   := -g -ffreestanding -nostdlib -nostartfiles -Wall -Wextra -MMD
+ASFLAGS  := -g -mgeneral-regs-only
+CFLAGS   := -g -mgeneral-regs-only -ffreestanding -nostdlib -nostartfiles -Wall -Wextra -MMD
 DBGFLAGS := -q -iex "target remote localhost:1234"
 LDFLAGS  := -g -ffreestanding -nostdlib -nostartfiles
 LDLIBS   := -lgcc
-VMFLAGS  := -M raspi3b -serial null -serial stdio
-ODFLAGS  := -D
+VMFLAGS  := -M raspi3b -serial null -serial stdio -d int
+ODFLAGS  := -s -d
 
 KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR) $(DRIVERS_DIR)
 KERNEL_OBJS := $(shell find $(KERNEL_DIRS) -type f -name *.c -or -name *.S)
@@ -69,7 +68,8 @@ endif
 KERNEL_CONF_FILES := $(KERNEL_CONF_FILES) $(KERNEL_CONF_MODE_FILES)
 
 .PHONY: clean build-gen build-all build-pre build-post build-main
-.PHONY: format install_deps install_cc vm_boot vm_debug
+.PHONY: format install_deps install_cc dump-all
+.PHONY: boot-vm boot-vm-device boot-vm-kernel debug-vm
 
 $(KERNEL_CONF):
 	mkdir -p $(@D)
@@ -123,9 +123,17 @@ install-deps:
 install-cc:
 	$(TOOLS_DIR)/install_cc.sh
 
-boot-vm: build-all
+boot-vm-kernel: build-all
 	$(VM) $(VMFLAGS) -kernel $(KERNEL_IMG)
+
+boot-vm-device: build-all
+	$(VM) $(VMFLAGS) -device loader,file=$(KERNEL_IMG),addr=0x0
+
+boot-vm: boot-vm-device
 
 debug-vm: build-all
 	$(VM) $(VMFLAGS) -s -S -kernel $(KERNEL_IMG) &
 	$(DBG) $(DBGFLAGS) -s $(KERNEL_ELF)
+
+dump-all: build-all
+	$(OD) $(ODFLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump

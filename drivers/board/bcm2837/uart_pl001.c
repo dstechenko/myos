@@ -9,7 +9,6 @@
 #include <drivers/mmio.h>
 #include <kernel/config.h>
 #include <kernel/util/bits.h>
-#include <kernel/util/math.h>
 
 #include "aux.h"
 #include "gpio.h"
@@ -110,7 +109,8 @@ void uart_pl001_init(void) {
   reg = CONFIG_SYSTEM_CLOCK_FREQ / (16 * CONFIG_UART_BAUDRATE);
   mmio_write32(UART_PL001_IBRD, reg);
   // Set fraction_reg = (fractional_part * 64) + 0.5.
-  reg = fmod(CONFIG_SYSTEM_CLOCK_FREQ, 16 * CONFIG_UART_BAUDRATE) * 64 + 0.5;
+  // Let's try with 0 and if not - revisit to fix.
+  reg = 0;
   mmio_write32(UART_PL001_FBRD, reg);
   // Enable FIFO and 8bit data transmission (1 stop bit, no parity).
   mmio_write32(UART_PL001_LCRH, BIT(4) | BIT(5) | BIT(6));

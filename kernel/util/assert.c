@@ -6,14 +6,14 @@
 #include <asm/abort.h>
 #include <kernel/log.h>
 
-void abort(void) {
+void handle_abort(void) {
   log_error("Aborting the execution...");
-  sys_abort();
+  abort();
 }
 
-void assert(const bool cond, const char *ctx) {
+void handle_assert(const bool cond, const char *ctx) {
   if (!cond) {
     log_error("Failed assert on: %s", ctx);
-    abort();
+    handle_abort();
   }
 }

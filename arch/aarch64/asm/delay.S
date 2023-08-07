@@ -3,6 +3,6 @@
 
 .globl cdelay
 cdelay:
-  subs x0, x0, #1
-  bne cdelay
+  subs  x0, x0, #1
+  bne   cdelay
   ret
