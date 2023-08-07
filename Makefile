@@ -52,7 +52,7 @@ KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.S=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.c=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:%.c=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:%.S=$(OUT_DIR)/%.o)
-KERNEL_OBJS := $(OUT_DIR)/boot/boot.o $(OUT_DIR)/boot/entry.o $(KERNEL_OBJS)
+KERNEL_OBJS := $(OUT_DIR)/boot/boot.o $(KERNEL_OBJS)
 
 KERNEL_BUILD_INFO := $(GEN_DIR)/include/kernel/build_info.h
 KERNEL_CONF       := $(GEN_DIR)/include/kernel/config.h

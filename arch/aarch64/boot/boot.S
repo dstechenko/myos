@@ -58,15 +58,15 @@ boot_init_kernel:
   ldr     w6, =__bss_size
 
 boot_loop_clear_bss:
-  cbz     w6, boot_jump_entry
+  cbz     w6, boot_kernel_entry
   str     xzr, [x5], #8
   sub     w6, w6, #1
   cbnz    w6, boot_loop_clear_bss
 
-boot_jump_entry:
+boot_kernel_entry:
   // Jump to the kernel entry point.
   // This should not return.
-  bl      boot_entry
+  bl      kernel_entry
 
 boot_halt_forever:
   // For failsafe, halt this core.
