@@ -8,15 +8,6 @@
 
 // Make _start global. Need this to get execution transferred from armstub8.
 .globl _start
-
-  // In 64-bit mode the boot code is loaded at 0x80000 and not 0x8000 like in 32-bit.
-  // Registers:
-  //   x0 -> 32 bit pointer to DTB in memory (primary core only) / 0 (secondary cores).
-  //   x1 -> 0.
-  //   x2 -> 0.
-  //   x3 -> 0.
-  //   x4 -> 32 bit kernel entry point, _start location.
-
 _start:
   // Entry point for the kernel.
   // We need to halt all of the non-primary CPUs since they
@@ -34,6 +25,7 @@ _start:
   bne     boot_init_el2
 
 boot_init_el3:
+  // Set EL3 secure configurations and switch to EL2.
   ldr     x0, =SCR_EL3_VALUE
   msr     scr_el3, x0
   ldr     x0, =SPSR_EL2h_VALUE
@@ -43,6 +35,9 @@ boot_init_el3:
   eret
 
 boot_init_el2:
+  // Set hypervisor and system control configurations and
+  // switch to EL1 for kernel entry.
+  // Disabling MMU, IRQs and data/instruction caching.
   ldr     x0, =SCTLR_EL1_VALUE
   msr     sctlr_el1, x0
   ldr     x0, =HCR_EL2_VALUE
