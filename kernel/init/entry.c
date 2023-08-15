@@ -3,7 +3,7 @@
 
 #include <kernel/init/entry.h>
 
-#include <asm/registers.h>
+#include <asm/regs.h>
 #include <kernel/build_info.h>
 #include <kernel/config.h>
 #include <kernel/log.h>
@@ -13,7 +13,7 @@ void kernel_entry(void) {
   log_init();
   log_info("MyOS boot complete!");
   log_info(">");
-  log_info("Core privilege:      %d", registers_get_priv());
+  log_info("Core privilege:      %d", regs_get_priv());
   log_info(">");
   log_info("Build commit hash:   %s", BUILD_INFO_COMMIT_HASH);
   log_info("Build timestamp:     %s", BUILD_INFO_TIMESTAMP);
