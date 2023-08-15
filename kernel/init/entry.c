@@ -11,6 +11,11 @@
 
 void kernel_entry(void) {
   log_init();
+  irq_init();
+  timer_init();
+  irq_ctrl_init();
+  irq_enable();
+
   log_info("MyOS boot complete!");
   log_info(">");
   log_info("Core privilege:      %d", regs_get_priv());
@@ -29,5 +34,6 @@ void kernel_entry(void) {
   log_debug("%x", 123);
   log_info("Spinning now...");
   ASSERT(1 > 2);
+
   log_error("Should be unreachable");
 }

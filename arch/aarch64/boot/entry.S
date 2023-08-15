@@ -61,15 +61,15 @@
 .align 11
 .globl entry_ex_vec
 entry_ex_vec:
-  // For now only enable el1 irqs with a proper handler.
-  entry_ex	entry_irq_el1
-
   // Just abort on everything else and show the registers.
   entry_ex	entry_syn_invalid_el1t
   entry_ex	entry_irq_invalid_el1t
   entry_ex	entry_fiq_invalid_el1t
   entry_ex	entry_err_invalid_el1t
   entry_ex	entry_syn_invalid_el1h
+  // For now only enable el1 irqs with a proper handler.
+  entry_ex	entry_irq_el1
+  // Just abort on everything else and show the registers.
   entry_ex	entry_fiq_invalid_el1h
   entry_ex	entry_err_invalid_el1h
   entry_ex	entry_syn_invalid_el0_64
