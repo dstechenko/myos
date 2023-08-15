@@ -15,7 +15,7 @@ _start:
   // Check a multiprocessor affinity register to id it (0 is primary core).
   mrs     x5, mpidr_el1
   and     x5, x5, #0xFF
-  cbnz    x5, boot_halt_forever
+  cbnz    x5, boot_halt_core
 
   // Check our current exception level.
   // Depending on the boot loader we could be in EL2 or EL3.
@@ -68,8 +68,8 @@ boot_kernel_entry:
   // This should not return.
   bl      kernel_entry
 
-boot_halt_forever:
+boot_halt_core:
   // For failsafe, halt this core.
   // We should not reach here, but if we do - we cannot recover.
   wfe
-  b       boot_halt_forever
+  b       boot_halt_core

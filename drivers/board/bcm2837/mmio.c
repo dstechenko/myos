@@ -3,7 +3,7 @@
 
 #include <drivers/mmio.h>
 
-#include "mmio_base.h"
+#include "mmio.h"
 
 void mmio_write8(const uint32_t reg, const uint8_t data) {
   *(volatile uint8_t *)((uintptr_t)MMIO_BASE + reg) = data;
