@@ -5,46 +5,17 @@
 
 #include "entry.h"
 
-static const char *type_to_string(const int type) {
-  switch (type) {
-  case ENTRY_SYN_INVALID_EL1t:
-    return "SYN_INVALID_EL1t";
-  case ENTRY_IRQ_INVALID_EL1t:
-    return "IRQ_INVALID_EL1t";
-  case ENTRY_FIQ_INVALID_EL1t:
-    return "FIQ_INVALID_EL1t";
-  case ENTRY_ERR_INVALID_EL1t:
-    return "ERR_INVALID_EL1t";
-  case ENTRY_SYN_INVALID_EL1h:
-    return "SYN_INVALID_EL1h";
-  case ENTRY_IRQ_INVALID_EL1h:
-    return "IRQ_INVALID_EL1h";
-  case ENTRY_FIQ_INVALID_EL1h:
-    return "FIQ_INVALID_EL1h";
-  case ENTRY_ERR_INVALID_EL1h:
-    return "ERR_INVALID_EL1h";
-  case ENTRY_SYN_INVALID_EL0_64:
-    return "SYN_INVALID_EL0_64";
-  case ENTRY_IRQ_INVALID_EL0_64:
-    return "IRQ_INVALID_EL0_64";
-  case ENTRY_FIQ_INVALID_EL0_64:
-    return "FIQ_INVALID_EL0_64";
-  case ENTRY_ERR_INVALID_EL0_64:
-    return "ERR_INVALID_EL0_64";
-  case ENTRY_SYN_INVALID_EL0_32:
-    return "SYN_INVALID_EL0_32";
-  case ENTRY_IRQ_INVALID_EL0_32:
-    return "IRQ_INVALID_EL0_32";
-  case ENTRY_FIQ_INVALID_EL0_32:
-    return "FIQ_INVALID_EL0_32";
-  case ENTRY_ERR_INVALID_EL0_32:
-    return "ERR_INVALID_EL0_32";
-  default:
-    return "UNKNOWN";
-  }
-}
+static const char *const invalid_message_type[] = {
+    "SYN_INVALID_EL1t",   "IRQ_INVALID_EL1t",   "FIQ_INVALID_EL1t",
+    "ERR_INVALID_EL1t",   "SYN_INVALID_EL1h",   "IRQ_INVALID_EL1h",
+    "FIQ_INVALID_EL1h",   "ERR_INVALID_EL1h",   "SYN_INVALID_EL0_64",
+    "IRQ_INVALID_EL0_64", "FIQ_INVALID_EL0_64", "ERR_INVALID_EL0_64",
+    "SYN_INVALID_EL0_32", "IRQ_INVALID_EL0_32", "FIQ_INVALID_EL0_32",
+    "ERR_INVALID_EL0_32",
+};
 
 void entry_log_invalid_message(const int type, const unsigned long esr,
                                const unsigned long elr) {
-  log_error("Entry type: %s, esr: %x, elr: %x", type_to_string(type), esr, elr);
+  log_error("Entry type: %s, esr: %x, elr: %x", invalid_message_type[type], esr,
+            elr);
 }

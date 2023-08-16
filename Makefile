@@ -46,7 +46,7 @@ LDLIBS   := -lgcc
 VMFLAGS  := -M raspi3b -serial null -serial stdio
 ODFLAGS  := -s -d
 
-ifeq ($(TARGET_MODE), debug)
+ifeq ($(VM_MODE), debug)
 VMFLAGS := $(VMFLAGS) -d int
 endif
 
@@ -127,13 +127,8 @@ install-deps:
 install-cc:
 	$(TOOLS_DIR)/install_cc.sh
 
-boot-vm-kernel: build-all
+boot-vm: build-all
 	$(VM) $(VMFLAGS) -kernel $(KERNEL_IMG)
-
-boot-vm-device: build-all
-	$(VM) $(VMFLAGS) -device loader,file=$(KERNEL_IMG),addr=0x0
-
-boot-vm: boot-vm-device
 
 debug-vm: build-all
 	$(VM) $(VMFLAGS) -s -S -kernel $(KERNEL_IMG) &

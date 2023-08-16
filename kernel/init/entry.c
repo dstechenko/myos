@@ -12,8 +12,11 @@
 #include <kernel/log.h>
 #include <kernel/util/assert.h>
 
+static const char *messages[] = {"null", "hello"};
+
 void kernel_entry(void) {
   log_init();
+
   irq_init();
   timer_init();
   irq_ctrl_init();
@@ -35,6 +38,8 @@ void kernel_entry(void) {
   log_debug("%d", 123);
   log_debug("%o", 123);
   log_debug("%x", 123);
+  log_debug("%s", messages[1]);
+
   log_info("Spinning now...");
   ASSERT(1 > 2);
   log_debug("Should not see this...");

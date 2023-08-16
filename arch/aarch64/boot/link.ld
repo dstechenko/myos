@@ -9,7 +9,6 @@ SECTIONS
 {
     . = 0x80000;
     __start = .;
-
     __text_start = .;
     .text :
     {
@@ -18,7 +17,6 @@ SECTIONS
     }
     . = ALIGN(4096);
     __text_end = .;
-
     __rodata_start = .;
     .rodata :
     {
@@ -26,7 +24,6 @@ SECTIONS
     }
     . = ALIGN(4096);
     __rodata_end = .;
-
     __data_start = .;
     .data :
     {
@@ -34,16 +31,13 @@ SECTIONS
     }
     . = ALIGN(4096);
     __data_end = .;
-
     __bss_start = .;
     .bss :
     {
-        bss = .;
         *(.bss)
     }
     . = ALIGN(4096);
     __bss_end = .;
     __bss_size = __bss_end - __bss_start;
-
     __end = .;
 }
