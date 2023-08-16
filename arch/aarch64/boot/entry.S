@@ -44,18 +44,17 @@
   eret
 .endm
 
+.macro entry_before_kernel
+  entry_save_regs
+.endm
+
+.macro entry_after_kernel
+  entry_load_regs
+.endm
+
 .macro entry_ex label
 .align 7
   b \label
-.endm
-
-.macro entry_handle_invalid type
-  entry_save_regs
-  mov	x0, #\type
-  mrs	x1, esr_el1
-  mrs	x2, elr_el1
-  bl entry_log_invalid_message
-  b entry_halt_core
 .endm
 
 .align 11
@@ -81,13 +80,28 @@ entry_ex_vec:
   entry_ex	entry_fiq_invalid_el0_32
   entry_ex	entry_err_invalid_el0_32
 
+// Print some error message and halt.
+.macro entry_handle_invalid type
+  entry_before_kernel
+  mov	x0, #\type
+  mrs	x1, esr_el1
+  mrs	x2, elr_el1
+  bl entry_log_invalid_message
+  b entry_halt_core
+.endm
+
+// Halt the affected core.
+entry_halt_core:
+  wfe
+  b entry_halt_core
+
 // For now only enable el1 irqs with a proper handler.
 // We need to save/load registers so that concurrent irqs can happen.
 // We could unmask them before going into the handler, for simplicity make it sync.
 entry_irq_el1:
-  entry_save_regs
+  entry_before_kernel
   bl irq_handle
-  entry_load_regs
+  entry_after_kernel
 
 // Just abort on everything else and show the registers.
 entry_syn_invalid_el1t:
@@ -120,7 +134,3 @@ entry_fiq_invalid_el0_32:
   entry_handle_invalid ENTRY_FIQ_INVALID_EL0_32
 entry_err_invalid_el0_32:
   entry_handle_invalid ENTRY_ERR_INVALID_EL0_32
-
-entry_halt_core:
-  wfe
-  b entry_halt_core

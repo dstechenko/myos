@@ -3,7 +3,10 @@
 
 #include <kernel/init/entry.h>
 
+#include <asm/irq.h>
 #include <asm/regs.h>
+#include <drivers/irq.h>
+#include <drivers/timer.h>
 #include <kernel/build_info.h>
 #include <kernel/config.h>
 #include <kernel/log.h>
