@@ -25,8 +25,7 @@ void timer_init(void) {
 }
 
 void timer_handle(void) {
-  log_debug("System timer interrupt ticks: %x, value: %x", timer_ticks,
-            timer_value);
+  log_debug("System timer ticks: %x, value: %x", timer_ticks, timer_value);
   timer_tick();
   mmio_write32(TIMER_CS, TIMER_CS_M1);
 }
