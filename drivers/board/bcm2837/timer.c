@@ -9,20 +9,24 @@
 
 #include "timer.h"
 
-static uint32_t counter = 0;
+static uint64_t timer_ticks = 0;
+static uint32_t timer_value = 0;
 
 static void timer_tick(void) {
-  counter += CONFIG_SYSTEM_TIMER_FREQ;
-  mmio_write32(TIMER_C1, counter);
+  timer_ticks++;
+  timer_value += CONFIG_SYSTEM_TIMER_FREQ;
+  mmio_write32(TIMER_C1, timer_value);
 }
 
 void timer_init(void) {
-  counter = mmio_read32(TIMER_CLO);
+  timer_ticks = 0;
+  timer_value = mmio_read32(TIMER_CLO);
   timer_tick();
 }
 
 void timer_handle(void) {
-  log_debug("System timer interrupt, counter: %x", counter);
+  log_debug("System timer interrupt ticks: %x, value: %x", timer_ticks,
+            timer_value);
   timer_tick();
   mmio_write32(TIMER_CS, TIMER_CS_M1);
 }

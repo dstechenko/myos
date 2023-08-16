@@ -37,6 +37,5 @@ void kernel_entry(void) {
   log_debug("%x", 123);
   log_info("Spinning now...");
   ASSERT(1 > 2);
-
-  log_error("Should be unreachable");
+  log_debug("Should not see this...");
 }

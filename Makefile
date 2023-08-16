@@ -43,8 +43,12 @@ CFLAGS   := -g -mgeneral-regs-only -ffreestanding -nostdlib -nostartfiles -Wall 
 DBGFLAGS := -q -iex "target remote localhost:1234"
 LDFLAGS  := -g -ffreestanding -nostdlib -nostartfiles
 LDLIBS   := -lgcc
-VMFLAGS  := -M raspi3b -serial null -serial stdio -d int
+VMFLAGS  := -M raspi3b -serial null -serial stdio
 ODFLAGS  := -s -d
+
+ifeq ($(TARGET_MODE), debug)
+VMFLAGS := $(VMFLAGS) -d int
+endif
 
 KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR) $(DRIVERS_DIR)
 KERNEL_OBJS := $(shell find $(KERNEL_DIRS) -type f -name *.c -or -name *.S)
