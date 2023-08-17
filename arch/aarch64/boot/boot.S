@@ -1,7 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include "regs.h"
+#include "boot_regs.h"
 
 // To keep this in the first portion of the binary.
 .section ".text.boot"
