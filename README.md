@@ -1,8 +1,10 @@
 # myos
 
 TODOs:
-- Add libc primitives...
+- Add UART irqs to handle inputs
+- Use local interrupt controller
+- Add libc primitives
 
 Notes:
-- UART pinout GPIO#3 GND, GPIO#4 TXD, GPIO#5 RXD
-- DTECH USB-2-SERIAL RED 5v, GREEN TXD, WHITE RXD
+- UART pinout gpio#3 gnd, gpio#4 txd, gpio#5 rxd
+- DTech usb-2-serial red 5v, green txd, white rxd
