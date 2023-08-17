@@ -9,8 +9,8 @@
 
 #include "timer.h"
 
-static uint64_t timer_ticks = 0;
-static uint32_t timer_value = 0;
+static volatile uint64_t timer_ticks = 0;
+static volatile uint32_t timer_value = 0;
 
 static void timer_tick(void) {
   timer_ticks++;

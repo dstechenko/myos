@@ -3,6 +3,8 @@
 TODOs:
 - Add UART irqs to handle inputs
 - Use local interrupt controller
+- Extract ticks into global functionality
+- Add driver subsystems (simple, static but organized)
 - Add libc primitives
 
 Notes:
