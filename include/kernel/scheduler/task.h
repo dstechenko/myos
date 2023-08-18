@@ -40,15 +40,6 @@ struct task {
   int64_t preempt;
 };
 
-#define DEFINE_TASK(name)                                                      \
-  struct task name = {                                                         \
-      .context = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},                      \
-      .state = TASK_RUNNING,                                                   \
-      .ticks = 0,                                                              \
-      .priority = 1,                                                           \
-      .preempt = 0,                                                            \
-  }
-
 void task_add(struct task *task);
 void task_remove(struct task *task);
 void task_schedule(void);
