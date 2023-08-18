@@ -10,17 +10,19 @@
 
 #define TASKS_TOTAL CONFIG_KERNEL_SCHEDULER_TASKS
 
+static size_t tasks_next_id = 1;
 static struct task tasks_init = {
-    .context = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    .context = NULL,
     .state = TASK_RUNNING,
     .ticks = 0,
-    .priority = 1,
+    .priority = CONFIG_KERNEL_SCHEDULER_PRIORITY,
     .preempt = 0,
 };
 
-static size_t tasks_next_id = 1;
 static struct task *tasks_current = &tasks_init;
 static struct task *tasks_all[TASKS_TOTAL] = {&tasks_init};
+
+int task_init(void) { return task_context_init(&tasks_init); }
 
 void task_schedule_loop(void) {
   size_t id;
@@ -79,13 +81,13 @@ void task_schedule_tick(void) {
 void task_context_switch(struct task *next) {
   struct task *prev;
 
-  ASSERT(next);
-  ASSERT(tasks_current);
   if (tasks_current == next)
     return;
 
   prev = tasks_current, tasks_current = next;
-  task_cpu_context_switch(&prev->context, &next->context);
+  ASSERT(prev && prev->context);
+  ASSERT(next && next->context);
+  task_cpu_switch(prev->context, next->context);
 }
 
 void task_schedule_tail(void) { task_preempt_enable(); }

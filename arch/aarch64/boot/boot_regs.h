@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef ASM_AARCH64_BOOT_BOOT_REGS_H
-#define ASM_AARCH64_BOOT_BOOT_REGS_H
+#ifndef ARCH_AARCH64_BOOT_BOOT_REGS_H
+#define ARCH_AARCH64_BOOT_BOOT_REGS_H
 
 #define SET(b) (1 << b)
 #define UNSET(b) (0 << b)
@@ -49,4 +49,4 @@
 #define SCR_EL3_NS SET(0)
 #define SCR_EL3_VALUE (SCR_EL3_RESERVED | SCR_EL3_RW | SCR_EL3_NS)
 
-#endif // !ASM_AARCH64_BOOT_BOOT_REGS_H
+#endif // !ARCH_AARCH64_BOOT_BOOT_REGS_H

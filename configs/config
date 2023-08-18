@@ -1,8 +1,10 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
-UART_ON                 false
-LOG_LEVEL               1
-SYSTEM_TIMER_FREQ       20000
-KERNEL_ALLOCATOR_STATIC true
-KERNEL_SCHEDULER_TASKS  64
+UART_ON                               false
+LOG_LEVEL                             1
+SYSTEM_TIMER_FREQ                     20000
+KERNEL_ALLOCATOR_STATIC               true
+KERNEL_SCHEDULER_TASKS                64
+KERNEL_SCHEDULER_STACK_SIZE           512
+KERNEL_SCHEDULER_PRIORITY             1

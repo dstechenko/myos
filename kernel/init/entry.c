@@ -35,6 +35,7 @@ void kernel_entry(void) {
   int err;
 
   log_init();
+  task_init();
   irq_init();
   timer_init();
   irq_ctrl_init();

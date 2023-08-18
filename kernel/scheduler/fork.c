@@ -3,8 +3,6 @@
 
 #include <kernel/scheduler/fork.h>
 
-#include <stdint.h>
-
 #include <kernel/memory/allocator.h>
 #include <kernel/scheduler/task.h>
 #include <kernel/util/assert.h>
@@ -13,6 +11,7 @@
 #define TASK_PREEMPT_DISABLED 1
 
 int fork(const void *func) {
+  int err;
   struct task *task;
 
   ASSERT(func);
@@ -22,9 +21,10 @@ int fork(const void *func) {
   if (!task)
     return -ENOMEM;
 
-  task->context.x19 = (uint64_t)func;
-  task->context.pc = (uint64_t)fork_return;
-  task->context.sp = (uint64_t)task + PAGE_SIZE;
+  err = fork_task_context(task, func);
+  if (err)
+    return err;
+
   task->state = TASK_RUNNING;
   task->ticks = task_get_priority();
   task->priority = task_get_priority();

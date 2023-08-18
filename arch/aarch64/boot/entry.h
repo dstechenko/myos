@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef ASM_AARCH64_BOOT_ENTRY_H
-#define ASM_AARCH64_BOOT_ENTRY_H
+#ifndef ARCH_AARCH64_BOOT_ENTRY_H
+#define ARCH_AARCH64_BOOT_ENTRY_H
 
 #define ENTRY_STACK_FRAME_SIZE 256
 
@@ -26,4 +26,4 @@
 #define ENTRY_FIQ_INVALID_EL0_32 14
 #define ENTRY_ERR_INVALID_EL0_32 15
 
-#endif // !ASM_AARCH64_BOOT_ENTRY_H
+#endif // !ARCH_AARCH64_BOOT_ENTRY_H
