@@ -5,5 +5,6 @@
 #define KERNEL_UTIL_ERROR_H
 
 #define EINVAL 1
+#define ENOMEM 2
 
 #endif // !KERNEL_UTIL_ERROR_H

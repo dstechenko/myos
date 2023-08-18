@@ -3,6 +3,7 @@
 
 #include <kernel/init/entry.h>
 
+#include <asm/delay.h>
 #include <asm/irq.h>
 #include <asm/regs.h>
 #include <drivers/irq.h>
@@ -10,13 +11,30 @@
 #include <kernel/build_info.h>
 #include <kernel/config.h>
 #include <kernel/log.h>
-#include <kernel/util/assert.h>
+#include <kernel/scheduler/fork.h>
+#include <kernel/scheduler/task.h>
 
 static const char *messages[] = {"null", "hello"};
+#define FORK_DELAY 99999999
+
+void task_a(void) {
+  while (true) {
+    log_info("tick from task a");
+    cdelay(FORK_DELAY);
+  }
+}
+
+void task_b(void) {
+  while (true) {
+    log_info("tick from task b");
+    cdelay(FORK_DELAY);
+  }
+}
 
 void kernel_entry(void) {
-  log_init();
+  int err;
 
+  log_init();
   irq_init();
   timer_init();
   irq_ctrl_init();
@@ -40,7 +58,18 @@ void kernel_entry(void) {
   log_debug("%x", 123);
   log_debug("%s", messages[1]);
 
-  log_info("Spinning now...");
-  ASSERT(1 > 2);
-  log_debug("Should not see this...");
+  err = fork(&task_a);
+  if (err) {
+    log_error("Failed to start task a, err: %d", -err);
+    return;
+  }
+
+  err = fork(&task_b);
+  if (err) {
+    log_error("Failed to start task b, err: %d", -err);
+    return;
+  }
+
+  while (true)
+    task_schedule();
 }

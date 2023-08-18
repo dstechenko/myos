@@ -40,7 +40,9 @@ void uart_putc(const char c) {
 }
 
 void uart_puts(const char *s) {
-  for (size_t i = 0; s[i] != '\0'; i++) {
+  size_t i;
+
+  for (i = 0; s[i] != '\0'; i++) {
     uart_putc(s[i]);
   }
 }

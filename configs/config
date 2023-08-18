@@ -1,6 +1,7 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
-UART_ON           false
-LOG_LEVEL         1
-SYSTEM_TIMER_FREQ 20000
+UART_ON                 false
+LOG_LEVEL               1
+SYSTEM_TIMER_FREQ       20000
+KERNEL_ALLOCATOR_STATIC true

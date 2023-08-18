@@ -17,7 +17,7 @@ echo "#include <kernel/util/config.h>"                            >> $CONFIG_OUT
 echo ""                                                           >> $CONFIG_OUT
 for CONFIG_FILE in $CONFIG_IN
 do
-    cat "$CONFIG_FILE" | while read CONFIG_LINE
+    cat "$CONFIG_FILE" | while read CONFIG_LINE || [ -n "$CONFIG_LINE" ];
     do
         [[ "${CONFIG_LINE}" = \#* ]] && continue
         [[ "${CONFIG_LINE}" = ""  ]] && continue
