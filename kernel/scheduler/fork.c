@@ -30,7 +30,7 @@ int fork(const void *func) {
   task->priority = task_get_priority();
   task->preempt = TASK_PREEMPT_DISABLED;
 
-  task_add(task);
+  task_enqueue(task);
   task_preempt_enable();
 
   return 0;

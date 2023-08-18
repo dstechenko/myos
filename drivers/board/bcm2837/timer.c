@@ -31,5 +31,5 @@ void timer_handle(void) {
 #endif // CONFIG_ENABLED(CONFIG_SYSTEM_TIMER_LOG)
   timer_tick();
   mmio_write32(TIMER_CS, TIMER_CS_M1);
-  task_schedule_tick();
+  task_tick();
 }
