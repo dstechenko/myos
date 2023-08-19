@@ -15,6 +15,7 @@ enum task_state {
 };
 
 struct task {
+  uint64_t id;
   struct task_context *context;
   enum task_state state;
   int64_t ticks;

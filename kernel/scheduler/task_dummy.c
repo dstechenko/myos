@@ -10,8 +10,9 @@
 
 #define TASKS_TOTAL CONFIG_KERNEL_SCHEDULER_TASKS
 
-static size_t tasks_next_id = 1;
+static uint64_t tasks_next_id = 1;
 static struct task tasks_init = {
+    .id = 0,
     .context = NULL,
     .state = TASK_RUNNING,
     .ticks = 0,
@@ -27,6 +28,7 @@ int task_init(void) { return task_context_init(&tasks_init); }
 void task_enqueue(struct task *task) {
   ASSERT(task);
   ASSERT(tasks_next_id < TASKS_TOTAL);
+  task->id = tasks_next_id;
   tasks_all[tasks_next_id++] = task;
 }
 

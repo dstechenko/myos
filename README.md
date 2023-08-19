@@ -1,7 +1,7 @@
 # myos
 
 TODOs:
-- Fix negative number printing
+- Fix sized printing
 - Driver config switch with no facade file - use ifdefs
 - Add UART irqs to handle inputs
 - Use local interrupt controller
@@ -9,6 +9,7 @@ TODOs:
 - Add driver subsystems (simple, static but organized)
 - Prefix all board specific configs with board name
 - Add libc primitives
+- Add stack protector
 
 Notes:
 - UART pinout gpio#3 gnd, gpio#4 txd, gpio#5 rxd

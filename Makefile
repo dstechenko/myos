@@ -136,3 +136,7 @@ debug-vm: build-all
 
 dump-all: build-all
 	$(OD) $(ODFLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
+
+serial: build-all
+	cp $(KERNEL_IMG) /run/media/dstechenko/bootfs/kernel8.img
+	picocom -b 115200 /dev/ttyUSB0

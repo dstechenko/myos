@@ -49,13 +49,21 @@ static void log_convert(int num, const uint8_t base) {
 }
 
 static void log_format(va_list *args, const char format) {
+  int d;
+
   // TODO: add asserts here...
+
   switch (format) {
   case 'c':
     log_putc((char)va_arg(*args, int));
     break;
   case 'd':
-    log_convert(va_arg(*args, int), 10);
+    d = va_arg(*args, int);
+    if (d < 0) {
+      log_putc('-');
+      d = -d;
+    }
+    log_convert(d, 10);
     break;
   case 'o':
     log_putc('0');

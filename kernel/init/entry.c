@@ -15,7 +15,7 @@
 #include <kernel/scheduler/task.h>
 
 static const char *messages[] = {"null", "hello"};
-#define FORK_DELAY 99999999
+#define FORK_DELAY 50000000
 
 void task_a(void) {
   while (true) {
@@ -55,6 +55,7 @@ void kernel_entry(void) {
   LOG_DEBUG("Logging test:");
   LOG_DEBUG("%c", 'c');
   LOG_DEBUG("%d", 123);
+  LOG_DEBUG("%d", -123);
   LOG_DEBUG("%o", 123);
   LOG_DEBUG("%x", 123);
   LOG_DEBUG("%s", messages[1]);
