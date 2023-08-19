@@ -8,17 +8,12 @@
 #include <asm/irq.h>
 #include <kernel/util/assert.h>
 
+#include "task_main.h"
+
 #define TASKS_TOTAL CONFIG_KERNEL_SCHEDULER_TASKS
 
 static uint64_t tasks_next_id = 1;
-static struct task tasks_main = {
-    .id = 0,
-    .context = NULL,
-    .state = TASK_RUNNING,
-    .ticks = 0,
-    .priority = CONFIG_KERNEL_SCHEDULER_PRIORITY,
-    .preempt = 0,
-};
+static struct task tasks_main = INIT_TASK_MAIN(tasks_main);
 
 static struct task *tasks_current = &tasks_main;
 static struct task *tasks_all[TASKS_TOTAL] = {&tasks_main};
