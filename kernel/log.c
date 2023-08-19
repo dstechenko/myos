@@ -19,11 +19,11 @@ static void (*log_puts)(const char *) = NULL;
 
 static const char *log_level_to_string(const uint8_t level) {
   switch (level) {
-  case LOG_ERROR:
+  case ERROR:
     return "[ERROR]";
-  case LOG_INFO:
+  case INFO:
     return " [INFO]";
-  case LOG_DEBUG:
+  case DEBUG:
     return "[DEBUG]";
   }
   // TODO: should assert here and fail?

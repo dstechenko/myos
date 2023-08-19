@@ -10,10 +10,10 @@
 #include "irq.h"
 
 void irq_ctrl_init(void) {
-  log_debug("Programming interrupt controller");
-  log_debug("Enabling system timer interrupt #1");
+  LOG_DEBUG("Programming interrupt controller");
+  LOG_DEBUG("Enabling system timer interrupt #1");
   mmio_write32(IRQ_ENABLE_1, IRQ_TABLE_SYSTEM_TIMER_1);
-  log_debug("Enabling system timer interrupt #3");
+  LOG_DEBUG("Enabling system timer interrupt #3");
   mmio_write32(IRQ_ENABLE_1, IRQ_TABLE_SYSTEM_TIMER_3);
 }
 

@@ -16,6 +16,6 @@ static const char *const invalid_message_type[] = {
 
 void entry_log_invalid_message(const int type, const unsigned long esr,
                                const unsigned long elr) {
-  log_error("Entry type: %s, esr: %x, elr: %x", invalid_message_type[type], esr,
+  LOG_ERROR("Entry type: %s, esr: %x, elr: %x", invalid_message_type[type], esr,
             elr);
 }

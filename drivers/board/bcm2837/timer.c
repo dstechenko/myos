@@ -27,7 +27,7 @@ void timer_init(void) {
 
 void timer_handle(void) {
 #if CONFIG_ENABLED(CONFIG_SYSTEM_TIMER_LOG)
-  log_debug("System timer ticks: %x, value: %x", timer_ticks, timer_value);
+  LOG_DEBUG("System timer ticks: %x, value: %x", timer_ticks, timer_value);
 #endif // CONFIG_ENABLED(CONFIG_SYSTEM_TIMER_LOG)
   timer_tick();
   mmio_write32(TIMER_CS, TIMER_CS_M1);

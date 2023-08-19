@@ -7,13 +7,13 @@
 #include <kernel/log.h>
 
 void handle_abort(void) {
-  log_error("Aborting the execution...");
+  LOG_ERROR("Aborting the execution...");
   abort();
 }
 
 void handle_assert(const bool cond, const char *ctx) {
   if (!cond) {
-    log_error("Failed assert on: %s", ctx);
+    LOG_ERROR("Failed assert on: %s", ctx);
     handle_abort();
   }
 }

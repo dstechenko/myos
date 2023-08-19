@@ -7,30 +7,30 @@
 #include <kernel/config.h>
 #include <stdint.h>
 
-#define LOG_ERROR 0
-#define LOG_INFO 1
-#define LOG_DEBUG 2
+#define ERROR 0
+#define INFO 1
+#define DEBUG 2
 
 #if (CONFIG_LOG_LEVEL >= LOG_ERROR)
-#define log_error(format, ...) log(LOG_ERROR, format, ##__VA_ARGS__)
+#define LOG_ERROR(format, ...) log(ERROR, format, ##__VA_ARGS__)
 #else // (CONFIG_LOG_LEVEL >= LOG_ERROR)
-#define log_error(format, ...)                                                 \
+#define LOG_ERROR(format, ...)                                                 \
   do {                                                                         \
   } while (false)
 #endif // !(CONFIG_LOG_LEVEL >= LOG_ERROR)
 
 #if (CONFIG_LOG_LEVEL >= LOG_INFO)
-#define log_info(format, ...) log(LOG_INFO, format, ##__VA_ARGS__)
+#define LOG_INFO(format, ...) log(INFO, format, ##__VA_ARGS__)
 #else // (CONFIG_LOG_LEVEL >= LOG_INFO)
-#define log_info(format, ...)                                                  \
+#define LOG_INFO(format, ...)                                                  \
   do {                                                                         \
   } while (false)
 #endif // !(CONFIG_LOG_LEVEL >= LOG_INFO)
 
 #if (CONFIG_LOG_LEVEL >= LOG_DEBUG)
-#define log_debug(format, ...) log(LOG_DEBUG, format, ##__VA_ARGS__)
+#define LOG_DEBUG(format, ...) log(DEBUG, format, ##__VA_ARGS__)
 #else // (CONFIG_LOG_LEVEL >= LOG_DEBUG)
-#define log_debug(format, ...)                                                 \
+#define LOG_DEBUG(format, ...)                                                 \
   do {                                                                         \
   } while (false)
 #endif // !(CONFIG_LOG_LEVEL >= LOG_DEBUG)
