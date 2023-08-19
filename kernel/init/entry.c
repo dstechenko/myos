@@ -10,7 +10,7 @@
 #include <drivers/timer.h>
 #include <kernel/build_info.h>
 #include <kernel/config.h>
-#include <kernel/log.h>
+#include <kernel/logging/log.h>
 #include <kernel/scheduler/fork.h>
 #include <kernel/scheduler/task.h>
 

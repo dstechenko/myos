@@ -5,7 +5,7 @@
 
 #include <drivers/mmio.h>
 #include <kernel/config.h>
-#include <kernel/log.h>
+#include <kernel/logging/log.h>
 #include <kernel/scheduler/task.h>
 
 #include "timer.h"

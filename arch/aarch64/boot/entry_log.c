@@ -1,7 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/log.h>
+#include <kernel/logging/log.h>
 
 #include "entry.h"
 

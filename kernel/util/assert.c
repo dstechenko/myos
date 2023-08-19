@@ -4,7 +4,7 @@
 #include <kernel/util/assert.h>
 
 #include <asm/abort.h>
-#include <kernel/log.h>
+#include <kernel/logging/log.h>
 
 void handle_abort(void) {
   LOG_ERROR("Aborting the execution...");

@@ -11,7 +11,7 @@
 #define TASKS_TOTAL CONFIG_KERNEL_SCHEDULER_TASKS
 
 static uint64_t tasks_next_id = 1;
-static struct task tasks_init = {
+static struct task tasks_main = {
     .id = 0,
     .context = NULL,
     .state = TASK_RUNNING,
@@ -20,10 +20,10 @@ static struct task tasks_init = {
     .preempt = 0,
 };
 
-static struct task *tasks_current = &tasks_init;
-static struct task *tasks_all[TASKS_TOTAL] = {&tasks_init};
+static struct task *tasks_current = &tasks_main;
+static struct task *tasks_all[TASKS_TOTAL] = {&tasks_main};
 
-int task_init(void) { return task_context_init(&tasks_init); }
+int task_init(void) { return task_context_init(&tasks_main); }
 
 void task_enqueue(struct task *task) {
   ASSERT(task);
@@ -50,7 +50,7 @@ struct task *task_pick(void) {
   struct task *each, *next;
 
   while (true) {
-    next = &tasks_init;
+    next = &tasks_main;
     ticks = next->ticks;
     for (id = 0; id < TASKS_TOTAL; id++) {
       each = tasks_all[id];

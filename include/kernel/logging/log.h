@@ -1,11 +1,12 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef KERNEL_LOG_H
-#define KERNEL_LOG_H
+#ifndef KERNEL_LOGGING_LOG_H
+#define KERNEL_LOGGING_LOG_H
+
+#include <stdint.h>
 
 #include <kernel/config.h>
-#include <stdint.h>
 
 #define ERROR 0
 #define INFO 1
@@ -38,4 +39,4 @@
 int log_init(void);
 void log(uint8_t level, const char *format, ...);
 
-#endif // !KERNEL_LOG_H
+#endif // !KERNEL_LOGGING_LOG_H
