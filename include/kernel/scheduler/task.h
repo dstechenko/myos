@@ -24,16 +24,17 @@ struct task {
   uint8_t stack[];
 };
 
-int task_init(void);
 int task_context_init(struct task *task);
+void task_context_switch(struct task *next);
+void task_cpu_switch(struct task_context *prev, struct task_context *next);
 
+int task_init(void);
 void task_enqueue(struct task *task);
 void task_dequeue(struct task *task);
 void task_tick(void);
 struct task *task_pick(void);
-
-void task_context_switch(struct task *next);
-void task_cpu_switch(struct task_context *prev, struct task_context *next);
+struct task *task_get_current(void);
+void task_set_current(struct task *task);
 
 void task_schedule(void);
 void task_preempt_enable(void);
