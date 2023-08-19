@@ -6,7 +6,7 @@
 
 #include <kernel/scheduler/task.h>
 
-int fork(const void *func);
+int fork_task(const void *func);
 int fork_task_context(struct task *task, const void *func);
 void fork_return(void);
 

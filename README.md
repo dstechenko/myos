@@ -1,6 +1,10 @@
 # myos
 
 TODOs:
+- Add qemu bcm overlay
+- Add task priority setting, unlimited task allocation
+- Add atomics, spinlocks, mutexes, per_cpu and per_task variables
+- Add memory ops: memset, memcpy
 - Fix sized printing
 - Driver config switch with no facade file - use ifdefs
 - Add UART irqs to handle inputs

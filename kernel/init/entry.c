@@ -60,13 +60,13 @@ void kernel_entry(void) {
   LOG_DEBUG("%x", 123);
   LOG_DEBUG("%s", messages[1]);
 
-  err = fork(&task_a);
+  err = fork_task(&task_a);
   if (err) {
     LOG_ERROR("Failed to start task a, err: %d", -err);
     return;
   }
 
-  err = fork(&task_b);
+  err = fork_task(&task_b);
   if (err) {
     LOG_ERROR("Failed to start task b, err: %d", -err);
     return;
