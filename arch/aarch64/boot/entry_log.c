@@ -3,8 +3,6 @@
 
 #include <kernel/logging/log.h>
 
-#include "entry.h"
-
 static const char *const invalid_message_type[] = {
     "SYN_INVALID_EL1t",   "IRQ_INVALID_EL1t",   "FIQ_INVALID_EL1t",
     "ERR_INVALID_EL1t",   "SYN_INVALID_EL1h",   "IRQ_INVALID_EL1h",

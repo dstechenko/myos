@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include "entry.h"
-#include "boot_regs.h"
+#include "sys_lvls.h"
+#include "sys_regs.h"
 
 .globl entry_ex_vec, entry_fork_return
 
@@ -23,23 +23,23 @@
   stp	x24, x25, [sp, #16 * 12]
   stp	x26, x27, [sp, #16 * 13]
   stp	x28, x29, [sp, #16 * 14]
-  ## .if	\level == 0
-  ## mrs	x21, sp_el0
-  ## .else
-  ## add	x21, sp, #ENTRY_STACK_FRAME_SIZE
-  ## .endif
+  .if	\level == 0
+  mrs	x21, sp_el0
+  .else
+  add	x21, sp, #ENTRY_STACK_FRAME_SIZE
+  .endif
   mrs	x22, elr_el1
   mrs	x23, spsr_el1
-  stp	x30, x22, [sp, #16 * 15]
-  str x23, [sp, #16 * 16]
+  stp	x30, x21, [sp, #16 * 15]
+  stp x22, x23, [sp, #16 * 16]
 .endm
 
 .macro entry_load_regs level
-  ldr	x23, [sp, #16 * 16]
-  ldp	x30, x22, [sp, #16 * 15]
-  ## .if	\level == 0
-  ## msr	sp_el0, x21
-  ## .endif
+  ldp	x22, x23, [sp, #16 * 16]
+  ldp	x30, x21, [sp, #16 * 15]
+  .if	\level == 0
+  msr	sp_el0, x21
+  .endif
   msr	elr_el1, x22
   msr	spsr_el1, x23
   ldp	x0, x1, [sp, #16 * 0]

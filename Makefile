@@ -73,7 +73,7 @@ KERNEL_CONF_FILES := $(KERNEL_CONF_FILES) $(KERNEL_CONF_MODE_FILES)
 
 .PHONY: clean build-gen build-all build-pre build-post build-main
 .PHONY: format install_deps install_cc dump-all
-.PHONY: boot-vm boot-vm-device boot-vm-kernel debug-vm
+.PHONY: boot-vm boot-copy debug-vm serial
 
 $(KERNEL_CONF):
 	mkdir -p $(@D)
@@ -137,6 +137,8 @@ debug-vm: build-all
 dump-all: build-all
 	$(OD) $(ODFLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
 
-serial: build-all
-	cp $(KERNEL_IMG) /run/media/dstechenko/bootfs/kernel8.img
+boot-copy: build-all
+	cp $(KERNEL_IMG) /run/media/$(USER)/bootfs/kernel8.img
+
+serial:
 	picocom -b 115200 /dev/ttyUSB0
