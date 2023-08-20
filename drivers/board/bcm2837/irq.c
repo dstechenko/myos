@@ -10,11 +10,9 @@
 #include "irq.h"
 
 void irq_ctrl_init(void) {
-  LOG_DEBUG("Programming interrupt controller");
-  LOG_DEBUG("Enabling system timer interrupt #1");
+  /* LOG_DEBUG("Programming interrupt controller"); */
+  /* LOG_DEBUG("Enabling system timer interrupt #1"); */
   mmio_write32(IRQ_ENABLE_1, IRQ_TABLE_SYSTEM_TIMER_1);
-  LOG_DEBUG("Enabling system timer interrupt #3");
-  mmio_write32(IRQ_ENABLE_1, IRQ_TABLE_SYSTEM_TIMER_3);
 }
 
 void irq_handle(void) {
@@ -26,7 +24,6 @@ void irq_handle(void) {
     }
     if (irq & IRQ_TABLE_SYSTEM_TIMER_3) {
       irq &= ~IRQ_TABLE_SYSTEM_TIMER_3;
-      // TODO: add handling for timer 3...
     }
   }
 }

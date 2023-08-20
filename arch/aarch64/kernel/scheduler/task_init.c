@@ -5,7 +5,7 @@
 
 #include <kernel/memory/allocator.h>
 #include <kernel/util/assert.h>
-#include <kernel/util/error.h>
+#include <kernel/core/error.h>
 
 #include "task_context.h"
 

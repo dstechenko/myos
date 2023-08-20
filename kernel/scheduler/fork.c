@@ -6,7 +6,7 @@
 #include <kernel/memory/allocator.h>
 #include <kernel/scheduler/task.h>
 #include <kernel/util/assert.h>
-#include <kernel/util/error.h>
+#include <kernel/core/error.h>
 
 #define TASK_PREEMPT_DISABLED 1
 
