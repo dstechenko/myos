@@ -8,6 +8,7 @@ ENTRY(_start)
 SECTIONS
 {
     . = 0x80000;
+    . = ALIGN(4096);
     __start = .;
     __text_start = .;
     .text :
@@ -16,19 +17,21 @@ SECTIONS
         *(.text)
     }
     __text_end = .;
+     . = ALIGN(4096);
     __rodata_start = .;
     .rodata :
     {
         *(.rodata)
     }
     __rodata_end = .;
+     . = ALIGN(4096);
     __data_start = .;
     .data :
     {
         *(.data)
     }
     __data_end = .;
-    . = ALIGN(0x8);
+     . = ALIGN(4096);
     __bss_start = .;
     .bss :
     {

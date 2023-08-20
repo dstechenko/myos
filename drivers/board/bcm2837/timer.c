@@ -4,8 +4,6 @@
 #include <drivers/timer.h>
 
 #include <drivers/mmio.h>
-#include <kernel/config.h>
-#include <kernel/logging/log.h>
 #include <kernel/scheduler/task.h>
 
 #include "timer.h"
@@ -26,9 +24,6 @@ void timer_init(void) {
 }
 
 void timer_handle(void) {
-#if CONFIG_ENABLED(CONFIG_SYSTEM_TIMER_LOG)
-  LOG_DEBUG("System timer ticks: %x, value: %x", timer_ticks, timer_value);
-#endif // CONFIG_ENABLED(CONFIG_SYSTEM_TIMER_LOG)
   timer_tick();
   mmio_write32(TIMER_CS, TIMER_CS_M1);
   task_tick();

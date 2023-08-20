@@ -30,8 +30,7 @@ static const char *log_level_to_string(const uint8_t level) {
   return "[ERROR]";
 }
 
-static void log_negative(const int num)
-{
+static void log_negative(const int num) {
   if (num < 0)
     log_putc('-');
 }

@@ -12,7 +12,7 @@
 #define TABLE_SIZE 512
 #define SECTION_SIZE (PAGE_SIZE + TABLE_SIZE)
 
-#define STATIC_MEMORY_MIN (2 * SECTION_SIZE)
+#define STATIC_MEMORY_MIN (100 * PAGE_SIZE)
 #define STATIC_MEMORY_HIGH 0x3F000000
 
 #define STATIC_MEMORY (STATIC_MEMORY_HIGH - STATIC_MEMORY_MIN)
@@ -31,7 +31,9 @@ void *alloc(const size_t size, const uint8_t flags) {
   (void)flags;
   (void)size;
 
-  ASSERT(size > 0 && size < PAGE_SIZE);
+  ASSERT(size > 0);
+  ASSERT(size <= PAGE_SIZE);
+
   for (i = 0; i < sizeof(memory_map); i++)
     if (!memory_map[i]) {
       memory_map[i] = true;

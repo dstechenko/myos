@@ -19,14 +19,14 @@ static const char *messages[] = {"null", "hello"};
 
 void task_a(void) {
   while (true) {
-    // LOG_INFO("tick from task a");
+    LOG_INFO("tick from task a");
     cdelay(FORK_DELAY);
   }
 }
 
 void task_b(void) {
   while (true) {
-    // LOG_INFO("tick from task b");
+    LOG_INFO("tick from task b");
     cdelay(FORK_DELAY);
   }
 }
@@ -42,23 +42,23 @@ void kernel_entry(void) {
   irq_enable();
 
   LOG_INFO("MyOS boot complete!");
-  /* LOG_INFO(">"); */
-  /* LOG_INFO("Core privilege:      %d", regs_get_priv()); */
-  /* LOG_INFO(">"); */
-  /* LOG_INFO("Build commit hash:   %s", BUILD_INFO_COMMIT_HASH); */
-  /* LOG_INFO("Build timestamp:     %s", BUILD_INFO_TIMESTAMP); */
-  /* LOG_INFO("Build target arch:   %s", BUILD_INFO_TARGET_ARCH); */
-  /* LOG_INFO("Build target board:  %s", BUILD_INFO_TARGET_BOARD); */
-  /* LOG_INFO("Build target mode:   %s", BUILD_INFO_TARGET_MODE); */
-  /* LOG_INFO("Build host arch:     %s", BUILD_INFO_HOST_ARCH); */
-  /* LOG_INFO(">"); */
-  /* LOG_DEBUG("Logging test:"); */
-  /* LOG_DEBUG("%c", 'c'); */
-  /* LOG_DEBUG("%d", 123); */
-  /* LOG_DEBUG("%d", -123); */
-  /* LOG_DEBUG("%o", 123); */
-  /* LOG_DEBUG("%x", 123); */
-  /* LOG_DEBUG("%s", messages[1]); */
+  LOG_INFO(">");
+  LOG_INFO("Core privilege:      %d", regs_get_priv());
+  LOG_INFO(">");
+  LOG_INFO("Build commit hash:   %s", BUILD_INFO_COMMIT_HASH);
+  LOG_INFO("Build timestamp:     %s", BUILD_INFO_TIMESTAMP);
+  LOG_INFO("Build target arch:   %s", BUILD_INFO_TARGET_ARCH);
+  LOG_INFO("Build target board:  %s", BUILD_INFO_TARGET_BOARD);
+  LOG_INFO("Build target mode:   %s", BUILD_INFO_TARGET_MODE);
+  LOG_INFO("Build host arch:     %s", BUILD_INFO_HOST_ARCH);
+  LOG_INFO(">");
+  LOG_DEBUG("Logging test:");
+  LOG_DEBUG("%c", 'c');
+  LOG_DEBUG("%d", 123);
+  LOG_DEBUG("%d", -123);
+  LOG_DEBUG("%o", 123);
+  LOG_DEBUG("%x", 123);
+  LOG_DEBUG("%s", messages[1]);
 
   err = fork_task(&task_a);
   if (err) {

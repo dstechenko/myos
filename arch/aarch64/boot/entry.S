@@ -8,7 +8,6 @@
 
 .macro entry_save_regs level
   sub	sp, sp, #ENTRY_STACK_FRAME_SIZE
-
   stp	x0, x1, [sp, #16 * 0]
   stp	x2, x3, [sp, #16 * 1]
   stp	x4, x5, [sp, #16 * 2]
@@ -24,29 +23,25 @@
   stp	x24, x25, [sp, #16 * 12]
   stp	x26, x27, [sp, #16 * 13]
   stp	x28, x29, [sp, #16 * 14]
-
-  .if	\level == 0
-  mrs	x21, sp_el0
-  .else
-  add	x21, sp, #ENTRY_STACK_FRAME_SIZE
-  .endif
+  ## .if	\level == 0
+  ## mrs	x21, sp_el0
+  ## .else
+  ## add	x21, sp, #ENTRY_STACK_FRAME_SIZE
+  ## .endif
   mrs	x22, elr_el1
   mrs	x23, spsr_el1
-
-  stp	x30, x21, [sp, #16 * 15]
-  stp	x22, x23, [sp, #16 * 16]
+  stp	x30, x22, [sp, #16 * 15]
+  str x23, [sp, #16 * 16]
 .endm
 
 .macro entry_load_regs level
-  ldp	x22, x23, [sp, #16 * 16]
-  ldp	x30, x21, [sp, #16 * 15]
-
-  .if	\level == 0
-  msr	sp_el0, x21
-  .endif
+  ldr	x23, [sp, #16 * 16]
+  ldp	x30, x22, [sp, #16 * 15]
+  ## .if	\level == 0
+  ## msr	sp_el0, x21
+  ## .endif
   msr	elr_el1, x22
   msr	spsr_el1, x23
-
   ldp	x0, x1, [sp, #16 * 0]
   ldp	x2, x3, [sp, #16 * 1]
   ldp	x4, x5, [sp, #16 * 2]
@@ -62,9 +57,7 @@
   ldp	x24, x25, [sp, #16 * 12]
   ldp	x26, x27, [sp, #16 * 13]
   ldp	x28, x29, [sp, #16 * 14]
-
   add	sp, sp, #ENTRY_STACK_FRAME_SIZE
-
   eret
 .endm
 
@@ -91,8 +84,8 @@ entry_ex_vec:
   entry_ex	entry_irq_el1
   entry_ex	entry_fiq_invalid_el1h
   entry_ex	entry_err_invalid_el1h
-  entry_ex	entry_syn_el0
-  entry_ex	entry_irq_el0
+  entry_ex	entry_syn_invalid_el1h
+  entry_ex	entry_irq_invalid_el1h
   entry_ex	entry_fiq_invalid_el0_64
   entry_ex	entry_err_invalid_el0_64
   entry_ex	entry_syn_invalid_el0_32
@@ -147,12 +140,16 @@ entry_err_invalid_el1t:
   entry_handle_invalid ENTRY_ERR_INVALID_EL1t, 1
 entry_syn_invalid_el1h:
   entry_handle_invalid ENTRY_SYN_INVALID_EL1h, 1
+entry_irq_invalid_el1h:
+  entry_handle_invalid ENTRY_IRQ_INVALID_EL1h, 1
 entry_fiq_invalid_el1h:
   entry_handle_invalid ENTRY_FIQ_INVALID_EL1h, 1
 entry_err_invalid_el1h:
   entry_handle_invalid ENTRY_ERR_INVALID_EL1h, 1
 entry_syn_invalid_el0_64:
   entry_handle_invalid ENTRY_SYN_INVALID_EL0_64, 0
+entry_irq_invalid_el0_64:
+  entry_handle_invalid ENTRY_IRQ_INVALID_EL0_64, 0
 entry_fiq_invalid_el0_64:
   entry_handle_invalid ENTRY_FIQ_INVALID_EL0_64, 0
 entry_err_invalid_el0_64:
@@ -169,6 +166,7 @@ entry_err_invalid_el0_32:
 syscall_num .req x25
 syscall_cnt .req x26
 syscall_tbl .req x27
+syscall_ptr .req x16
 entry_svc_el0:
   adr    syscall_tbl, syscall_table
   uxtw   syscall_num, w8
@@ -176,8 +174,8 @@ entry_svc_el0:
   bl     irq_enable
   cmp    syscall_num, syscall_cnt
   b.hs   entry_syscall_error
-  ldr    x16, [syscall_tbl, syscall_num, lsl #3]
-  blr    x16
+  ldr    syscall_ptr, [syscall_tbl, syscall_num, lsl #3]
+  blr    syscall_ptr
   b      entry_syscall_return
 
 entry_syscall_error:
@@ -188,9 +186,9 @@ entry_syscall_return:
   str   x0, [sp, #0]
   entry_after_kernel 0
 
-fork_addr .req x19
+fork_ptr .req x19
 entry_fork_return:
   bl  task_schedule_tail
-  blr fork_addr
+  blr fork_ptr
 
 entry_user_return:

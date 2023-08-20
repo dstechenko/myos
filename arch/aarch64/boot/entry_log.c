@@ -11,7 +11,7 @@ static const char *const invalid_message_type[] = {
     "FIQ_INVALID_EL1h",   "ERR_INVALID_EL1h",   "SYN_INVALID_EL0_64",
     "IRQ_INVALID_EL0_64", "FIQ_INVALID_EL0_64", "ERR_INVALID_EL0_64",
     "SYN_INVALID_EL0_32", "IRQ_INVALID_EL0_32", "FIQ_INVALID_EL0_32",
-    "ERR_INVALID_EL0_32",
+    "ERR_INVALID_EL0_32", "ERROR_SYN",          "ERROR_SYSCALL",
 };
 
 void entry_log_invalid_message(const int type, const unsigned long esr,

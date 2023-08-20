@@ -3,7 +3,8 @@
 
 .globl cdelay
 
+cycles .req x0
 cdelay:
-  subs  x0, x0, #1
+  subs  cycles, cycles, #1
   bne   cdelay
   ret

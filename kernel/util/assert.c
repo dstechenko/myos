@@ -6,14 +6,15 @@
 #include <asm/abort.h>
 #include <kernel/logging/log.h>
 
-void handle_abort(void) {
-  LOG_ERROR("Aborting the execution...");
+void handle_abort(const char *file, const int line) {
+  LOG_ERROR("Aborting the execution at %s:%d", file, line);
   abort();
 }
 
-void handle_assert(const bool cond, const char *ctx) {
+void handle_assert(const bool cond, const char *ctx, const char *file,
+                   const int line) {
   if (!cond) {
     LOG_ERROR("Failed assert on: %s", ctx);
-    handle_abort();
+    handle_abort(file, line);
   }
 }

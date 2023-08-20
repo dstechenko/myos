@@ -3,9 +3,10 @@
 
 #include <kernel/scheduler/task.h>
 
+#include <kernel/logging/log.h>
 #include <kernel/util/assert.h>
 
-void task_schedule_loop(void) {
+static void task_schedule_loop(void) {
   task_preempt_disable();
   task_context_switch(task_pick());
   task_preempt_enable();
@@ -17,8 +18,10 @@ void task_context_switch(struct task *next) {
   if (prev == next)
     return;
 
-  ASSERT(prev && prev->context);
-  ASSERT(next && next->context);
+  ASSERT(prev);
+  ASSERT(prev->context);
+  ASSERT(next);
+  ASSERT(next->context);
 
   task_set_current(next);
   task_cpu_switch(prev->context, next->context);
