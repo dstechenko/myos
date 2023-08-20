@@ -8,6 +8,7 @@
 
 // Make _start global. Need this to get execution transferred from armstub8.
 .globl _start
+
 _start:
   // Entry point for the kernel.
   // We need to halt all of the non-primary CPUs since they

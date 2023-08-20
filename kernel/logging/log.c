@@ -30,12 +30,21 @@ static const char *log_level_to_string(const uint8_t level) {
   return "[ERROR]";
 }
 
+static void log_negative(const int num)
+{
+  if (num < 0)
+    log_putc('-');
+}
+
 static void log_convert(int num, const uint8_t base) {
   static const char digits[] = "0123456789ABCDEF";
   char buffer[20];
   char *cursor;
 
   // TODO: add asserts here...
+
+  if (num < 0)
+    num = -num;
 
   cursor = &buffer[sizeof(buffer) - 1];
   *cursor = '\0';
@@ -49,32 +58,34 @@ static void log_convert(int num, const uint8_t base) {
 }
 
 static void log_format(va_list *args, const char format) {
-  int d;
+  int arg;
 
   // TODO: add asserts here...
 
   switch (format) {
   case 'c':
-    log_putc((char)va_arg(*args, int));
+    arg = va_arg(*args, int);
+    log_putc((char)arg);
     break;
   case 'd':
-    d = va_arg(*args, int);
-    if (d < 0) {
-      log_putc('-');
-      d = -d;
-    }
-    log_convert(d, 10);
+    arg = va_arg(*args, int);
+    log_negative(arg);
+    log_convert(arg, 10);
     break;
   case 'o':
+    arg = va_arg(*args, int);
+    log_negative(arg);
     log_putc('0');
-    log_convert(va_arg(*args, int), 8);
+    log_convert(arg, 8);
     break;
   case 's':
     log_puts(va_arg(*args, const char *));
     break;
   case 'x':
+    arg = va_arg(*args, int);
+    log_negative(arg);
     log_puts("0x");
-    log_convert(va_arg(*args, int), 16);
+    log_convert(arg, 16);
     break;
   default:
     // TODO: add asserts here too?

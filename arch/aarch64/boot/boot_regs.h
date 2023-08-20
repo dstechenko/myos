@@ -49,4 +49,11 @@
 #define SCR_EL3_NS SET(0)
 #define SCR_EL3_VALUE (SCR_EL3_RESERVED | SCR_EL3_RW | SCR_EL3_NS)
 
+/**
+ * ESR_EL1, Exception Syndrome Register (EL1).
+ * Page 2431 of ARMv8-Architecture-Reference-Manual.
+ */
+#define ESR_ELx_EC_SHIFT 26
+#define ESR_ELx_EC_SVC64 0x15
+
 #endif // !ARCH_AARCH64_BOOT_BOOT_REGS_H

@@ -2,6 +2,7 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 .globl task_cpu_switch
+
 task_cpu_switch:
   mov    x8, sp
   stp    x19, x20, [x0], #16

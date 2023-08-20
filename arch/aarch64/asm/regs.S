@@ -2,6 +2,7 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 .globl regs_get_priv
+
 regs_get_priv:
     // Read from the system register for exception levels.
     // EL0 least priv, EL3 the most.

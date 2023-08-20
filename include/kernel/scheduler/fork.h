@@ -8,6 +8,5 @@
 
 int fork_task(const void *func);
 int fork_task_context(struct task *task, const void *func);
-void fork_return(void);
 
 #endif // !KERNEL_SCHEDULER_FORK_H
