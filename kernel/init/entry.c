@@ -19,14 +19,21 @@ static const char *messages[] = {"null", "hello"};
 
 void task_a(void) {
   while (true) {
-    LOG_INFO("tick from task a");
+    LOG_INFO("tick from task a, priv %d", regs_get_priv());
     cdelay(FORK_DELAY);
   }
 }
 
 void task_b(void) {
   while (true) {
-    LOG_INFO("tick from task b");
+    LOG_INFO("tick from task b, priv %d", regs_get_priv());
+    cdelay(FORK_DELAY);
+  }
+}
+
+void task_c(void) {
+  while (true) {
+    LOG_INFO("tick from task c, priv %d", regs_get_priv());
     cdelay(FORK_DELAY);
   }
 }

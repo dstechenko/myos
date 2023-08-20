@@ -8,10 +8,12 @@
 
 #include <kernel/config.h>
 
+struct proc_regs;
 struct task_context;
 
 enum task_state {
   TASK_RUNNING,
+  TASK_ZOMBIE,
 };
 
 struct task {
@@ -26,8 +28,8 @@ struct task {
 };
 
 int task_context_init(struct task *task);
-void task_context_switch(struct task *next);
 void task_cpu_switch(struct task_context *prev, struct task_context *next);
+struct proc_regs *task_get_proc_regs(struct task *task);
 
 int task_init(void);
 void task_enqueue(struct task *task);
@@ -38,6 +40,7 @@ struct task *task_get_current(void);
 void task_set_current(struct task *task);
 
 void task_schedule(void);
+void task_context_switch(struct task *next);
 void task_preempt_enable(void);
 void task_preempt_disable(void);
 uint64_t task_get_priority(void);

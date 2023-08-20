@@ -61,11 +61,11 @@
   eret
 .endm
 
-.macro entry_before_kernel level
+.macro entry_kernel_in level
   entry_save_regs level
 .endm
 
-.macro entry_after_kernel level
+.macro entry_kernel_out level
   entry_load_regs level
 .endm
 
@@ -95,7 +95,7 @@ entry_ex_vec:
 
 // Print some error message and halt.
 .macro entry_handle_invalid type, level
-  entry_before_kernel level
+  entry_kernel_in level
   mov	x0, #\type
   mrs	x1, esr_el1
   mrs	x2, elr_el1
@@ -103,21 +103,16 @@ entry_ex_vec:
   b entry_halt_core
 .endm
 
-// Halt the affected core.
-entry_halt_core:
-  wfe
-  b entry_halt_core
-
 // For now only enable el1 irqs with a proper handler.
 // We need to save/load registers so that concurrent irqs can happen.
 // We could unmask them before going into the handler, for simplicity make it sync.
 entry_irq_el1:
-  entry_before_kernel 1
+  entry_kernel_in 1
   bl irq_handle
-  entry_after_kernel 1
+  entry_kernel_out 1
 
 entry_syn_el0:
-  entry_before_kernel 0
+  entry_kernel_in 0
   mrs   x25, esr_el1
   lsr   x24, x25, #ESR_ELx_EC_SHIFT
   cmp   x24, #ESR_ELx_EC_SVC64
@@ -125,9 +120,9 @@ entry_syn_el0:
   entry_handle_invalid ENTRY_ERROR_SYN, 0
 
 entry_irq_el0:
-  entry_before_kernel 0
+  entry_kernel_in 0
   bl irq_handle
-  entry_after_kernel 0
+  entry_kernel_out 0
 
 // Just abort on everything else and show the registers.
 entry_syn_invalid_el1t:
@@ -184,11 +179,16 @@ entry_syscall_error:
 entry_syscall_return:
   bl    irq_disable
   str   x0, [sp, #0]
-  entry_after_kernel 0
+  entry_kernel_out 0
 
 fork_ptr .req x19
 entry_fork_return:
   bl  task_schedule_tail
   blr fork_ptr
+
+// Halt the affected core.
+entry_halt_core:
+  wfe
+  b entry_halt_core
 
 entry_user_return:
