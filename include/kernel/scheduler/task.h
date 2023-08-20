@@ -20,8 +20,9 @@ struct task {
   uint64_t id;
   struct task_context *context;
   enum task_state state;
-  int64_t ticks;
+  uint8_t flags;
   int64_t priority;
+  int64_t ticks;
   int64_t preempt;
   uint8_t padding[CONFIG_KERNEL_SCHEDULER_STACK_SIZE];
   uint8_t stack[];
@@ -32,7 +33,7 @@ void task_cpu_switch(struct task_context *prev, struct task_context *next);
 struct proc_regs *task_get_proc_regs(struct task *task);
 
 int task_init(void);
-void task_enqueue(struct task *task);
+int task_enqueue(struct task *task);
 void task_dequeue(struct task *task);
 void task_tick(void);
 struct task *task_pick(void);

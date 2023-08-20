@@ -12,7 +12,7 @@
 
 int task_context_init(struct task *task) {
   ASSERT(task);
-  task->context = zalloc(sizeof(struct task_context), ALLOC_NONE);
+  task->context = zalloc(sizeof(struct task_context), ALLOC_KERNEL);
   if (!task->context)
     return -ENOMEM;
   return 0;

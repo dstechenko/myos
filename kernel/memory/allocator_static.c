@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 #include <kernel/config.h>
+#include <kernel/memory/ops.h>
 #include <kernel/util/assert.h>
 #include <kernel/util/bool.h>
 
@@ -31,7 +32,7 @@ void *alloc(const size_t size, const uint8_t flags) {
   (void)flags;
   (void)size;
 
-  ASSERT(size > 0);
+  ASSERT(size);
   ASSERT(size <= PAGE_SIZE);
 
   for (i = 0; i < sizeof(memory_map); i++)
@@ -44,20 +45,15 @@ void *alloc(const size_t size, const uint8_t flags) {
 }
 
 void *zalloc(const size_t size, const uint8_t flags) {
-  size_t i;
-  uint8_t *obj;
+  uint8_t *obj = (uint8_t *)alloc(size, flags);
 
-  ASSERT(size > 0);
-  obj = (uint8_t *)alloc(size, flags);
   if (obj)
-    for (i = 0; i < size; i++)
-      obj[i] = 0;
+    memzero(obj, size);
 
   return obj;
 }
 
 void free(const void *obj) {
-  // TODO: assert on bounds here
   if (obj)
     memory_map[MEMORY_TO_PAGE(obj)] = false;
 }

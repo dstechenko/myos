@@ -10,28 +10,31 @@
 
 #define TASK_PREEMPT_DISABLED 1
 
-int fork_task(const void *pc) {
+int fork_task(const void *pc, const uint8_t flags) {
   int err;
   struct task *task;
 
   ASSERT(pc);
 
   task_preempt_disable();
-  task = zalloc(sizeof(struct task), ALLOC_NONE);
+  task = zalloc(sizeof(struct task), ALLOC_KERNEL);
   if (!task)
     return -ENOMEM;
 
-  err = fork_task_context(task, pc);
+  err = fork_task_context(task, pc, flags);
   if (err)
     return err;
 
   task->state = TASK_RUNNING;
-  task->ticks = task_get_priority();
+  task->flags = flags;
   task->priority = task_get_priority();
+  task->ticks = task->priority;
   task->preempt = TASK_PREEMPT_DISABLED;
 
+  // TODO: handle inability to add tasks
   task_enqueue(task);
   task_preempt_enable();
 
-  return 0;
+  // TODO: make sure task ids always fit into ints
+  return (int)task->id;
 }

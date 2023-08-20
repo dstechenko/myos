@@ -1,6 +1,7 @@
 # myos
 
 TODOs:
+- Add comments and docs everywhere after vmem/user
 - Add qemu bcm overlay
 - Add task priority setting, unlimited task allocation
 - Add atomics, spinlocks, mutexes, per_cpu and per_task variables

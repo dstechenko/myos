@@ -186,9 +186,6 @@ entry_fork_return:
   bl  task_schedule_tail
   blr fork_ptr
 
-// Halt the affected core.
 entry_halt_core:
   wfe
   b entry_halt_core
-
-entry_user_return:

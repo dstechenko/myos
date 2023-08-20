@@ -15,26 +15,26 @@
 #include <kernel/scheduler/task.h>
 
 static const char *messages[] = {"null", "hello"};
-#define FORK_DELAY 50000000
+#define LOOP_DELAY 50000000
 
 void task_a(void) {
   while (true) {
     LOG_INFO("tick from task a, priv %d", regs_get_priv());
-    cdelay(FORK_DELAY);
+    cdelay(LOOP_DELAY);
   }
 }
 
 void task_b(void) {
   while (true) {
     LOG_INFO("tick from task b, priv %d", regs_get_priv());
-    cdelay(FORK_DELAY);
+    cdelay(LOOP_DELAY);
   }
 }
 
 void task_c(void) {
   while (true) {
     LOG_INFO("tick from task c, priv %d", regs_get_priv());
-    cdelay(FORK_DELAY);
+    cdelay(LOOP_DELAY);
   }
 }
 
@@ -67,15 +67,15 @@ void kernel_entry(void) {
   LOG_DEBUG("%x", 123);
   LOG_DEBUG("%s", messages[1]);
 
-  err = fork_task(&task_a);
-  if (err) {
-    LOG_ERROR("Failed to start task a, err: %d", -err);
+  err = fork_task(&task_a, FORK_KERNEL);
+  if (err < 0) {
+    LOG_ERROR("Failed to start task a, err: %d", err);
     return;
   }
 
-  err = fork_task(&task_b);
-  if (err) {
-    LOG_ERROR("Failed to start task b, err: %d", -err);
+  err = fork_task(&task_b, FORK_KERNEL);
+  if (err < 0) {
+    LOG_ERROR("Failed to start task b, err: %d", err);
     return;
   }
 

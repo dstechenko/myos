@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef ARCH_AARCH64_BOOT_ENTRY_H
-#define ARCH_AARCH64_BOOT_ENTRY_H
+#ifndef ARCH_AARCH64_BOOT_SYS_LVLS_H
+#define ARCH_AARCH64_BOOT_SYS_LVLS_H
 
 #define ENTRY_STACK_FRAME_SIZE (34 * 8)
 
@@ -29,4 +29,4 @@
 #define ENTRY_ERROR_SYN 16
 #define ENTRY_ERROR_SYSCALL 17
 
-#endif // !ARCH_AARCH64_BOOT_ENTRY_H
+#endif // !ARCH_AARCH64_BOOT_SYS_LVLS_H

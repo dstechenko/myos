@@ -20,11 +20,12 @@ static struct task *tasks_all[TASKS_TOTAL] = {&tasks_main};
 
 int task_init(void) { return task_context_init(&tasks_main); }
 
-void task_enqueue(struct task *task) {
+int task_enqueue(struct task *task) {
   ASSERT(task);
   ASSERT(tasks_next_id < TASKS_TOTAL);
   task->id = tasks_next_id;
   tasks_all[tasks_next_id++] = task;
+  return 0;
 }
 
 void task_dequeue(struct task *task) { ASSERT(task); }
