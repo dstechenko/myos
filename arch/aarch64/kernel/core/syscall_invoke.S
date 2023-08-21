@@ -28,7 +28,7 @@ syscall_clone_invoke:
 
 clone_fp .req x29
 syscall_clone_thread_start:
-  mov clone_fp, #0
+  mov clone_fp, xzr
   blr clone_pc
   bl  syscall_exit_invoke
 
