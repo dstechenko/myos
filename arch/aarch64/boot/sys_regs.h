@@ -54,6 +54,6 @@
  * Page 2431 of ARMv8-Architecture-Reference-Manual.
  */
 #define ESR_ELx_EC_SHIFT 26
-#define ESR_ELx_EC_SVC64 0x15
+#define ESR_ELx_EC_SVC64 (SET(4) | SET(2) | SET(0))
 
 #endif // !ARCH_AARCH64_BOOT_SYS_REGS_H

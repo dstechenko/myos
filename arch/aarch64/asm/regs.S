@@ -7,7 +7,7 @@ level .req x0
 regs_get_priv:
     // Read from the system register for exception levels.
     // EL0 least priv, EL3 the most.
-    mrs level, CurrentEL
+    mrs level, currentel
     // Shift right by two because the first 2 bits are reserved
     // and are always zero.
     lsr level, level, #2

@@ -24,15 +24,15 @@ struct task {
   int64_t priority;
   int64_t ticks;
   int64_t preempt;
-  uint8_t padding[CONFIG_KERNEL_SCHEDULER_STACK_SIZE];
-  uint8_t stack[];
+  void *stack;
+  void *user_stack;
 };
 
-int task_context_init(struct task *task);
+int task_init(struct task *task);
 void task_cpu_switch(struct task_context *prev, struct task_context *next);
 struct proc_regs *task_get_proc_regs(struct task *task);
 
-int task_init(void);
+int task_main_init(void);
 int task_enqueue(struct task *task);
 void task_dequeue(struct task *task);
 void task_tick(void);
@@ -45,5 +45,7 @@ void task_context_switch(struct task *next);
 void task_preempt_enable(void);
 void task_preempt_disable(void);
 uint64_t task_get_priority(void);
+int task_move_to_user(uintptr_t pc);
+void task_exit(void);
 
 #endif // !KERNEL_SCHEDULER_TASK_H

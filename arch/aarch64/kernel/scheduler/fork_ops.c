@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <kernel/config.h>
 #include <kernel/memory/ops.h>
 #include <kernel/scheduler/task.h>
 #include <kernel/util/assert.h>
@@ -13,7 +14,7 @@
 #include "proc_regs.h"
 #include "task_context.h"
 
-int fork_task_context(struct task *forked, const void *pc,
+int fork_task_context(struct task *forked, const void *pc, const void *sp,
                       const uint8_t flags) {
   int err;
   struct task *current;
@@ -21,9 +22,8 @@ int fork_task_context(struct task *forked, const void *pc,
   struct proc_regs *forked_regs, *current_regs;
 
   ASSERT(forked);
-  ASSERT(pc);
 
-  err = task_context_init(forked);
+  err = task_init(forked);
   if (err)
     return err;
 
@@ -33,6 +33,7 @@ int fork_task_context(struct task *forked, const void *pc,
   ASSERT(forked_regs);
 
   if (flags & FORK_KERNEL) {
+    ASSERT(pc);
     forked_context->x19 = (uint64_t)pc;
   } else {
     current = task_get_current();
@@ -41,7 +42,8 @@ int fork_task_context(struct task *forked, const void *pc,
     ASSERT(current_regs);
     *forked_regs = *current_regs;
     forked_regs->regs[0] = 0;
-    forked_regs->sp = (uint64_t)NULL;
+    forked_regs->sp = (uint64_t)sp + CONFIG_KERNEL_SCHEDULER_STACK_SIZE;
+    forked->user_stack = (uint64_t)sp;
   }
 
   forked_context->pc = (uint64_t)entry_fork_return;

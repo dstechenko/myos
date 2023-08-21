@@ -62,11 +62,11 @@
 .endm
 
 .macro entry_kernel_in level
-  entry_save_regs level
+  entry_save_regs \level
 .endm
 
 .macro entry_kernel_out level
-  entry_load_regs level
+  entry_load_regs \level
 .endm
 
 .macro entry_ex label
@@ -74,26 +74,6 @@
   b \label
 .endm
 
-.align 11
-entry_ex_vec:
-  entry_ex	entry_syn_invalid_el1t
-  entry_ex	entry_irq_invalid_el1t
-  entry_ex	entry_fiq_invalid_el1t
-  entry_ex	entry_err_invalid_el1t
-  entry_ex	entry_syn_invalid_el1h
-  entry_ex	entry_irq_el1
-  entry_ex	entry_fiq_invalid_el1h
-  entry_ex	entry_err_invalid_el1h
-  entry_ex	entry_syn_invalid_el1h
-  entry_ex	entry_irq_invalid_el1h
-  entry_ex	entry_fiq_invalid_el0_64
-  entry_ex	entry_err_invalid_el0_64
-  entry_ex	entry_syn_invalid_el0_32
-  entry_ex	entry_irq_invalid_el0_32
-  entry_ex	entry_fiq_invalid_el0_32
-  entry_ex	entry_err_invalid_el0_32
-
-// Print some error message and halt.
 .macro entry_handle_invalid type, level
   entry_kernel_in level
   mov	x0, #\type
@@ -103,9 +83,28 @@ entry_ex_vec:
   b entry_halt_core
 .endm
 
-// For now only enable el1 irqs with a proper handler.
-// We need to save/load registers so that concurrent irqs can happen.
-// We could unmask them before going into the handler, for simplicity make it sync.
+.align 11
+entry_ex_vec:
+  entry_ex	entry_syn_invalid_el1t
+  entry_ex	entry_irq_invalid_el1t
+  entry_ex	entry_fiq_invalid_el1t
+  entry_ex	entry_err_invalid_el1t
+
+  entry_ex	entry_syn_invalid_el1h
+  entry_ex	entry_irq_el1
+  entry_ex	entry_fiq_invalid_el1h
+  entry_ex	entry_err_invalid_el1h
+
+  entry_ex	entry_syn_el0
+  entry_ex	entry_irq_el0
+  entry_ex	entry_fiq_invalid_el0_64
+  entry_ex	entry_err_invalid_el0_64
+
+  entry_ex	entry_syn_invalid_el0_32
+  entry_ex	entry_irq_invalid_el0_32
+  entry_ex	entry_fiq_invalid_el0_32
+  entry_ex	entry_err_invalid_el0_32
+
 entry_irq_el1:
   entry_kernel_in 1
   bl irq_handle
@@ -116,7 +115,7 @@ entry_syn_el0:
   mrs   x25, esr_el1
   lsr   x24, x25, #ESR_ELx_EC_SHIFT
   cmp   x24, #ESR_ELx_EC_SVC64
-  b.eq  entry_svc_el0
+  beq   entry_svc_el0
   entry_handle_invalid ENTRY_ERROR_SYN, 0
 
 entry_irq_el0:
@@ -124,7 +123,6 @@ entry_irq_el0:
   bl irq_handle
   entry_kernel_out 0
 
-// Just abort on everything else and show the registers.
 entry_syn_invalid_el1t:
   entry_handle_invalid ENTRY_SYN_INVALID_EL1t, 1
 entry_irq_invalid_el1t:
@@ -133,6 +131,7 @@ entry_fiq_invalid_el1t:
   entry_handle_invalid ENTRY_FIQ_INVALID_EL1t, 1
 entry_err_invalid_el1t:
   entry_handle_invalid ENTRY_ERR_INVALID_EL1t, 1
+
 entry_syn_invalid_el1h:
   entry_handle_invalid ENTRY_SYN_INVALID_EL1h, 1
 entry_irq_invalid_el1h:
@@ -141,6 +140,7 @@ entry_fiq_invalid_el1h:
   entry_handle_invalid ENTRY_FIQ_INVALID_EL1h, 1
 entry_err_invalid_el1h:
   entry_handle_invalid ENTRY_ERR_INVALID_EL1h, 1
+
 entry_syn_invalid_el0_64:
   entry_handle_invalid ENTRY_SYN_INVALID_EL0_64, 0
 entry_irq_invalid_el0_64:
@@ -149,6 +149,7 @@ entry_fiq_invalid_el0_64:
   entry_handle_invalid ENTRY_FIQ_INVALID_EL0_64, 0
 entry_err_invalid_el0_64:
   entry_handle_invalid ENTRY_ERR_INVALID_EL0_64, 0
+
 entry_syn_invalid_el0_32:
   entry_handle_invalid ENTRY_SYN_INVALID_EL0_32, 0
 entry_irq_invalid_el0_32:
@@ -168,23 +169,27 @@ entry_svc_el0:
   mov    syscall_cnt, #4
   bl     irq_enable
   cmp    syscall_num, syscall_cnt
-  b.hs   entry_syscall_error
+  bhs    entry_syscall_error
   ldr    syscall_ptr, [syscall_tbl, syscall_num, lsl #3]
   blr    syscall_ptr
-  b      entry_syscall_return
-
-entry_syscall_error:
-  entry_handle_invalid ENTRY_ERROR_SYSCALL, 0
 
 entry_syscall_return:
   bl    irq_disable
   str   x0, [sp, #0]
   entry_kernel_out 0
 
+entry_syscall_error:
+  entry_handle_invalid ENTRY_ERROR_SYSCALL, 0
+
 fork_ptr .req x19
 entry_fork_return:
   bl  task_schedule_tail
+  cbz fork_ptr, entry_user_return
   blr fork_ptr
+
+entry_user_return:
+  bl irq_disable
+  entry_kernel_out 0
 
 entry_halt_core:
   wfe

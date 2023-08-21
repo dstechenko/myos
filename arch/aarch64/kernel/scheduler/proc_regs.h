@@ -10,7 +10,7 @@ struct proc_regs {
   uint64_t regs[31];
   uint64_t sp;
   uint64_t pc;
-  uint64_t st;
+  uint64_t ps;
 };
 
 #endif // !ARCH_AARCH64_KERNEL_SCHEDULER_PROC_REGS_H

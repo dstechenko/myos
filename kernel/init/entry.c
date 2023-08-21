@@ -10,6 +10,7 @@
 #include <drivers/timer.h>
 #include <kernel/build_info.h>
 #include <kernel/config.h>
+#include <kernel/core/syscall.h>
 #include <kernel/logging/log.h>
 #include <kernel/scheduler/fork.h>
 #include <kernel/scheduler/task.h>
@@ -19,30 +20,62 @@ static const char *messages[] = {"null", "hello"};
 
 void task_a(void) {
   while (true) {
-    LOG_INFO("tick from task a, priv %d", regs_get_priv());
+    LOG_INFO("tick from task a");
     cdelay(LOOP_DELAY);
   }
 }
 
 void task_b(void) {
   while (true) {
-    LOG_INFO("tick from task b, priv %d", regs_get_priv());
+    LOG_INFO("tick from task b");
     cdelay(LOOP_DELAY);
   }
 }
 
-void task_c(void) {
-  while (true) {
-    LOG_INFO("tick from task c, priv %d", regs_get_priv());
-    cdelay(LOOP_DELAY);
+void task_user(void) {
+  int err;
+  uintptr_t stack;
+
+  syscall_write_invoke("tick from task in user");
+
+  stack = syscall_alloc_invoke(CONFIG_KERNEL_SCHEDULER_STACK_SIZE);
+  if (!stack) {
+    LOG_ERROR("Failed to allocate user stack for task a");
+    goto exit;
   }
+
+  err = syscall_clone_invoke((uintptr_t)&task_a, stack);
+  if (err < 0) {
+    LOG_ERROR("Failed to clone user task a, err %d", err);
+    goto exit;
+  }
+
+  stack = syscall_alloc_invoke(CONFIG_KERNEL_SCHEDULER_STACK_SIZE);
+  if (!stack) {
+    LOG_ERROR("Failed to allocate user stack for task b");
+    goto exit;
+  }
+
+  err = syscall_clone_invoke((uintptr_t)&task_b, stack);
+  if (err < 0) {
+    LOG_ERROR("Failed to clone user task b, err %d", err);
+    goto exit;
+  }
+
+exit:
+  syscall_exit_invoke();
+}
+
+void task_kernel(void) {
+  LOG_INFO("tick from task in kernel, priv %d", regs_get_priv());
+  task_move_to_user((uintptr_t)&task_user);
 }
 
 void kernel_entry(void) {
   int err;
 
   log_init();
-  task_init();
+  task_main_init();
   irq_init();
   timer_init();
   irq_ctrl_init();
@@ -67,15 +100,9 @@ void kernel_entry(void) {
   LOG_DEBUG("%x", 123);
   LOG_DEBUG("%s", messages[1]);
 
-  err = fork_task(&task_a, FORK_KERNEL);
+  err = fork_task(&task_kernel, NULL, FORK_KERNEL);
   if (err < 0) {
-    LOG_ERROR("Failed to start task a, err: %d", err);
-    return;
-  }
-
-  err = fork_task(&task_b, FORK_KERNEL);
-  if (err < 0) {
-    LOG_ERROR("Failed to start task b, err: %d", err);
+    LOG_ERROR("Failed to start task before user, err: %d", err);
     return;
   }
 

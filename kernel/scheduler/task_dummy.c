@@ -18,7 +18,7 @@ static struct task tasks_main = INIT_TASK_MAIN(tasks_main);
 static struct task *tasks_current = &tasks_main;
 static struct task *tasks_all[TASKS_TOTAL] = {&tasks_main};
 
-int task_init(void) { return task_context_init(&tasks_main); }
+int task_main_init(void) { return task_init(&tasks_main); }
 
 int task_enqueue(struct task *task) {
   ASSERT(task);
@@ -59,7 +59,7 @@ struct task *task_pick(void) {
       break;
     for (id = 0; id < TASKS_TOTAL; id++) {
       each = tasks_all[id];
-      if (each)
+      if (each && each->state == TASK_RUNNING)
         each->ticks = (each->ticks >> 1) + each->priority;
     }
   }

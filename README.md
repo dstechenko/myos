@@ -1,6 +1,7 @@
 # myos
 
 TODOs:
+- Refine syscall system with generated wrappers and arguments
 - Add comments and docs everywhere after vmem/user
 - Add qemu bcm overlay
 - Add task priority setting, unlimited task allocation

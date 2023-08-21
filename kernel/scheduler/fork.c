@@ -6,22 +6,19 @@
 #include <kernel/core/error.h>
 #include <kernel/memory/allocator.h>
 #include <kernel/scheduler/task.h>
-#include <kernel/util/assert.h>
 
 #define TASK_PREEMPT_DISABLED 1
 
-int fork_task(const void *pc, const uint8_t flags) {
+int fork_task(const void *pc, const void *sp, const uint8_t flags) {
   int err;
   struct task *task;
-
-  ASSERT(pc);
 
   task_preempt_disable();
   task = zalloc(sizeof(struct task), ALLOC_KERNEL);
   if (!task)
     return -ENOMEM;
 
-  err = fork_task_context(task, pc, flags);
+  err = fork_task_context(task, pc, sp, flags);
   if (err)
     return err;
 

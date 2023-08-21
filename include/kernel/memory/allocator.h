@@ -12,6 +12,7 @@
 #define PAGE_SIZE 4096
 
 #define ALLOC_KERNEL BIT(0)
+#define ALLOC_USER BIT(1)
 
 void *alloc(size_t size, uint8_t flags);
 void *zalloc(size_t size, uint8_t flags);
