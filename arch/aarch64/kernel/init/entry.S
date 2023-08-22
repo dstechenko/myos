@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include "sys_lvls.h"
-#include "sys_regs.h"
+#include <asm/system_levels.h>
+#include <asm/system_registers.h>
 
 .globl entry_ex_vec, entry_fork_return
 

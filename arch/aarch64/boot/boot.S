@@ -1,15 +1,16 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include "sys_regs.h"
+#include <asm/system_registers.h>
 
 // To keep this in the first portion of the binary.
 .section ".text.boot"
 
 // Make _start global. Need this to get execution transferred from armstub8.
-.globl _start
+.globl _start, boot_start
 
 _start:
+boot_start:
   // Entry point for the kernel.
   // We need to halt all of the non-primary CPUs since they
   // all might execute the same code. Depends on the firmware.
@@ -67,7 +68,7 @@ boot_loop_clear_bss:
 boot_kernel_entry:
   // Jump to the kernel entry point.
   // This should not return.
-  bl      kernel_entry
+  bl      kernel_start
 
 boot_halt_core:
   // For failsafe, halt this core.

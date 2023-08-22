@@ -63,6 +63,9 @@ KERNEL_CONF       := $(GEN_DIR)/include/kernel/config.h
 KERNEL_CONF_DIRS  := $(CONFIGS_DIR) $(CONFIGS_ARCH_DIR) $(CONFIGS_BOARD_DIR)
 KERNEL_CONF_FILES := $(KERNEL_CONF_DIRS:%=%/config)
 
+INC_DIRS := $(INC_DIR) $(GEN_DIR)/include $(ARCH_DIR)/include
+INC_FLAGS := $(INC_DIRS:%=-I%)
+
 ifeq ($(TARGET_MODE),)
 KERNEL_CONF_MODE_FILES :=
 else
@@ -85,19 +88,19 @@ $(KERNEL_BUILD_INFO):
 
 $(OUT_DIR)/%.o: $(ARCH_DIR)/%.S
 	mkdir -p $(@D)
-	$(AS) $(ASFLAGS) -c -I$(<D) $< -o $@
+	$(AS) $(ASFLAGS) -c $(INC_FLAGS) -I$(<D) $< -o $@
 
 $(OUT_DIR)/%.o: %.S
 	mkdir -p $(@D)
-	$(AS) $(ASFLAGS) -c -I$(<D) $< -o $@
+	$(AS) $(ASFLAGS) -c $(INC_FLAGS) -I$(<D) $< -o $@
 
 $(OUT_DIR)/%.o: $(ARCH_DIR)/%.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(GEN_DIR)/include -I$(<D) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC_FLAGS) -I$(<D) -c $< -o $@
 
 $(OUT_DIR)/%.o: %.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(GEN_DIR)/include -I$(<D) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC_FLAGS) -I$(<D) -c $< -o $@
 
 build-target: $(KERNEL_OBJS)
 	mkdir -p $(@D)

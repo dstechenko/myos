@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef ARCH_AARCH64_BOOT_SYS_REGS_H
-#define ARCH_AARCH64_BOOT_SYS_REGS_H
+#ifndef ARCH_AARCH64_SYSTEM_REGISTERS_H
+#define ARCH_AARCH64_SYSTEM_REGISTERS_H
 
 #define SET(b) (1 << b)
 #define UNSET(b) (0 << b)
@@ -56,4 +56,4 @@
 #define ESR_ELx_EC_SHIFT 26
 #define ESR_ELx_EC_SVC64 (SET(4) | SET(2) | SET(0))
 
-#endif // !ARCH_AARCH64_BOOT_SYS_REGS_H
+#endif // !ARCH_AARCH64_SYSTEM_REGISTERS_H

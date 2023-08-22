@@ -1,7 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/init/entry.h>
+#include <kernel/init/kernel.h>
 
 #include <asm/delay.h>
 #include <asm/irq.h>
@@ -71,7 +71,7 @@ void task_kernel(void) {
   task_move_to_user((uintptr_t)&task_user);
 }
 
-void kernel_entry(void) {
+void kernel_start(void) {
   int err;
 
   log_init();
