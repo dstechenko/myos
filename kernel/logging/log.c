@@ -9,9 +9,9 @@
 #include <kernel/core/config.h>
 #include <kernel/core/error.h>
 
-#if CONFIG_ENABLED(CONFIG_UART_ON)
+#if CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
 #include <drivers/uart.h>
-#endif // CONFIG_ENABLED(CONFIG_UART_ON)
+#endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
 
 static void (*log_putc)(char) = NULL;
 
@@ -94,12 +94,12 @@ static void log_format(va_list *args, const char format) {
 
 int log_init() {
   int err = -EINVAL;
-#if CONFIG_ENABLED(CONFIG_UART_ON)
+#if CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
   err = 0;
   uart_init();
   log_putc = uart_putc;
   log_puts = uart_puts;
-#endif // CONFIG_ENABLED(CONFIG_UART_ON)
+#endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
   return err;
 }
 

@@ -1,7 +1,7 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
-UART_ON           true
-UART_USE_MINI     true
-UART_BAUDRATE     115200
-SYSTEM_CLOCK_FREQ 250000000
+BCM2837_UART_ON             true
+BCM2837_UART_USE_MINI       true
+BCM2837_UART_BAUDRATE       115200
+BCM2837_SYSTEM_CLOCK_FREQ   250000000

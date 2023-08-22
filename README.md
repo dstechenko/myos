@@ -1,13 +1,13 @@
 # myos
 
 TODOs(progress):
-- Prefix all board specific configs with board name
 - Fix sized printing, extract printing and logging separately
+- Expose jiffies in kernel
+- Add irq enabled/disabled functions
 
 TODOs(backlog):
 - Add UART irqs to handle inputs
 - Make kernel tasks exit by themselves and clean up
-- Add irq enabled/disabled functions
 - Separate fork into user/kernel implementations
 - Refine syscall system with generated wrappers and arguments, syscall table
 - Add comments and docs everywhere after vmem bits
@@ -20,6 +20,9 @@ TODOs(backlog):
 - Add driver subsystems (simple, static but organized)
 - Add stack protector
 - Add libc primitives
+- Run all timers
+- Set up multiple cores
+- Add cpu core asm code
 
 Notes:
 - UART pinout gpio#3 gnd, gpio#4 txd, gpio#5 rxd
