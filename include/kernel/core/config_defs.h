@@ -6,7 +6,8 @@
 
 #include <kernel/util/bool.h>
 
-#define CONFIG_ENABLED(config) (config == true)
+#define CONFIG_SET(config, value) (config == value)
+#define CONFIG_ENABLED(config) (CONFIG_SET(config, true))
 #define CONFIG_DISABLED(config) (!CONFIG_ENABLED(config))
 
 #endif // !KERNEL_CORE_CONFIG_H

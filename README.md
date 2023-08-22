@@ -1,8 +1,6 @@
 # myos
 
 TODOs(progress):
-- Move config into core subfolder
-- Add config defined macro, make varargs
 - Prefix all board specific configs with board name
 - Fix sized printing, extract printing and logging separately
 
