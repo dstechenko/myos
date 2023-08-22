@@ -1,9 +1,9 @@
 # myos
 
 TODOs(progress):
+- Add irq enabled/disabled functions
 - Fix sized printing, extract printing and logging separately
 - Expose jiffies in kernel
-- Add irq enabled/disabled functions
 
 TODOs(backlog):
 - Add UART irqs to handle inputs

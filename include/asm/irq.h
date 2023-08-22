@@ -6,6 +6,10 @@
 
 void irq_init(void);
 void irq_enable(void);
+bool irq_enabled(void);
 void irq_disable(void);
+bool irq_disabled(void);
+void irq_save(uint64_t *flags);
+void irq_restore(uint64_t *flags);
 
 #endif // !ASM_IRQ_H
