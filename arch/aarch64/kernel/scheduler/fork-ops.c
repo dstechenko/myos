@@ -6,15 +6,15 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <asm/proc-regs.h>
 #include <kernel/core/config.h>
 #include <kernel/memory/ops.h>
 #include <kernel/scheduler/task.h>
 #include <kernel/util/assert.h>
 
-#include "proc_regs.h"
-#include "task_context.h"
+#include "task-context.h"
 
-int fork_task_context(struct task *forked, const void *pc, const void *sp,
+int fork_task_context(struct task *forked, void *pc, void *sp,
                       const uint8_t flags) {
   int err;
   struct task *current;
@@ -43,7 +43,7 @@ int fork_task_context(struct task *forked, const void *pc, const void *sp,
     *forked_regs = *current_regs;
     forked_regs->regs[0] = 0;
     forked_regs->sp = (uint64_t)sp + CONFIG_KERNEL_SCHEDULER_STACK_SIZE;
-    forked->user_stack = (uint64_t)sp;
+    forked->user_stack = sp;
   }
 
   forked_context->pc = (uint64_t)entry_fork_return;

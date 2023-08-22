@@ -1,6 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
+#include <asm/page.h>
 #include <asm/system-registers.h>
 
 // To keep this in the first portion of the binary.
@@ -13,7 +14,7 @@
   lsr   \tmp1, \virt, #\shift
   and   \tmp1, \tmp1, #PTRS_PER_TABLE - 1
   add   \tmp2, \table, #PAGE_SIZE
-  orr   \tmp2, \tmp2,  #
+  orr   \tmp2, \tmp2, #MM_TYPE_PAGE_TABLE
 .endm
 
 .macro boot_create_block_map

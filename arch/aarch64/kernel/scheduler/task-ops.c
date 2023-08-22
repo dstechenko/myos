@@ -3,13 +3,13 @@
 
 #include <kernel/scheduler/task.h>
 
+#include <asm/proc-regs.h>
 #include <kernel/core/config.h>
 #include <kernel/core/error.h>
 #include <kernel/memory/allocator.h>
 #include <kernel/util/assert.h>
 
-#include "proc_regs.h"
-#include "task_context.h"
+#include "task-context.h"
 
 #define PSR_MODE_EL0t 0x00000000
 #define PSR_MODE_EL1t 0x00000004

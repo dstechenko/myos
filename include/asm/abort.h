@@ -3,9 +3,9 @@
 
 #ifndef ASM_ABORT_H
 #define ASM_ABORT_H
-#ifndef __ASSEMBLY__
+#ifndef __ASSEMBLER__
 
 void abort();
 
-#endif // !__ASSEMBLY__
+#endif // !__ASSEMBLER__
 #endif // !ASM_ABORT_H

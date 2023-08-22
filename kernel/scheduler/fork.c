@@ -9,7 +9,7 @@
 
 #define TASK_PREEMPT_DISABLED 1
 
-int fork_task(const void *pc, const void *sp, const uint8_t flags) {
+int fork_task(void *pc, void *sp, const uint8_t flags) {
   int err;
   struct task *task;
 

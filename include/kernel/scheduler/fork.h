@@ -14,8 +14,7 @@
 
 void entry_fork_return(void);
 
-int fork_task(const void *pc, const void *sp, uint8_t flags);
-int fork_task_context(struct task *task, const void *pc, const void *sp,
-                      uint8_t flags);
+int fork_task(void *pc, void *sp, uint8_t flags);
+int fork_task_context(struct task *task, void *pc, void *sp, uint8_t flags);
 
 #endif // !KERNEL_SCHEDULER_FORK_H

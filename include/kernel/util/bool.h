@@ -7,8 +7,8 @@
 #define true 1
 #define false 0
 
-#ifndef __ASSEMBLY__
+#ifndef __ASSEMBLER__
 typedef _Bool bool;
-#endif // !__ASSEMBLY__
+#endif // !__ASSEMBLER__
 
 #endif // !KERNEL_UTIL_BOOL_H

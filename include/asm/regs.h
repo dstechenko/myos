@@ -3,9 +3,9 @@
 
 #ifndef ASM_REGS_H
 #define ASM_REGS_H
-#ifndef __ASSEMBLY__
+#ifndef __ASSEMBLER__
 
 int regs_get_priv(void);
 
-#endif // !__ASSEMBLY__
+#endif // !__ASSEMBLER__
 #endif // !ASM_REGS_H

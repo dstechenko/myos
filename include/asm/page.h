@@ -23,7 +23,7 @@
 
 #define PG_DIR_SIZE (3 * PAGE_SIZE)
 
-#ifndef __ASSEMBLY__
-#endif // !__ASSEMBLY__
+#ifndef __ASSEMBLER__
+#endif // !__ASSEMBLER__
 
 #endif // !ASM_PAGE_H
