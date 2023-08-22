@@ -38,16 +38,17 @@ OD  := $(TOOLCHAIN)-objdump
 OC  := $(TOOLCHAIN)-objcopy
 VM  := qemu-system-$(TARGET_ARCH)
 
-ASFLAGS  := -g -mgeneral-regs-only
-CFLAGS   := -g -mgeneral-regs-only -ffreestanding -nostdlib -nostartfiles -Wall -Wextra -MMD
-DBGFLAGS := -q -iex "target remote localhost:1234"
-LDFLAGS  := -g -ffreestanding -nostdlib -nostartfiles
-LDLIBS   := -lgcc
-VMFLAGS  := -M raspi3b -serial null -serial stdio
-ODFLAGS  := -s -d
+AS_FLAGS  := -c -g -mgeneral-regs-only
+C_FLAGS   := -c -g -mgeneral-regs-only -ffreestanding -nostdlib -nostartfiles -Wall -Wextra -MMD
+DBG_FLAGS := -q -iex "target remote localhost:1234"
+LD_FLAGS  := -g -ffreestanding -nostdlib -nostartfiles
+LD_LIBS   := -lgcc
+PP_FLAGS  := -E -P -x c -D__ASSEMBLER__
+VM_FLAGS   := -M raspi3b -serial null -serial stdio
+OD_FLAGS   := -s -d
 
 ifeq ($(VM_MODE), debug)
-VMFLAGS := $(VMFLAGS) -d int
+VM_FLAGS := $(VM_FLAGS) -d int
 endif
 
 KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR) $(DRIVERS_DIR)
@@ -56,7 +57,6 @@ KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.S=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.c=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:%.c=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:%.S=$(OUT_DIR)/%.o)
-KERNEL_OBJS := $(OUT_DIR)/boot/boot.o $(KERNEL_OBJS)
 
 KERNEL_BUILD_INFO := $(GEN_DIR)/include/kernel/core/build_info.h
 KERNEL_CONF       := $(GEN_DIR)/include/kernel/core/config.h
@@ -65,6 +65,8 @@ KERNEL_CONF_FILES := $(KERNEL_CONF_DIRS:%=%/config)
 
 INC_DIRS := $(INC_DIR) $(GEN_DIR)/include $(ARCH_DIR)/include
 INC_FLAGS := $(INC_DIRS:%=-I%)
+
+LD_FILE := $(OUT_DIR)/boot/link.ld
 
 ifeq ($(TARGET_MODE),)
 KERNEL_CONF_MODE_FILES :=
@@ -88,23 +90,26 @@ $(KERNEL_BUILD_INFO):
 
 $(OUT_DIR)/%.o: $(ARCH_DIR)/%.S
 	mkdir -p $(@D)
-	$(AS) $(ASFLAGS) -c $(INC_FLAGS) -I$(<D) $< -o $@
+	$(AS) $(AS_FLAGS) $(INC_FLAGS) -I$(<D) $< -o $@
 
 $(OUT_DIR)/%.o: %.S
 	mkdir -p $(@D)
-	$(AS) $(ASFLAGS) -c $(INC_FLAGS) -I$(<D) $< -o $@
+	$(AS) $(AS_FLAGS) $(INC_FLAGS) -I$(<D) $< -o $@
 
 $(OUT_DIR)/%.o: $(ARCH_DIR)/%.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INC_FLAGS) -I$(<D) -c $< -o $@
+	$(CC) $(C_FLAGS) $(INC_FLAGS) -I$(<D) $< -o $@
 
 $(OUT_DIR)/%.o: %.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INC_FLAGS) -I$(<D) -c $< -o $@
+	$(CC) $(C_FLAGS) $(INC_FLAGS) -I$(<D) $< -o $@
 
-build-target: $(KERNEL_OBJS)
+$(LD_FILE): $(BOOT_DIR)/link.ld
+	$(CC) $(PP_FLAGS) $(INC_FLAGS) -I$(<D) $< -o $@
+
+build-target: $(KERNEL_OBJS) $(LD_FILE)
 	mkdir -p $(@D)
-	$(LD) $(LDFLAGS) -T $(BOOT_DIR)/link.ld -o $(KERNEL_ELF) $^ $(LDLIBS)
+	$(LD) $(LD_FLAGS) -T $(LD_FILE) -o $(KERNEL_ELF) $(KERNEL_OBJS) $(LDLIBS)
 	$(OC) $(KERNEL_ELF) -O binary $(KERNEL_IMG)
 
 build-gen: $(KERNEL_CONF) $(KERNEL_BUILD_INFO)
@@ -131,14 +136,14 @@ install-cc:
 	$(TOOLS_DIR)/install_cc.sh
 
 boot-vm: build-all
-	$(VM) $(VMFLAGS) -kernel $(KERNEL_IMG)
+	$(VM) $(VM_FLAGS) -kernel $(KERNEL_IMG)
 
 debug-vm: build-all
-	$(VM) $(VMFLAGS) -s -S -kernel $(KERNEL_IMG) &
-	$(DBG) $(DBGFLAGS) -s $(KERNEL_ELF)
+	$(VM) $(VM_FLAGS) -s -S -kernel $(KERNEL_IMG) &
+	$(DBG) $(DBG_FLAGS) -s $(KERNEL_ELF)
 
 dump-all: build-all
-	$(OD) $(ODFLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
+	$(OD) $(OD_FLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
 
 boot-copy: build-all
 	cp $(KERNEL_IMG) /run/media/$(USER)/bootfs/kernel8.img

@@ -10,14 +10,19 @@
 // Make _start global. Need this to get execution transferred from armstub8.
 .globl _start, boot_start
 
-.macro boot_create_table_entry table, vaddr, shift, tmp1, tmp2
-  lsr   \tmp1, \virt, #\shift
-  and   \tmp1, \tmp1, #PTRS_PER_TABLE - 1
-  add   \tmp2, \table, #PAGE_SIZE
-  orr   \tmp2, \tmp2, #MM_TYPE_PAGE_TABLE
+.macro boot_create_page_global_directory_entry table, vaddr, aux0, aux1
+  boot_create_page_table_entry \table, \vaddr, PAGE_GLOBAL_DIRECTORY_SHIFT, \aux0, \aux1
+  boot_create_page_table_entry \table, \vaddr, PAGE_UPPER_DIRECTORY_SHIFT, \aux0, \aux1
 .endm
 
-.macro boot_create_block_map
+.macro boot_create_page_table_entry table, vaddr, shift, aux0, aux1
+  ## lsr   \aux0, \virt, #\shift
+  ## and   \aux0, \aux0, #PAGE_ENTRIES_PER_TABLE - 1
+  ## add   \aux1, \table, #PAGE_SIZE
+  ## orr   \aux1, \aux1, #MM_TYPE_PAGE_TABLE
+.endm
+
+.macro boot_create_page_block_mapping table, paddr, start, end, flags, aux0
 .endm
 
 _start:
@@ -26,13 +31,13 @@ boot_start:
   // We need to halt all of the non-primary CPUs since they
   // all might execute the same code. Depends on the firmware.
   // Check a multiprocessor affinity register to id it (0 is primary core).
-  mrs     x5, mpidr_el1
-  and     x5, x5, #0xFF
-  cbnz    x5, boot_halt_core
+  mrs     x0, mpidr_el1
+  and     x0, x0, #0xFF
+  cbnz    x0, boot_halt_core
 
   // Check our current exception level.
   // Depending on the boot loader we could be in EL2 or EL3.
-  mrs     x0, CurrentEL
+  mrs     x0, currentel
   lsr     x0, x0, #2
   cmp     x0, #3
   bne     boot_init_el2
@@ -63,12 +68,13 @@ boot_init_el2:
 
 boot_init_kernel:
   // Set stack before we jump into kernel.
-  ldr     x5, =_start
-  mov     sp, x5
+  ldr     x0, =_start
+  mov     sp, x0
 
   // Also zero-out bss section to prepare kernel.
-  adr     x0, __bss_start
-  adr     x1, __bss_size
+  adr     x0, section_bss_start
+  adr     x1, section_bss_end
+  sub     x1, x1, x0
   bl      memzero
 
 boot_kernel_entry:
@@ -81,3 +87,28 @@ boot_halt_core:
   // We should not reach here, but if we do - we cannot recover.
   wfe
   b       boot_halt_core
+
+boot_create_page_tables:
+  // Save link register to return after
+  mov	x29, x30
+
+  // Prepare the pages before mapping (zero out)
+  ## adrp	x0, page_global_directory
+  ## mov	x1, #PG_DIR_SIZE
+  ## bl  memzero
+
+  // Create page global directory entries
+  ## adrp	x0, page_global_directory
+  ## mov	x1, #VA_START
+  ## boot_create_page_global_directory_entry x0, x1, x2, x3
+
+  // Map kernel and initial stack
+  // ...
+
+  // Map device memory
+  // ...
+
+  // Restore link register to jump back
+  mov x30, x29
+
+  ret
