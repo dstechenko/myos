@@ -23,6 +23,7 @@ TODOs(backlog):
 - Run all timers
 - Set up multiple cores
 - Add cpu core asm code
+- Add cpu registers breakdown doc strings
 
 Notes:
 - UART pinout gpio#3 gnd, gpio#4 txd, gpio#5 rxd

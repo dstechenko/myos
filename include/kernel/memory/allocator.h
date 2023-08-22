@@ -7,9 +7,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <asm/page.h>
 #include <kernel/util/bits.h>
-
-#define PAGE_SIZE 4096
 
 #define ALLOC_KERNEL BIT(0)
 #define ALLOC_USER BIT(1)

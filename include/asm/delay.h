@@ -3,9 +3,11 @@
 
 #ifndef ASM_DELAY_H
 #define ASM_DELAY_H
+#ifndef __ASSEMBLY__
 
 void cdelay(unsigned long cycles);
 void udelay(unsigned long micros);
 void mdelay(unsigned long millis);
 
+#endif // !__ASSEMBLY__
 #endif // !ASM_DELAY_H

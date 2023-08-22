@@ -1,7 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include "syscall_invoke.h"
+#include "syscall-invoke.h"
 
 .globl syscall_alloc_invoke
 .globl syscall_clone_invoke

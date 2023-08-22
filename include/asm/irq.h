@@ -3,6 +3,11 @@
 
 #ifndef ASM_IRQ_H
 #define ASM_IRQ_H
+#ifndef __ASSEMBLY__
+
+#include <stdint.h>
+
+#include <kernel/util/bool.h>
 
 void irq_init(void);
 void irq_enable(void);
@@ -12,4 +17,5 @@ bool irq_disabled(void);
 void irq_save(uint64_t *flags);
 void irq_restore(uint64_t *flags);
 
+#endif // !__ASSEMBLY__
 #endif // !ASM_IRQ_H

@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef ARCH_AARCH64_SYSTEM_REGISTERS_H
-#define ARCH_AARCH64_SYSTEM_REGISTERS_H
+#ifndef ARCH_AARCH64_ASM_SYSTEM_REGISTERS_H
+#define ARCH_AARCH64_ASM_SYSTEM_REGISTERS_H
 
 #define SET(b) (1 << b)
 #define UNSET(b) (0 << b)

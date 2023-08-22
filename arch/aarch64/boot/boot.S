@@ -1,13 +1,23 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <asm/system_registers.h>
+#include <asm/system-registers.h>
 
 // To keep this in the first portion of the binary.
 .section ".text.boot"
 
 // Make _start global. Need this to get execution transferred from armstub8.
 .globl _start, boot_start
+
+.macro boot_create_table_entry table, vaddr, shift, tmp1, tmp2
+  lsr   \tmp1, \virt, #\shift
+  and   \tmp1, \tmp1, #PTRS_PER_TABLE - 1
+  add   \tmp2, \table, #PAGE_SIZE
+  orr   \tmp2, \tmp2,  #
+.endm
+
+.macro boot_create_block_map
+.endm
 
 _start:
 boot_start:
@@ -56,14 +66,9 @@ boot_init_kernel:
   mov     sp, x5
 
   // Also zero-out bss section to prepare kernel.
-  ldr     x5, =__bss_start
-  ldr     w6, =__bss_size
-
-boot_loop_clear_bss:
-  cbz     w6, boot_kernel_entry
-  str     xzr, [x5], #8
-  sub     w6, w6, #1
-  cbnz    w6, boot_loop_clear_bss
+  adr     x0, __bss_start
+  adr     x1, __bss_size
+  bl      memzero
 
 boot_kernel_entry:
   // Jump to the kernel entry point.

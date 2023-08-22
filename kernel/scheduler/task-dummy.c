@@ -8,7 +8,7 @@
 #include <asm/irq.h>
 #include <kernel/util/assert.h>
 
-#include "task_main.h"
+#include "task-main.h"
 
 #define TASKS_TOTAL CONFIG_KERNEL_SCHEDULER_TASKS
 

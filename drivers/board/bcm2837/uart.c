@@ -8,9 +8,9 @@
 #include <kernel/core/config.h>
 
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
-#include "uart_mini.h"
+#include "uart-mini.h"
 #else // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
-#include "uart_pl001.h"
+#include "uart-pl001.h"
 #endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
 
 void uart_init(void) {

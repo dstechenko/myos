@@ -1,7 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include "uart_pl001.h"
+#include "uart-mini.h"
 
 #include <stdint.h>
 
@@ -9,10 +9,10 @@
 #include <drivers/mmio.h>
 #include <kernel/core/config.h>
 #include <kernel/util/bits.h>
+#include <kernel/util/bool.h>
 
 #include "aux.h"
 #include "gpio.h"
-#include "mbox.h"
 
 /**
  * If you use a particular pin as input and don't connect anything to this pin,
@@ -45,47 +45,8 @@
  * 6. Write to GPPUDCLK0/1 to remove the clock.
  */
 
-#define UART_PL001_BASE 0x00201000
-
-#define UART_PL001_DR (UART_PL001_BASE + 0x00)
-#define UART_PL001_RSRECR (UART_PL001_BASE + 0x04)
-#define UART_PL001_FR (UART_PL001_BASE + 0x18)
-#define UART_PL001_ILPR (UART_PL001_BASE + 0x20)
-#define UART_PL001_IBRD (UART_PL001_BASE + 0x24)
-#define UART_PL001_FBRD (UART_PL001_BASE + 0x28)
-#define UART_PL001_LCRH (UART_PL001_BASE + 0x2C)
-#define UART_PL001_CR (UART_PL001_BASE + 0x30)
-#define UART_PL001_IFLS (UART_PL001_BASE + 0x34)
-#define UART_PL001_IMSC (UART_PL001_BASE + 0x38)
-#define UART_PL001_RIS (UART_PL001_BASE + 0x3C)
-#define UART_PL001_MIS (UART_PL001_BASE + 0x40)
-#define UART_PL001_ICR (UART_PL001_BASE + 0x44)
-#define UART_PL001_DMACR (UART_PL001_BASE + 0x48)
-#define UART_PL001_ITCR (UART_PL001_BASE + 0x80)
-#define UART_PL001_ITIP (UART_PL001_BASE + 0x84)
-#define UART_PL001_ITOP (UART_PL001_BASE + 0x88)
-#define UART_PL001_TDR (UART_PL001_BASE + 0x8C)
-
-void uart_pl001_init(void) {
+void uart_mini_init(void) {
   uint32_t reg;
-
-  // Disable UART_PL001.
-  mmio_write32(UART_PL001_CR, 0);
-
-  // Set up clock for consistent divisor values.
-  DEFINE_MBOX(mbox);
-  // Set clock rate.
-  mbox[0] = 9 * 4;
-  mbox[1] = MBOX_REQUEST;
-  mbox[2] = MBOX_TAG_SET_CLKRATE;
-  mbox[3] = 12;
-  mbox[4] = 8;
-  // UART clock with 4Mhz and cleared turbo.
-  mbox[5] = 2;
-  mbox[6] = CONFIG_BCM2837_SYSTEM_CLOCK_FREQ;
-  mbox[7] = 0;
-  mbox[8] = MBOX_TAG_LAST;
-  mbox_send(MBOX_CHANNEL_PROP, mbox);
 
   // GPIO pins should be set up first the before enabling the UART.
   reg = mmio_read32(GPFSEL1);
@@ -103,31 +64,35 @@ void uart_pl001_init(void) {
   cdelay(150);
   mmio_write32(GPPUDCLK0, 0);
 
-  // Clear pending interrupts.
-  mmio_write32(UART_PL001_ICR, 0x7FF);
-  // Set integer_reg  = (system_clock_freq / (16 * baudrate)).
-  reg = CONFIG_BCM2837_SYSTEM_CLOCK_FREQ / (16 * CONFIG_BCM2837_UART_BAUDRATE);
-  mmio_write32(UART_PL001_IBRD, reg);
-  // Set fraction_reg = (fractional_part * 64) + 0.5.
-  // Let's try with 0 and if not - revisit to fix.
-  reg = 0;
-  mmio_write32(UART_PL001_FBRD, reg);
-  // Enable FIFO and 8bit data transmission (1 stop bit, no parity).
-  mmio_write32(UART_PL001_LCRH, BIT(4) | BIT(5) | BIT(6));
-  // Enable UART_PL001, enable RX and TX part of it.
-  mmio_write32(UART_PL001_CR, BIT(0) | BIT(8) | BIT(9));
+  // Enable Mini UART (this also enables access to its registers).
+  mmio_write32(AUX_ENABLES, 1);
+  // Disable auto flow control and disable receiver/transmitter (for now).
+  mmio_write32(AUX_MU_CNTL_REG, 0);
+  // Disable receive/transmit interrupts.
+  mmio_write32(AUX_MU_IER_REG, 0);
+  // Enable 8 bit mode.
+  mmio_write32(AUX_MU_LCR_REG, 3);
+  // Set RTS line to be always high.
+  mmio_write32(AUX_MU_MCR_REG, 0);
+  // Calculated: baudrate = system_clock_freq / (8 * (baudrate_reg + 1)).
+  reg =
+      (CONFIG_BCM2837_SYSTEM_CLOCK_FREQ / (8 * CONFIG_BCM2837_UART_BAUDRATE)) -
+      1;
+  mmio_write32(AUX_MU_BAUD_REG, reg);
+  // Finally, enable receiver/transmitter.
+  mmio_write32(AUX_MU_CNTL_REG, 3);
 }
 
-char uart_pl001_getc(void) {
-  while (mmio_read32(UART_PL001_FR) & BIT(4))
-    // TODO: replace with NOPs?
-    cdelay(1);
-  return MASK_LOW_BYTE(mmio_read32(UART_PL001_DR));
+char uart_mini_getc(void) {
+  while (true)
+    if (mmio_read32(AUX_MU_LSR_REG) & BIT(0))
+      break;
+  return (MASK_LOW_BYTE(mmio_read32(AUX_MU_IO_REG)));
 }
 
-void uart_pl001_putc(const char c) {
-  while (mmio_read32(UART_PL001_FR) & BIT(5))
-    // TODO: replace with NOPs?
-    cdelay(1);
-  mmio_write32(UART_PL001_DR, c);
+void uart_mini_putc(const char c) {
+  while (true)
+    if (mmio_read32(AUX_MU_LSR_REG) & BIT(5))
+      break;
+  mmio_write32(AUX_MU_IO_REG, c);
 }
