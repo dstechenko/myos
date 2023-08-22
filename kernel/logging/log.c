@@ -6,7 +6,7 @@
 #include <stdarg.h>
 #include <stddef.h>
 
-#include <kernel/config.h>
+#include <kernel/core/config.h>
 #include <kernel/core/error.h>
 
 #if CONFIG_ENABLED(CONFIG_UART_ON)

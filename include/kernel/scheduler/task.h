@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 
-#include <kernel/config.h>
+#include <kernel/core/config.h>
 
 struct proc_regs;
 struct task_context;

@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-#include <kernel/config.h>
+#include <kernel/core/config.h>
 #include <kernel/memory/ops.h>
 #include <kernel/util/assert.h>
 #include <kernel/util/bool.h>

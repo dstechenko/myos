@@ -7,7 +7,7 @@
 
 #include <asm/delay.h>
 #include <drivers/mmio.h>
-#include <kernel/config.h>
+#include <kernel/core/config.h>
 #include <kernel/util/bits.h>
 #include <kernel/util/bool.h>
 

@@ -3,7 +3,7 @@
 
 #include <kernel/scheduler/task.h>
 
-#include <kernel/config.h>
+#include <kernel/core/config.h>
 #include <kernel/core/error.h>
 #include <kernel/memory/allocator.h>
 #include <kernel/util/assert.h>

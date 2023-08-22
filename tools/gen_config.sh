@@ -13,7 +13,7 @@ echo ""                                                           >> $CONFIG_OUT
 echo "#ifndef KERNEL_CONFIG_H"                                    >> $CONFIG_OUT
 echo "#define KERNEL_CONFIG_H"                                    >> $CONFIG_OUT
 echo ""                                                           >> $CONFIG_OUT
-echo "#include <kernel/core/config.h>"                            >> $CONFIG_OUT
+echo "#include <kernel/core/config_defs.h>"                       >> $CONFIG_OUT
 echo ""                                                           >> $CONFIG_OUT
 for CONFIG_FILE in $CONFIG_IN
 do

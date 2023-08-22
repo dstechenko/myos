@@ -4,7 +4,7 @@
 #ifndef KERNEL_UTIL_ASSERT_H
 #define KERNEL_UTIL_ASSERT_H
 
-#include <kernel/config.h>
+#include <kernel/core/config.h>
 
 #if CONFIG_ENABLED(CONFIG_DEBUG)
 #define ABORT() handle_abort(__FILE__, __LINE__)

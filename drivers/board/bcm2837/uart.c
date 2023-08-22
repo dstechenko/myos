@@ -5,7 +5,7 @@
 
 #include <stddef.h>
 
-#include <kernel/config.h>
+#include <kernel/core/config.h>
 
 #if CONFIG_ENABLED(CONFIG_UART_USE_MINI)
 #include "uart_mini.h"

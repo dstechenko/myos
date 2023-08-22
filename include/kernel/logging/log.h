@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 
-#include <kernel/config.h>
+#include <kernel/core/config.h>
 
 #define ERROR 0
 #define INFO 1

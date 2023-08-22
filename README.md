@@ -2,9 +2,9 @@
 
 TODOs(progress):
 - Move config into core subfolder
-- Fix sized printing, extract printing and logging separately
-- Prefix all board specific configs with board name
 - Add config defined macro, make varargs
+- Prefix all board specific configs with board name
+- Fix sized printing, extract printing and logging separately
 
 TODOs(backlog):
 - Add UART irqs to handle inputs

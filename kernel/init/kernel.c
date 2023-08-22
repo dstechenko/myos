@@ -8,8 +8,8 @@
 #include <asm/regs.h>
 #include <drivers/irq.h>
 #include <drivers/timer.h>
-#include <kernel/build_info.h>
-#include <kernel/config.h>
+#include <kernel/core/build_info.h>
+#include <kernel/core/config.h>
 #include <kernel/core/syscall.h>
 #include <kernel/logging/log.h>
 #include <kernel/scheduler/fork.h>

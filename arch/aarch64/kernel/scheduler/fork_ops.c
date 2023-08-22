@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <kernel/config.h>
+#include <kernel/core/config.h>
 #include <kernel/memory/ops.h>
 #include <kernel/scheduler/task.h>
 #include <kernel/util/assert.h>
