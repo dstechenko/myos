@@ -3,10 +3,9 @@
 
 .globl irq_init, irq_enable, irq_disable
 
-vector_ptr .req x0
 irq_init:
-  adr	vector_ptr, entry_ex_vec
-  msr	vbar_el1, vector_ptr
+  adr	x0, entry_ex_vector
+  msr	vbar_el1, x0
   ret
 
 irq_enable:

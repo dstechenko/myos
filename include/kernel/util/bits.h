@@ -5,6 +5,7 @@
 #define KERNEL_UTIL_BITS_H
 
 #define BIT(b) (1 << b)
+#define NOBIT(b) (0 << b)
 
 #define MASK_LOW_HALF_BYTE(b) (b & 0x0F)
 #define MASK_HIGH_HALF_BYTE(b) (b & 0xF0)

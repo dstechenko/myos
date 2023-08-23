@@ -100,7 +100,7 @@ void kernel_start(void) {
   LOG_DEBUG("%x", 123);
   LOG_DEBUG("%s", messages[1]);
 
-  err = fork_task(&task_kernel, NULL, FORK_KERNEL);
+  err = fork_task((uintptr_t)&task_kernel, (uintptr_t)NULL, FORK_KERNEL);
   if (err < 0) {
     LOG_ERROR("Failed to start task before user, err: %d", err);
     return;

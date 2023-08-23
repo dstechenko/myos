@@ -13,7 +13,7 @@ static void task_schedule_loop(void) {
   task_preempt_enable();
 }
 
-static void task_clean_up_if_needed(struct task *task) {
+static void task_clean_up(struct task *task) {
   ASSERT(task);
 
   if (task->state != TASK_ZOMBIE)
@@ -48,7 +48,7 @@ void task_context_switch(struct task *next) {
 
   task_set_current(next);
   task_cpu_switch(prev->context, next->context);
-  task_clean_up_if_needed(prev);
+  task_clean_up(prev);
 }
 
 void task_schedule(void) {

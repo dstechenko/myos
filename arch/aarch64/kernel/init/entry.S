@@ -4,7 +4,7 @@
 #include <asm/system-levels.h>
 #include <asm/system-registers.h>
 
-.globl entry_ex_vec, entry_fork_return
+.globl entry_ex_vector, entry_fork_return
 
 .macro entry_save_regs level
   sub	sp, sp, #ENTRY_STACK_FRAME_SIZE
@@ -84,26 +84,26 @@
 .endm
 
 .align 11
-entry_ex_vec:
-  entry_ex	entry_syn_invalid_el1t
-  entry_ex	entry_irq_invalid_el1t
-  entry_ex	entry_fiq_invalid_el1t
-  entry_ex	entry_err_invalid_el1t
+entry_ex_vector:
+  entry_ex entry_syn_invalid_el1t
+  entry_ex entry_irq_invalid_el1t
+  entry_ex entry_fiq_invalid_el1t
+  entry_ex entry_err_invalid_el1t
 
-  entry_ex	entry_syn_invalid_el1h
-  entry_ex	entry_irq_el1
-  entry_ex	entry_fiq_invalid_el1h
-  entry_ex	entry_err_invalid_el1h
+  entry_ex entry_syn_invalid_el1h
+  entry_ex entry_irq_el1
+  entry_ex entry_fiq_invalid_el1h
+  entry_ex entry_err_invalid_el1h
 
-  entry_ex	entry_syn_el0
-  entry_ex	entry_irq_el0
-  entry_ex	entry_fiq_invalid_el0_64
-  entry_ex	entry_err_invalid_el0_64
+  entry_ex entry_syn_el0
+  entry_ex entry_irq_el0
+  entry_ex entry_fiq_invalid_el0_64
+  entry_ex entry_err_invalid_el0_64
 
-  entry_ex	entry_syn_invalid_el0_32
-  entry_ex	entry_irq_invalid_el0_32
-  entry_ex	entry_fiq_invalid_el0_32
-  entry_ex	entry_err_invalid_el0_32
+  entry_ex entry_syn_invalid_el0_32
+  entry_ex entry_irq_invalid_el0_32
+  entry_ex entry_fiq_invalid_el0_32
+  entry_ex entry_err_invalid_el0_32
 
 entry_irq_el1:
   entry_kernel_in 1
@@ -112,10 +112,10 @@ entry_irq_el1:
 
 entry_syn_el0:
   entry_kernel_in 0
-  mrs   x25, esr_el1
-  lsr   x24, x25, #ESR_ELx_EC_SHIFT
-  cmp   x24, #ESR_ELx_EC_SVC64
-  beq   entry_svc_el0
+  mrs x25, esr_el1
+  lsr x24, x25, #ESR_ELx_EC_SHIFT
+  cmp x24, #ESR_ELx_EC_SVC64
+  beq entry_svc_el0
   entry_handle_invalid ENTRY_ERROR_SYN, 0
 
 entry_irq_el0:
@@ -159,33 +159,28 @@ entry_fiq_invalid_el0_32:
 entry_err_invalid_el0_32:
   entry_handle_invalid ENTRY_ERR_INVALID_EL0_32, 0
 
-syscall_num .req x25
-syscall_cnt .req x26
-syscall_tbl .req x27
-syscall_ptr .req x16
 entry_svc_el0:
-  adr    syscall_tbl, syscall_table
-  uxtw   syscall_num, w8
-  mov    syscall_cnt, #4
-  bl     irq_enable
-  cmp    syscall_num, syscall_cnt
-  bhs    entry_syscall_error
-  ldr    syscall_ptr, [syscall_tbl, syscall_num, lsl #3]
-  blr    syscall_ptr
+  bl irq_enable
+  adr x24, syscall_table
+  uxtw x25, w8
+  mov x26, #4
+  cmp x25, x26
+  bhs entry_syscall_error
+  ldr x27, [x24, x25, lsl #3]
+  blr x27
 
 entry_syscall_return:
-  bl    irq_disable
-  str   x0, [sp, #0]
+  bl irq_disable
+  str x0, [sp, #0]
   entry_kernel_out 0
 
 entry_syscall_error:
   entry_handle_invalid ENTRY_ERROR_SYSCALL, 0
 
-fork_ptr .req x19
 entry_fork_return:
-  bl  task_schedule_tail
-  cbz fork_ptr, entry_user_return
-  blr fork_ptr
+  bl task_schedule_tail
+  cbz x19, entry_user_return
+  blr x19
 
 entry_user_return:
   bl irq_disable

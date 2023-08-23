@@ -20,7 +20,7 @@ uintptr_t syscall_alloc(const size_t size) {
 }
 
 int syscall_clone(const uintptr_t sp) {
-  return fork_task(NULL, (void *)sp, FORK_USER);
+  return fork_task((uintptr_t)NULL, sp, FORK_USER);
 }
 
 void syscall_exit(void) { task_exit(); }

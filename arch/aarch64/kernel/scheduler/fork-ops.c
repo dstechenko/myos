@@ -14,8 +14,8 @@
 
 #include "task-context.h"
 
-int fork_task_context(struct task *forked, void *pc, void *sp,
-                      const uint8_t flags) {
+int fork_task_context(struct task *forked, const uintptr_t pc,
+                      const uintptr_t sp, const uint8_t flags) {
   int err;
   struct task *current;
   struct task_context *forked_context;
@@ -34,7 +34,7 @@ int fork_task_context(struct task *forked, void *pc, void *sp,
 
   if (flags & FORK_KERNEL) {
     ASSERT(pc);
-    forked_context->x19 = (uint64_t)pc;
+    forked_context->x19 = pc;
   } else {
     current = task_get_current();
     ASSERT(current);
@@ -42,8 +42,9 @@ int fork_task_context(struct task *forked, void *pc, void *sp,
     ASSERT(current_regs);
     *forked_regs = *current_regs;
     forked_regs->regs[0] = 0;
-    forked_regs->sp = (uint64_t)sp + CONFIG_KERNEL_SCHEDULER_STACK_SIZE;
-    forked->user_stack = sp;
+    ASSERT(sp);
+    forked_regs->sp = sp + CONFIG_KERNEL_SCHEDULER_STACK_SIZE;
+    forked->user_stack = (void *)sp;
   }
 
   forked_context->pc = (uint64_t)entry_fork_return;
