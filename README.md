@@ -2,7 +2,6 @@
 
 TODOs(progress):
 - Add irq enabled/disabled/save/load functions
-- Fix sized printing, extract printing and logging separately
 - Expose jiffies in kernel
 
 TODOs(backlog):
@@ -18,6 +17,7 @@ TODOs(backlog):
 - Use local interrupt controller
 - Extract ticks into global functionality
 - Add driver subsystems (simple, static but organized)
+- Add driver init for print not hardcoded, take deps
 - Add stack protector
 - Add libc primitives
 - Run all timers

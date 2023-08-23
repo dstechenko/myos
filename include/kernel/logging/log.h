@@ -36,7 +36,6 @@
   } while (false)
 #endif // !(CONFIG_LOG_LEVEL >= LOG_DEBUG)
 
-int log_init(void);
 void log(uint8_t level, const char *format, ...);
 
 #endif // !KERNEL_LOGGING_LOG_H
