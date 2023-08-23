@@ -16,10 +16,10 @@
 .endm
 
 .macro boot_create_page_table_entry table, vaddr, shift, aux0, aux1
-  ## lsr   \aux0, \virt, #\shift
-  ## and   \aux0, \aux0, #PAGE_ENTRIES_PER_TABLE - 1
-  ## add   \aux1, \table, #PAGE_SIZE
-  ## orr   \aux1, \aux1, #MM_TYPE_PAGE_TABLE
+  lsr   \aux0, \virt, #\shift
+  and   \aux0, \aux0, #PAGE_ENTRIES_PER_TABLE - 1
+  add   \aux1, \table, #PAGE_SIZE
+  orr   \aux1, \aux1, #MMU_TYPE_PAGE_TABLE
 .endm
 
 .macro boot_create_page_block_mapping table, paddr, start, end, flags, aux0

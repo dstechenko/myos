@@ -1,7 +1,7 @@
 # myos
 
 TODOs(progress):
-- Add irq enabled/disabled functions
+- Add irq enabled/disabled/save/load functions
 - Fix sized printing, extract printing and logging separately
 - Expose jiffies in kernel
 
@@ -24,6 +24,9 @@ TODOs(backlog):
 - Set up multiple cores
 - Add cpu core asm code
 - Add cpu registers breakdown doc strings
+- Flip syscall and syscall-invoke
+- Make crash reporter much better
+- Dump kernel crash state into a carved out section
 
 Notes:
 - UART pinout gpio#3 gnd, gpio#4 txd, gpio#5 rxd
