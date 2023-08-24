@@ -116,6 +116,8 @@ entry_syn_el0:
   lsr x24, x25, #ESR_ELx_EC_SHIFT
   cmp x24, #ESR_ELx_EC_SVC64
   beq entry_svc_el0
+  cmp x24, #ESR_ELx_EC_DABT_LOW
+  beq entry_da_el0
   entry_handle_invalid ENTRY_ERROR_SYN, 0
 
 entry_irq_el0:
@@ -168,6 +170,19 @@ entry_svc_el0:
   bhs entry_syscall_error
   ldr x27, [x24, x25, lsl #3]
   blr x27
+
+entry_da_el0:
+  bl irq_enable
+  mrs x0, far_el1
+  mrs x1, esr_el1
+  ## bl memory_handle_abort
+  cmp x0, #0
+  beq entry_da_el0_out
+  entry_handle_invalid ENTRY_ERROR_DATA_ABORT, 0
+
+entry_da_el0_out:
+  bl irq_disable
+  entry_kernel_out 0
 
 entry_syscall_return:
   bl irq_disable

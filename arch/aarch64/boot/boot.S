@@ -3,6 +3,8 @@
 
 #include <asm/page.h>
 #include <asm/system-registers.h>
+#include <asm/memory.h>
+#include <asm/mmu-defs.h>
 
 // To keep this in the first portion of the binary.
 .section ".text.boot"
@@ -16,13 +18,28 @@
 .endm
 
 .macro boot_create_page_table_entry table, vaddr, shift, aux0, aux1
-  lsr   \aux0, \virt, #\shift
-  and   \aux0, \aux0, #PAGE_ENTRIES_PER_TABLE - 1
-  add   \aux1, \table, #PAGE_SIZE
-  orr   \aux1, \aux1, #MMU_TYPE_PAGE_TABLE
+  lsr \aux0, \vaddr, #\shift
+  and \aux0, \aux0, #PAGE_ENTRIES_PER_TABLE - 1
+  add \aux1, \table, #PAGE_SIZE
+  orr \aux1, \aux1, #MMU_TYPE_PAGE_TABLE
+  str \aux1, [\table, \aux0, lsl #3]
+  add \table, \table, #PAGE_SIZE
 .endm
 
 .macro boot_create_page_block_mapping table, paddr, start, end, flags, aux0
+  lsr \start, \start, #SECTION_SHIFT
+  and \start, \start, #PAGE_ENTRIES_PER_TABLE - 1
+  lsr \end, \end, #SECTION_SHIFT
+  and \end, \end, #PAGE_ENTRIES_PER_TABLE - 1
+  lsr \paddr, \paddr, #SECTION_SHIFT
+  mov \aux0, #\flags
+  orr \paddr, \aux0, \paddr, lsl #SECTION_SHIFT
+9999:
+  str \paddr, [\table, \start, lsl #3]
+  add \start, \start, #1
+  add \paddr, \paddr, #SECTION_SIZE
+  cmp \start, \end
+  bls 9999b
 .endm
 
 _start:
@@ -99,23 +116,22 @@ boot_create_page_tables:
   bl memzero
 
   // Create page global directory entries
-  ## adr x0, section_page_global_directory_start
-  ## mov x1, #VA_START
-  ## boot_create_page_global_directory_entry x0, x1, x2, x3
+  adr x0, section_page_global_directory_start
+  mov x1, #VIRTUAL_MEMORY_START
+  boot_create_page_global_directory_entry x0, x1, x2, x3
 
   // Map kernel and initial stack
-  ## mov x1, xzr
-  ## mov x2, #VA_START
-  ## ldr x3, =(VA_START + DEVICE_BASE - SECTION_SIZE)
-  ## boot_create_page_block_mapping x0, x1, x2, x3, MMU_FLAGS, x4
+  mov x1, xzr
+  mov x2, #VIRTUAL_MEMORY_START
+  ldr x3, =(VIRTUAL_DEVICE_MEMORY_START - SECTION_SIZE)
+  boot_create_page_block_mapping x0, x1, x2, x3, MMU_NORMAL_FLAGS, x4
 
   // Map device memory
-  ## mov x1, #DEVICE_BASE
-  ## ldr x2, =(VA_START + DEVICE_BASE)
-  ## ldr x3, =(VA_START + PHYS_MEMORY_SIZE - SECTION_SIZE)
-  ## boot_create_page_block_mapping x0, x1, x2, x3, MMU_DEVICE_FLAGS, x4
+  mov x1, #PHYSICAL_DEVICE_MEMORY_START
+  ldr x2, =VIRTUAL_DEVICE_MEMORY_START
+  ldr x3, =(VIRTUAL_DEVICE_MEMORY_SIZE - SECTION_SIZE)
+  boot_create_page_block_mapping x0, x1, x2, x3, MMU_DEVICE_FLAGS, x4
 
   // Restore link register to jump back
   mov x30, x29
-
   ret

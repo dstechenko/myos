@@ -5,6 +5,8 @@ TODOs(progress):
 - Expose jiffies in kernel
 
 TODOs(backlog):
+- Make memory paging/mapping board independent
+- Add page table traversal/printing
 - Add UART irqs to handle inputs
 - Make kernel tasks exit by themselves and clean up
 - Separate fork into user/kernel implementations

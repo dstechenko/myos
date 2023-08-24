@@ -4,6 +4,7 @@
  */
 
 #include <asm/page.h>
+#include <asm/memory.h>
 
 ENTRY(_start)
 

@@ -18,6 +18,9 @@
   } while (false)
 #endif // CONFIG_ENABLED(CONFIG_DEBUG)
 
+#define STATIC_ASSERT(cond, name)                                              \
+  typedef char static_assert_##name[(cond) ? 1 : -1]
+
 void handle_abort(const char *file, int line);
 void handle_assert(bool cond, const char *ctx, const char *file, int line);
 
