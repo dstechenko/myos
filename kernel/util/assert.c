@@ -11,8 +11,7 @@ void handle_abort(const char *file, const int line) {
   abort();
 }
 
-void handle_assert(const bool cond, const char *ctx, const char *file,
-                   const int line) {
+void handle_assert(const bool cond, const char *ctx, const char *file, const int line) {
   if (!cond) {
     LOG_ERROR("Failed assert on: %s", ctx);
     handle_abort(file, line);

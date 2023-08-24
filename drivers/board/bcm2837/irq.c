@@ -9,9 +9,7 @@
 
 #include "irq.h"
 
-void irq_ctrl_init(void) {
-  mmio_write32(IRQ_ENABLE_1, IRQ_TABLE_SYSTEM_TIMER_1);
-}
+void irq_ctrl_init(void) { mmio_write32(IRQ_ENABLE_1, IRQ_TABLE_SYSTEM_TIMER_1); }
 
 void irq_handle(void) {
   uint32_t irq = mmio_read32(IRQ_PENDING_1);

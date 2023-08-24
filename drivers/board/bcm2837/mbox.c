@@ -34,8 +34,7 @@ int mbox_send(const unsigned char channel, const mbox_data_t *data) {
   mmio_write32(MBOX_WRITE, msg);
 
   // Send the message and wait for the response, check if ours/valid.
-  while ((mmio_read32(MBOX_STATUS) & MBOX_EMPTY) ||
-         (mmio_read32(MBOX_READ) != msg))
+  while ((mmio_read32(MBOX_STATUS) & MBOX_EMPTY) || (mmio_read32(MBOX_READ) != msg))
     // TODO: replace with NOPs?
     cdelay(1);
 

@@ -14,8 +14,7 @@
 
 #include "task-context.h"
 
-int fork_task_context(struct task *forked, const uintptr_t pc,
-                      const uintptr_t sp, const uint8_t flags) {
+int fork_task_context(struct task *forked, const uintptr_t pc, const uintptr_t sp, const uint8_t flags) {
   int err;
   struct task *current;
   struct task_context *forked_context;

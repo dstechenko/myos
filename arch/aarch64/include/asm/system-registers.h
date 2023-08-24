@@ -10,16 +10,14 @@
  * SCTLR_EL1, System Control Register (EL1).
  * See: Page 2654 of ARMv8-Architecture-Reference-Manual.
  */
-#define SCTLR_EL1_RESERVED                                                     \
-  (BIT(28) | BIT(29) | BIT(22) | BIT(23) | BIT(20) | BIT(11))
+#define SCTLR_EL1_RESERVED (BIT(28) | BIT(29) | BIT(22) | BIT(23) | BIT(20) | BIT(11))
 #define SCTLR_EL1_EE_LITTLE_ENDIAN NOBIT(25)
 #define SCTLR_EL1_EOE_LITTLE_ENDIAN NOBIT(24)
 #define SCTLR_EL1_I_CACHE_DISABLED NOBIT(12)
 #define SCTLR_EL1_D_CACHE_DISABLED NOBIT(2)
 #define SCTLR_EL1_MMU_DISABLED NOBIT(0)
-#define SCTLR_EL1_VALUE                                                        \
-  (SCTLR_EL1_RESERVED | SCTLR_EL1_EE_LITTLE_ENDIAN |                           \
-   SCTLR_EL1_I_CACHE_DISABLED | SCTLR_EL1_D_CACHE_DISABLED |                   \
+#define SCTLR_EL1_VALUE                                                                                                \
+  (SCTLR_EL1_RESERVED | SCTLR_EL1_EE_LITTLE_ENDIAN | SCTLR_EL1_I_CACHE_DISABLED | SCTLR_EL1_D_CACHE_DISABLED |         \
    SCTLR_EL1_MMU_DISABLED)
 
 /**

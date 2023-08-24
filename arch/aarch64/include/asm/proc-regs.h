@@ -17,8 +17,7 @@ struct proc_regs {
   uint64_t ps;
 };
 
-STATIC_ASSERT(sizeof(struct proc_regs) == ENTRY_STACK_FRAME_SIZE,
-              proc_regs_size);
+STATIC_ASSERT(sizeof(struct proc_regs) == ENTRY_STACK_FRAME_SIZE, proc_regs_size);
 
 #endif // !__ASSEMBLER__
 #endif // !ARCH_AARCH64_ASM_PROC_REGS_H

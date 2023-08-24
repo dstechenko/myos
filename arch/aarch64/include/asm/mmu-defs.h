@@ -20,13 +20,11 @@
 
 #define MAIR_TO_VALUE(flags, index) (flags << (8 * index))
 
-#define MAIR_VALUE                                                             \
-  (MAIR_TO_VALUE(MT_DEVICE_nGnRnE_FLAGS, MT_DEVICE_nGnRnE) |                   \
-   MAIR_TO_VALUE(MT_NORMAL_NC_FLAGS, MT_NORMAL_NC))
+#define MAIR_VALUE                                                                                                     \
+  (MAIR_TO_VALUE(MT_DEVICE_nGnRnE_FLAGS, MT_DEVICE_nGnRnE) | MAIR_TO_VALUE(MT_NORMAL_NC_FLAGS, MT_NORMAL_NC))
 
 #define MMU_NORMAL_FLAGS (MMU_TYPE_BLOCK | (MT_NORMAL_NC << 2) | MMU_ACCESS)
 #define MMU_DEVICE_FLAGS (MMU_TYPE_BLOCK | (MT_DEVICE_nGnRnE << 2) | MMU_ACCESS)
-#define MMU_PAGE_FLAGS                                                         \
-  (MMU_TYPE_PAGE | (MT_NORMAL_NC << 2) | MMU_ACCESS | MMU_ACCESS_PERMISSION)
+#define MMU_PAGE_FLAGS (MMU_TYPE_PAGE | (MT_NORMAL_NC << 2) | MMU_ACCESS | MMU_ACCESS_PERMISSION)
 
 #endif // !ARCH_AARCH64_ASM_MMU_DEFS_H

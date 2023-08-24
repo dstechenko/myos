@@ -9,10 +9,10 @@
 #include <kernel/core/config.h>
 #include <kernel/scheduler/task.h>
 
-#define INIT_TASK_MAIN(task)                                                   \
-  {                                                                            \
-    .id = 0, .context = NULL, .state = TASK_RUNNING, .ticks = 0,               \
-    .priority = CONFIG_KERNEL_SCHEDULER_PRIORITY, .preempt = 0,                \
+#define INIT_TASK_MAIN(task)                                                                                           \
+  {                                                                                                                    \
+    .id = 0, .context = NULL, .state = TASK_RUNNING, .ticks = 0, .priority = CONFIG_KERNEL_SCHEDULER_PRIORITY,         \
+    .preempt = 0,                                                                                                      \
   }
 
 #endif // !KERNEL_SCHEDULER_TASK_MAIN_H

@@ -57,8 +57,7 @@ int task_move_to_user(const uintptr_t pc) {
   if (!current->user_stack)
     return -ENOMEM;
 
-  current_regs->sp =
-      (uint64_t)current->user_stack + CONFIG_KERNEL_SCHEDULER_STACK_SIZE;
+  current_regs->sp = (uint64_t)current->user_stack + CONFIG_KERNEL_SCHEDULER_STACK_SIZE;
   current_regs->pc = (uint64_t)pc;
   current_regs->ps = (uint64_t)PSR_MODE_EL0t;
 

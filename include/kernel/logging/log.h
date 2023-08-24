@@ -15,24 +15,24 @@
 #if (CONFIG_LOG_LEVEL >= LOG_ERROR)
 #define LOG_ERROR(format, ...) log(ERROR, format, ##__VA_ARGS__)
 #else // (CONFIG_LOG_LEVEL >= LOG_ERROR)
-#define LOG_ERROR(format, ...)                                                 \
-  do {                                                                         \
+#define LOG_ERROR(format, ...)                                                                                         \
+  do {                                                                                                                 \
   } while (false)
 #endif // !(CONFIG_LOG_LEVEL >= LOG_ERROR)
 
 #if (CONFIG_LOG_LEVEL >= LOG_INFO)
 #define LOG_INFO(format, ...) log(INFO, format, ##__VA_ARGS__)
 #else // (CONFIG_LOG_LEVEL >= LOG_INFO)
-#define LOG_INFO(format, ...)                                                  \
-  do {                                                                         \
+#define LOG_INFO(format, ...)                                                                                          \
+  do {                                                                                                                 \
   } while (false)
 #endif // !(CONFIG_LOG_LEVEL >= LOG_INFO)
 
 #if (CONFIG_LOG_LEVEL >= LOG_DEBUG)
 #define LOG_DEBUG(format, ...) log(DEBUG, format, ##__VA_ARGS__)
 #else // (CONFIG_LOG_LEVEL >= LOG_DEBUG)
-#define LOG_DEBUG(format, ...)                                                 \
-  do {                                                                         \
+#define LOG_DEBUG(format, ...)                                                                                         \
+  do {                                                                                                                 \
   } while (false)
 #endif // !(CONFIG_LOG_LEVEL >= LOG_DEBUG)
 
