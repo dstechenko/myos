@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-#include <asm/system-levels.h>
+#include <asm/entry-defs.h>
 #include <kernel/util/assert.h>
 
 struct proc_regs {

@@ -5,7 +5,7 @@
 
 #include <asm/delay.h>
 #include <asm/irq.h>
-#include <asm/regs.h>
+#include <asm/registers.h>
 #include <drivers/irq.h>
 #include <drivers/timer.h>
 #include <kernel/core/build_info.h>
@@ -65,7 +65,7 @@ exit:
 }
 
 void task_kernel(void) {
-  LOG_INFO("tick from task in kernel, priv %d", regs_get_priv());
+  LOG_INFO("tick from task in kernel, priv %d", registers_get_priv());
   task_move_to_user((uintptr_t)&task_user);
 }
 

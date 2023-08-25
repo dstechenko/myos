@@ -1,14 +1,13 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-.globl regs_get_priv
+.globl registers_get_priv
 
-level .req x0
-regs_get_priv:
+registers_get_priv:
     // Read from the system register for exception levels.
     // EL0 least priv, EL3 the most.
-    mrs level, currentel
+    mrs x0, currentel
     // Shift right by two because the first 2 bits are reserved
     // and are always zero.
-    lsr level, level, #2
+    lsr x0, x0, #2
     ret

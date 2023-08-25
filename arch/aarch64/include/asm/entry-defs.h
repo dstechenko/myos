@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef ARCH_AARCH64_ASM_SYSTEM_LEVELS_H
-#define ARCH_AARCH64_ASM_SYSTEM_LEVELS_H
+#ifndef ARCH_AARCH64_ASM_ENTRY_DEFS_H
+#define ARCH_AARCH64_ASM_ENTRY_DEFS_H
 
 #define ENTRY_STACK_FRAME_SIZE (34 * 8)
 
@@ -30,4 +30,4 @@
 #define ENTRY_ERROR_SYSCALL 17
 #define ENTRY_ERROR_DATA_ABORT 18
 
-#endif // !ARCH_AARCH64_ASM_SYSTEM_LEVELS_H
+#endif // !ARCH_AARCH64_ASM_ENTRY_DEFS_H

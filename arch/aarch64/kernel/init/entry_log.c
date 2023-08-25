@@ -1,6 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
+#include <stdint.h>
+
 #include <kernel/logging/log.h>
 
 static const char *const invalid_message_type[] = {
@@ -10,6 +12,6 @@ static const char *const invalid_message_type[] = {
     "ERR_INVALID_EL0_32", "ERROR_SYN",          "ERROR_SYSCALL",      "ERROR_DATA_ABORT",
 };
 
-void entry_log_invalid_message(const int type, const unsigned long esr, const unsigned long elr) {
-  LOG_ERROR("Entry type: %s, esr: %lx, elr: %lx", invalid_message_type[type], esr, elr);
+void entry_log_invalid_message(const uint8_t type, const uint64_t esr, const uint64_t elr, const uint64_t far) {
+  LOG_ERROR("Entry type: %s, esr: %lx, elr: %lx, far: %lx", invalid_message_type[type], esr, elr, far);
 }

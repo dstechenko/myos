@@ -4,7 +4,7 @@
 #include <asm/memory-defs.h>
 #include <asm/mmu-defs.h>
 #include <asm/page-defs.h>
-#include <asm/system-registers.h>
+#include <asm/registers-defs.h>
 
 // To keep this in the first portion of the binary.
 .section ".text.boot"

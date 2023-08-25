@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <asm/system-levels.h>
-#include <asm/system-registers.h>
+#include <asm/entry-defs.h>
+#include <asm/registers-defs.h>
 
 .globl entry_ex_vector, entry_fork_return
 
@@ -79,6 +79,7 @@
   mov	x0, #\type
   mrs	x1, esr_el1
   mrs	x2, elr_el1
+  mrs x3, far_el1
   bl entry_log_invalid_message
   b entry_halt_core
 .endm

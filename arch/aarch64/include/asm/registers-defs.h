@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef ARCH_AARCH64_ASM_SYSTEM_REGISTERS_H
-#define ARCH_AARCH64_ASM_SYSTEM_REGISTERS_H
+#ifndef ARCH_AARCH64_ASM_REGISTERS_DEFS_H
+#define ARCH_AARCH64_ASM_REGISTERS_DEFS_H
 
 #include <kernel/util/bits.h>
 
@@ -54,4 +54,4 @@
 #define ESR_ELx_EC_SVC64 (BIT(4) | BIT(2) | BIT(0))
 #define ESR_ELx_EC_DABT_LOW (BIT(3) | BIT(4))
 
-#endif // !ARCH_AARCH64_SYSTEM_REGISTERS_H
+#endif // !ARCH_AARCH64_REGISTERS_DEFS_H
