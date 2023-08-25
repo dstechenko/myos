@@ -175,7 +175,7 @@ entry_da_el0:
   bl irq_enable
   mrs x0, far_el1
   mrs x1, esr_el1
-  ## bl memory_handle_abort
+  bl handle_data_abort
   cmp x0, #0
   beq entry_da_el0_out
   entry_handle_invalid ENTRY_ERROR_DATA_ABORT, 0

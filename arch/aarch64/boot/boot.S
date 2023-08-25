@@ -1,10 +1,10 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <asm/page.h>
-#include <asm/system-registers.h>
-#include <asm/memory.h>
+#include <asm/memory-defs.h>
 #include <asm/mmu-defs.h>
+#include <asm/page-defs.h>
+#include <asm/system-registers.h>
 
 // To keep this in the first portion of the binary.
 .section ".text.boot"

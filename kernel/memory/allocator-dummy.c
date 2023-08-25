@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-#include <asm/page.h>
+#include <asm/page-defs.h>
 #include <kernel/core/config.h>
 #include <kernel/memory/ops.h>
 #include <kernel/util/assert.h>

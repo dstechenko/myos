@@ -3,8 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html
  */
 
-#include <asm/page.h>
-#include <asm/memory.h>
+#include <asm/memory-defs.h>
+#include <asm/page-defs.h>
 
 ENTRY(_start)
 

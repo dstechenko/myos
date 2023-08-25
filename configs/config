@@ -1,10 +1,10 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
-MEMORY_LOW         0
-MEMORY_HIGH        0
-DEVICE_MEMORY_LOW  0
-DEVICE_MEMORY_HIGH 0
+PHYSICAL_MEMORY_START         0
+PHYSICAL_MEMORY_END           0
+PHYSICAL_DEVICE_MEMORY_START  0
+PHYSICAL_DEVICE_MEMORY_END    0
 
 LOG_LEVEL                             1
 SYSTEM_TIMER_FREQ                     10000

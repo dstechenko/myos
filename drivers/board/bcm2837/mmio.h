@@ -4,8 +4,7 @@
 #ifndef DRIVERS_BOARD_BCM2837_MMIO_H
 #define DRIVERS_BOARD_BCM2837_MMIO_H
 
-#include <asm/memory.h>
-#include <kernel/core/config.h>
+#include <asm/memory-defs.h>
 
 /**
  * ARM physical addresses for peripherals range from 0x3F000000 to 0x3FFFFFFF.
@@ -13,6 +12,6 @@
  * bus address range starting at 0x7E000000.
  */
 
-#define MMIO_BASE CONFIG_PHYSICAL_DEVICE_MEMORY_START
+#define MMIO_BASE PHYSICAL_DEVICE_MEMORY_START
 
 #endif // !DRIVERS_BOARD_BCM2837_MMIO_H

@@ -4,9 +4,11 @@
 #ifndef KERNEL_SCHEDULER_TASK_H
 #define KERNEL_SCHEDULER_TASK_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 #include <kernel/core/config.h>
+#include <kernel/memory/page.h>
 
 struct proc_regs;
 struct task_context;
@@ -16,9 +18,19 @@ enum task_state {
   TASK_ZOMBIE,
 };
 
+#define TASK_MAX_PROCESS_PAGES 16
+
+struct task_memory {
+  struct page user_pages[TASK_MAX_PROCESS_PAGES];
+  size_t user_pages_count;
+  struct page kernel_pages[TASK_MAX_PROCESS_PAGES];
+  size_t kernel_pages_count;
+};
+
 struct task {
   uint64_t id;
   struct task_context *context;
+  struct task_memory memory;
   enum task_state state;
   uint8_t flags;
   int64_t priority;
@@ -46,6 +58,7 @@ void task_preempt_enable(void);
 void task_preempt_disable(void);
 uint64_t task_get_priority(void);
 int task_move_to_user(uintptr_t pc);
+int task_copy_vmem_into(struct task *task);
 void task_exit(void);
 
 #endif // !KERNEL_SCHEDULER_TASK_H

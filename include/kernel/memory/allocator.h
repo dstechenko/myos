@@ -7,7 +7,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <asm/page.h>
 #include <kernel/util/bits.h>
 
 #define ALLOC_KERNEL BIT(0)
