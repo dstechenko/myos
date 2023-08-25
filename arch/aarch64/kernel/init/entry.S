@@ -172,6 +172,11 @@ entry_svc_el0:
   ldr x27, [x24, x25, lsl #3]
   blr x27
 
+entry_syscall_return:
+  bl irq_disable
+  str x0, [sp, #0]
+  entry_kernel_out 0
+
 entry_da_el0:
   bl irq_enable
   mrs x0, far_el1
@@ -183,11 +188,6 @@ entry_da_el0:
 
 entry_da_el0_out:
   bl irq_disable
-  entry_kernel_out 0
-
-entry_syscall_return:
-  bl irq_disable
-  str x0, [sp, #0]
   entry_kernel_out 0
 
 entry_syscall_error:
