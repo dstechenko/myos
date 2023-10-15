@@ -7,7 +7,6 @@
 #include <stdint.h>
 
 #include <asm/page-defs.h>
-#include <kernel/util/bits.h>
 
 struct task;
 

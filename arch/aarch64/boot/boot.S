@@ -12,14 +12,14 @@
 // Make _start global. Need this to get execution transferred from armstub8.
 .globl _start, boot_start
 
-.macro boot_create_page_global_directory_entry table, vaddr, aux0, aux1
-  boot_create_page_table_entry \table, \vaddr, PAGE_GLOBAL_DIRECTORY_SHIFT, \aux0, \aux1
-  boot_create_page_table_entry \table, \vaddr, PAGE_UPPER_DIRECTORY_SHIFT, \aux0, \aux1
+.macro boot_create_page_global_directory table, vaddr, aux0, aux1
+  boot_create_page_table_entry \table, \vaddr, PGD_SHIFT, \aux0, \aux1
+  boot_create_page_table_entry \table, \vaddr, PUD_SHIFT, \aux0, \aux1
 .endm
 
 .macro boot_create_page_table_entry table, vaddr, shift, aux0, aux1
   lsr \aux0, \vaddr, #\shift
-  and \aux0, \aux0, #PAGE_ENTRIES_PER_TABLE - 1
+  and \aux0, \aux0, #PAGES_PER_TABLE - 1
   add \aux1, \table, #PAGE_SIZE
   orr \aux1, \aux1, #MMU_TYPE_PAGE_TABLE
   str \aux1, [\table, \aux0, lsl #3]
@@ -28,9 +28,9 @@
 
 .macro boot_create_page_block_mapping table, paddr, start, end, flags, aux0
   lsr \start, \start, #SECTION_SHIFT
-  and \start, \start, #PAGE_ENTRIES_PER_TABLE - 1
+  and \start, \start, #PAGES_PER_TABLE - 1
   lsr \end, \end, #SECTION_SHIFT
-  and \end, \end, #PAGE_ENTRIES_PER_TABLE - 1
+  and \end, \end, #PAGES_PER_TABLE - 1
   lsr \paddr, \paddr, #SECTION_SHIFT
   mov \aux0, #\flags
   orr \paddr, \aux0, \paddr, lsl #SECTION_SHIFT
@@ -113,15 +113,15 @@ boot_create_page_tables:
   mov x29, x30
 
   // Prepare the pages before mapping (zero out)
-  adr x0, section_page_global_directory_start
-  adr x1, section_page_global_directory_end
+  adr x0, section_pgd_start
+  adr x1, section_pgd_end
   sub x1, x1, x0
   bl memzero
 
   // Create page global directory entries
-  adr x0, section_page_global_directory_start
+  adr x0, section_pgd_start
   mov x1, #VIRTUAL_MEMORY_START
-  boot_create_page_global_directory_entry x0, x1, x2, x3
+  boot_create_page_global_directory x0, x1, x2, x3
 
   // Map kernel and initial stack
   mov x1, xzr

@@ -45,11 +45,11 @@ SECTIONS
     }
     section_bss_end = .;
     . = ALIGN(PAGE_SIZE);
-    section_page_global_directory_start = .;
-    .page_global_directory :
+    section_pgd_start = .;
+    .pgd :
     {
-      . += PAGE_GLOBAL_DIRECTORY_SIZE;
+      . += PGD_SIZE;
     }
-    section_page_global_directory_end = .;
+    section_pgd_end = .;
     section_end = .;
 }

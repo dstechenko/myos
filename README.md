@@ -1,12 +1,12 @@
 # myos
 
 TODOs(progress):
-- Add irq enabled/disabled/save/load functions
-- Expose jiffies in kernel
+- Add pages for user/kernel
 
 TODOs(backlog):
+- Add irq enabled/disabled/save/load functions
+- Expose jiffies in kernel
 - Make memory paging/mapping board independent
-- Add page table traversal/printing
 - Add UART irqs to handle inputs
 - Make kernel tasks exit by themselves and clean up
 - Separate fork into user/kernel implementations
@@ -32,4 +32,4 @@ TODOs(backlog):
 
 Notes:
 - UART pinout gpio#3 gnd, gpio#4 txd, gpio#5 rxd
-- DTech usb-2-serial red 5v, green txd, white rxd
+- DTech usb-2-serial red 5v, green txd, white rxd, black gnd

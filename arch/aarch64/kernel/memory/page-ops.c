@@ -29,7 +29,7 @@ static void print_page_entries(const uintptr_t table) {
 
   ASSERT(cursor);
 
-  for (size_t i = 0; i < PAGE_ENTRIES_PER_TABLE; i++) {
+  for (size_t i = 0; i < PAGES_PER_TABLE; i++) {
     if (!cursor[i]) {
       empty++;
       continue;
@@ -61,29 +61,29 @@ void print_page_global_directory(const uintptr_t pgd) {
   print("\nPage Global Directory (physical address %lx)\n", pgd);
   print_page_entries(pgd);
 
-  for (size_t i = 0; i < PAGE_ENTRIES_PER_TABLE; i++)
+  for (size_t i = 0; i < PAGES_PER_TABLE; i++)
     if (pud[i]) {
       print("\nPage Upper Directory (physical address %lx)\n", GET_DESC_ADDR_BITS(pud[i]));
       print_page_entries(GET_DESC_ADDR_BITS(pud[i]));
     }
 
-  for (size_t i = 0; i < PAGE_ENTRIES_PER_TABLE; i++)
+  for (size_t i = 0; i < PAGES_PER_TABLE; i++)
     if (pud[i]) {
       pmd = (uintptr_t *)GET_DESC_ADDR_BITS(pud[i]);
-      for (size_t j = 0; j < PAGE_ENTRIES_PER_TABLE; j++)
+      for (size_t j = 0; j < PAGES_PER_TABLE; j++)
         if (pmd[j]) {
           print("\nPage Middle Directory (physical address %lx)\n", GET_DESC_ADDR_BITS(pmd[j]));
           print_page_entries(GET_DESC_ADDR_BITS(pmd[j]));
         }
     }
 
-  for (size_t i = 0; i < PAGE_ENTRIES_PER_TABLE; i++)
+  for (size_t i = 0; i < PAGES_PER_TABLE; i++)
     if (pud[i]) {
       pmd = (uintptr_t *)GET_DESC_ADDR_BITS(pud[i]);
-      for (size_t j = 0; j < PAGE_ENTRIES_PER_TABLE; j++)
+      for (size_t j = 0; j < PAGES_PER_TABLE; j++)
         if (pmd[j]) {
           pte = (uintptr_t *)GET_DESC_ADDR_BITS(pmd[j]);
-          for (size_t k = 0; k < PAGE_ENTRIES_PER_TABLE; k++)
+          for (size_t k = 0; k < PAGES_PER_TABLE; k++)
             if (pte[k] && GET_DESC_TABLE_BIT(pte[k])) {
               print("\nPage Table Entry (physical address %lx)\n", GET_DESC_ADDR_BITS(pte[k]));
               print_page_entries(GET_DESC_ADDR_BITS(pte[k]));
@@ -92,9 +92,9 @@ void print_page_global_directory(const uintptr_t pgd) {
     }
 }
 
-void section_page_global_directory_start(void);
+void section_pgd_start(void);
 
 void debug_pages(void) {
-  print_page_global_directory((uintptr_t)section_page_global_directory_start);
+  print_page_global_directory((uintptr_t)section_pgd_start);
   ABORT();
 }
