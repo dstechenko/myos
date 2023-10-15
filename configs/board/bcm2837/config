@@ -1,12 +1,20 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
+BOOT_ENTRY_POINT_LABEL _start
+
+# One PGD descriptor can cover 2^39 = 512GB.
+# One PUD descriptor can cover 2^30 = 1GB.
+# So we need:
+# - 1 PGD page with 1 entry.
+# - 1 PUD page with 1 entry.
+# - 1 PMD page with most entries (each 2MB in block mode).
+PGD_SIZE 3
+
 PHYSICAL_MEMORY_START         0x0000000000000000
 PHYSICAL_MEMORY_END           0x000000003FFFFFFF
 PHYSICAL_DEVICE_MEMORY_START  0x000000003F000000
 PHYSICAL_DEVICE_MEMORY_END    0x000000003FFFFFFF
-
-ENTRY_POINT_LABEL _start
 
 BCM2837_UART_ON       true
 BCM2837_UART_USE_MINI true

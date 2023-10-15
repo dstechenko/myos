@@ -6,6 +6,8 @@
 
 #include <kernel/util/bits.h>
 
+#include "mmu-defs.h"
+
 /**
  * SCTLR_EL1, System Control Register (EL1).
  * See: Page 2654 of ARMv8-Architecture-Reference-Manual.
@@ -15,10 +17,12 @@
 #define SCTLR_EL1_EOE_LITTLE_ENDIAN NOBIT(24)
 #define SCTLR_EL1_I_CACHE_DISABLED NOBIT(12)
 #define SCTLR_EL1_D_CACHE_DISABLED NOBIT(2)
+#define SCTLR_EL1_MMU_ENABLED BIT(0)
 #define SCTLR_EL1_MMU_DISABLED NOBIT(0)
 #define SCTLR_EL1_VALUE                                                                                                \
   (SCTLR_EL1_RESERVED | SCTLR_EL1_EE_LITTLE_ENDIAN | SCTLR_EL1_I_CACHE_DISABLED | SCTLR_EL1_D_CACHE_DISABLED |         \
    SCTLR_EL1_MMU_DISABLED)
+#define SCTLR_EL1_MMU_VALUE (SCTLR_EL1_VALUE | SCTLR_EL1_MMU_ENABLED)
 
 /**
  * HCR_EL2, Hypervisor Configuration Register (EL2).
@@ -53,5 +57,21 @@
 #define ESR_ELx_EC_SHIFT 26
 #define ESR_ELx_EC_SVC64 (BIT(4) | BIT(2) | BIT(0))
 #define ESR_ELx_EC_DABT_LOW (BIT(3) | BIT(4))
+
+/**
+ * MAIR_EL1, Memory Attribute Indirection Register (EL1).
+ * Page 2609 of ARMv8-Architecture-Reference-Manual.
+ */
+#define MAIR_EL1_VALUE MAIR_VALUE
+
+/**
+ * TCR_EL1, Translation Control Register (EL1).
+ * Page 2685 of ARMv8-Architecture-Reference-Manual.
+ */
+#define TCR_EL1_T0SZ (64 - 48)
+#define TCR_EL1_T1SZ ((64 - 48) << 16)
+#define TCR_EL1_TG0_4K (0 << 14)
+#define TCR_EL1_TG1_4K (2 << 30)
+#define TCR_EL1_VALUE (TCR_EL1_T0SZ | TCR_EL1_T1SZ | TCR_EL1_TG0_4K | TCR_EL1_TG1_4K)
 
 #endif // !ARCH_AARCH64_REGISTERS_DEFS_H

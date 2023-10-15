@@ -8,16 +8,15 @@
 
 #include <kernel/core/config.h>
 
-ENTRY(ENTRY_POINT_LABEL)
+ENTRY(BOOT_ENTRY_POINT_LABEL)
 
 SECTIONS
 {
-    /* TODO: move this out into an arch specific property */
     . = 0x80000;
+    /* . = VIRTUAL_MEMORY_START; */
     . = ALIGN(PAGE_SIZE);
     section_start = .;
-    /* TODO: move this out into a board specific property */
-    ENTRY_POINT_LABEL = .;
+    BOOT_ENTRY_POINT_LABEL = .;
     section_text_start = .;
     .text :
     {

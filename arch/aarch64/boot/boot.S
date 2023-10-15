@@ -12,7 +12,7 @@
 .section ".text.boot"
 
 // Make _start global. Need this to get execution transferred from armstub8.
-.globl ENTRY_POINT_LABEL
+.globl BOOT_ENTRY_POINT_LABEL
 
 .macro boot_create_page_global_directory table, vaddr, aux0, aux1
   boot_create_page_table_entry \table, \vaddr, PGD_SHIFT, \aux0, \aux1
@@ -44,7 +44,7 @@
   bls 9999b
 .endm
 
-ENTRY_POINT_LABEL:
+BOOT_ENTRY_POINT_LABEL:
 boot_start:
   // Entry point for the kernel.
   // We need to halt all of the non-primary CPUs since they
@@ -99,10 +99,31 @@ boot_init_kernel:
   // Set up initial kernel/device pages.
   bl boot_create_page_tables
 
-boot_kernel_entry:
-  // Jump to the kernel entry point.
-  // This should not return.
-  bl kernel_start
+  // Reset the stack pointer for init task.
+  ## mov x0, VIRTUAL_MEMORY_START
+  ## add sp, x0, #LOW_MEMORY
+
+  // Point kernel level translation table base register.
+  ## adrp x0, section_pgd_start
+  ## msr ttbr1_el1, x0
+
+  // Configure translation control register (pages size etc).
+  ## ldr x0, =(TCR_EL1_VALUE)
+  ## msr tcr_el1, x0
+
+  // Set up memory attribute indirection register (additional attributes for translation).
+  ## ldr x0, =(MAIR_VALUE)
+  ## msr mair_el1, x0
+
+  // Grab the offset before we enable MMU.
+  ldr x2, =kernel_start
+
+  // Enable MMU via system control register.
+  ## ldr x0, =(SCTLR_EL1_MMU_VALUE)
+  ## msr sctlr_el1, x0
+
+  // Jump to the kernel entry point. This should not return.
+  br x2
 
 boot_halt_core:
   // For failsafe, halt this core.
@@ -111,32 +132,32 @@ boot_halt_core:
   b boot_halt_core
 
 boot_create_page_tables:
-  // Save link register to return after
+  // Save link register to return after.
   mov x29, x30
 
-  // Prepare the pages before mapping (zero out)
+  // Prepare the pages before mapping (zero out).
   adr x0, section_pgd_start
   adr x1, section_pgd_end
   sub x1, x1, x0
   bl memzero
 
-  // Create page global directory entries
+  // Create page global directory entries.
   adr x0, section_pgd_start
   mov x1, #VIRTUAL_MEMORY_START
   boot_create_page_global_directory x0, x1, x2, x3
 
-  // Map kernel and initial stack
+  // Map kernel and initial stack.
   mov x1, xzr
   mov x2, #VIRTUAL_MEMORY_START
   ldr x3, =(VIRTUAL_DEVICE_MEMORY_START - SECTION_SIZE)
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_NORMAL_FLAGS, x4
 
-  // Map device memory
+  // Map device memory.
   mov x1, #PHYSICAL_DEVICE_MEMORY_START
   ldr x2, =VIRTUAL_DEVICE_MEMORY_START
   ldr x3, =(VIRTUAL_DEVICE_MEMORY_SIZE - SECTION_SIZE)
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_DEVICE_FLAGS, x4
 
-  // Restore link register to jump back
+  // Restore link register to jump back.
   mov x30, x29
   ret
