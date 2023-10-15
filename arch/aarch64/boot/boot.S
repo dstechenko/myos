@@ -104,16 +104,16 @@ boot_init_kernel:
   ## add sp, x0, #LOW_MEMORY
 
   // Point kernel level translation table base register.
-  ## adrp x0, section_pgd_start
-  ## msr ttbr1_el1, x0
+  adrp x0, section_pgd_start
+  msr ttbr1_el1, x0
 
   // Configure translation control register (pages size etc).
-  ## ldr x0, =(TCR_EL1_VALUE)
-  ## msr tcr_el1, x0
+  ldr x0, =(TCR_EL1_VALUE)
+  msr tcr_el1, x0
 
   // Set up memory attribute indirection register (additional attributes for translation).
-  ## ldr x0, =(MAIR_VALUE)
-  ## msr mair_el1, x0
+  ldr x0, =(MAIR_VALUE)
+  msr mair_el1, x0
 
   // Grab the offset before we enable MMU.
   ldr x2, =kernel_start
