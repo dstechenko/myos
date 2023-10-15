@@ -5,6 +5,7 @@
 
 #include <asm/delay.h>
 #include <asm/irq.h>
+#include <asm/memory-defs.h>
 #include <asm/registers.h>
 #include <drivers/irq.h>
 #include <drivers/timer.h>
@@ -81,12 +82,26 @@ void kernel_start(void) {
   irq_enable();
 
   LOG_INFO("MyOS boot complete!");
+  LOG_INFO(">");
   LOG_INFO("Build commit hash:   %s", BUILD_INFO_COMMIT_HASH);
   LOG_INFO("Build timestamp:     %s", BUILD_INFO_TIMESTAMP);
   LOG_INFO("Build target arch:   %s", BUILD_INFO_TARGET_ARCH);
   LOG_INFO("Build target board:  %s", BUILD_INFO_TARGET_BOARD);
   LOG_INFO("Build target mode:   %s", BUILD_INFO_TARGET_MODE);
   LOG_INFO("Build host arch:     %s", BUILD_INFO_HOST_ARCH);
+  LOG_INFO(">");
+  LOG_INFO("Physical memory start:        %lx", PHYSICAL_MEMORY_START);
+  LOG_INFO("Physical memory end:          %lx", PHYSICAL_MEMORY_END);
+  LOG_INFO("Physical memory size:         %lx", PHYSICAL_MEMORY_SIZE);
+  LOG_INFO("Physical device memory start: %lx", PHYSICAL_DEVICE_MEMORY_START);
+  LOG_INFO("Physical device memory end:   %lx", PHYSICAL_DEVICE_MEMORY_END);
+  LOG_INFO("Physical device memory size:  %lx", PHYSICAL_DEVICE_MEMORY_SIZE);
+  LOG_INFO("Virtual memory start:         %lx", VIRTUAL_MEMORY_START);
+  LOG_INFO("Virtual memory end:           %lx", VIRTUAL_MEMORY_END);
+  LOG_INFO("Virtual memory size:          %lx", VIRTUAL_MEMORY_SIZE);
+  LOG_INFO("Virtual device memory start:  %lx", VIRTUAL_DEVICE_MEMORY_START);
+  LOG_INFO("Virtual device memory end:    %lx", VIRTUAL_DEVICE_MEMORY_END);
+  LOG_INFO("Virtual device memory size:   %lx", VIRTUAL_DEVICE_MEMORY_SIZE);
   LOG_INFO(">");
 
   debug_pages();

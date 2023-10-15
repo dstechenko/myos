@@ -143,19 +143,19 @@ boot_create_page_tables:
 
   // Create page global directory entries.
   adr x0, section_pgd_start
-  mov x1, #VIRTUAL_MEMORY_START
+  ldr x1, =VIRTUAL_MEMORY_START
   boot_create_page_global_directory x0, x1, x2, x3
 
   // Map kernel and initial stack.
-  mov x1, xzr
-  mov x2, #VIRTUAL_MEMORY_START
-  ldr x3, =(VIRTUAL_DEVICE_MEMORY_START - SECTION_SIZE)
+  ldr x1, =PHYSICAL_MEMORY_START
+  ldr x2, =VIRTUAL_MEMORY_START
+  ldr x3, =VIRTUAL_DEVICE_MEMORY_START
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_NORMAL_FLAGS, x4
 
   // Map device memory.
-  mov x1, #PHYSICAL_DEVICE_MEMORY_START
+  ldr x1, =PHYSICAL_DEVICE_MEMORY_START
   ldr x2, =VIRTUAL_DEVICE_MEMORY_START
-  ldr x3, =(VIRTUAL_DEVICE_MEMORY_SIZE - SECTION_SIZE)
+  ldr x3, =VIRTUAL_DEVICE_MEMORY_END
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_DEVICE_FLAGS, x4
 
   // Restore link register to jump back.

@@ -21,7 +21,8 @@
 
 #define GET_DESC_VALID_BIT(desc) (desc & BIT(0))
 #define GET_DESC_TABLE_BIT(desc) (desc & BIT(1))
-#define GET_DESC_ADDR_BITS(desc) (desc & (BIT(47) - 1) & ~(BIT(12) - 1))
+#define GET_DESC_ADDR_BITS(desc) (desc & (BIT(48) - 1) & ~(BIT(12) - 1))
+#define GET_DESC_LOW_ATTR_BITS(desc) (desc & (BIT(12) - 1) & ~(BIT(2) - 1))
 
 static void print_page_entries(const uintptr_t table) {
   uintptr_t *cursor = (uintptr_t *)table;
@@ -43,10 +44,12 @@ static void print_page_entries(const uintptr_t table) {
     const bool is_valid = GET_DESC_VALID_BIT(cursor[i]);
     const bool is_table = GET_DESC_TABLE_BIT(cursor[i]);
     const uintptr_t addr = GET_DESC_ADDR_BITS(cursor[i]);
+    const uint64_t flags = GET_DESC_LOW_ATTR_BITS(cursor[i]);
 
     print("> %s [%s]\n", is_table ? "table" : "block", is_valid ? "valid" : "invalid");
     print("  bits: %lx\n", cursor[i]);
     print("  addr: %lx\n", addr);
+    print(" flags: %lx\n", flags);
   }
   if (empty)
     print("... %u empty entries ... \n", empty);
