@@ -6,7 +6,9 @@
 #include <asm/memory-defs.h>
 #include <asm/page-defs.h>
 
-ENTRY(_start)
+#include <kernel/core/config.h>
+
+ENTRY(ENTRY_POINT_LABEL)
 
 SECTIONS
 {
@@ -15,7 +17,7 @@ SECTIONS
     . = ALIGN(PAGE_SIZE);
     section_start = .;
     /* TODO: move this out into a board specific property */
-    _start = .;
+    ENTRY_POINT_LABEL = .;
     section_text_start = .;
     .text :
     {

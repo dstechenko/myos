@@ -6,11 +6,13 @@
 #include <asm/page-defs.h>
 #include <asm/registers-defs.h>
 
+#include <kernel/core/config.h>
+
 // To keep this in the first portion of the binary.
 .section ".text.boot"
 
 // Make _start global. Need this to get execution transferred from armstub8.
-.globl _start, boot_start
+.globl ENTRY_POINT_LABEL
 
 .macro boot_create_page_global_directory table, vaddr, aux0, aux1
   boot_create_page_table_entry \table, \vaddr, PGD_SHIFT, \aux0, \aux1
@@ -42,7 +44,7 @@
   bls 9999b
 .endm
 
-_start:
+ENTRY_POINT_LABEL:
 boot_start:
   // Entry point for the kernel.
   // We need to halt all of the non-primary CPUs since they
@@ -85,7 +87,7 @@ boot_init_el2:
 
 boot_init_kernel:
   // Set stack before we jump into kernel.
-  ldr x0, =_start
+  ldr x0, =boot_start
   mov sp, x0
 
   // Also zero-out bss section to prepare kernel.
