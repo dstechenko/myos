@@ -6,6 +6,8 @@
 #include <stddef.h>
 
 #include <asm/memory-defs.h>
+#include <asm/page-defs.h>
+#include <kernel/memory/ops.h>
 #include <kernel/util/bool.h>
 
 #define STATIC_MEMORY_MIN (100 * PAGE_SIZE)
@@ -44,7 +46,11 @@ uintptr_t get_free_page_zero() {
 
 uintptr_t get_free_page_kernel() { return (uintptr_t)NULL; }
 
-uintptr_t get_free_page_user(struct task *task, uintptr_t vaddr) { return (uintptr_t)NULL; }
+uintptr_t get_free_page_user(struct task *task, uintptr_t vaddr) {
+  (void)task;
+  (void)vaddr;
+  return (uintptr_t)NULL;
+}
 
 void free_page(const uintptr_t page) {
   if (page)

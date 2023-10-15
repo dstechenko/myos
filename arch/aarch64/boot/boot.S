@@ -94,6 +94,9 @@ boot_init_kernel:
   sub x1, x1, x0
   bl memzero
 
+  // Set up initial kernel/device pages.
+  bl boot_create_page_tables
+
 boot_kernel_entry:
   // Jump to the kernel entry point.
   // This should not return.

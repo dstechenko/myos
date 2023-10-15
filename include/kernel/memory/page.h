@@ -16,18 +16,13 @@ struct page {
   uintptr_t paddr;
 };
 
-uintptr_t get_free_page();
-uintptr_t get_free_page_zero();
-uintptr_t get_free_page_kernel();
+uintptr_t get_free_page(void);
+uintptr_t get_free_page_zero(void);
+uintptr_t get_free_page_kernel(void);
 uintptr_t get_free_page_user(struct task *task, uintptr_t vaddr);
 
 void free_page(uintptr_t page);
 
-void map_table_entry();
-void map_table();
-void map_page();
-
-void set_page_global_directory(uintptr_t table);
-uintptr_t get_page_global_directory();
+void debug_pages(void);
 
 #endif // !KERNEL_MEMORY_PAGE_H

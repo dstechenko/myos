@@ -13,6 +13,7 @@
 #include <kernel/core/syscall.h>
 #include <kernel/logging/log.h>
 #include <kernel/logging/print.h>
+#include <kernel/memory/page.h>
 #include <kernel/scheduler/fork.h>
 #include <kernel/scheduler/task.h>
 
@@ -87,6 +88,8 @@ void kernel_start(void) {
   LOG_INFO("Build target mode:   %s", BUILD_INFO_TARGET_MODE);
   LOG_INFO("Build host arch:     %s", BUILD_INFO_HOST_ARCH);
   LOG_INFO(">");
+
+  debug_pages();
 
   LOG_DEBUG("Logging test:");
   LOG_DEBUG("%c", 'c');
