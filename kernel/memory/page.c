@@ -10,7 +10,7 @@
 #include <kernel/memory/ops.h>
 #include <kernel/util/bool.h>
 
-#define STATIC_MEMORY_MIN (3 * SECTION_SIZE)
+#define STATIC_MEMORY_MIN (30 * SECTION_SIZE)
 #define STATIC_MEMORY_HIGH 0x3F000000
 
 #define STATIC_MEMORY (STATIC_MEMORY_HIGH - STATIC_MEMORY_MIN)

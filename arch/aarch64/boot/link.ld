@@ -16,13 +16,12 @@ SECTIONS
     . = ALIGN(PAGE_SIZE);
     section_start = .;
     BOOT_ENTRY_POINT_LABEL = .;
-    section_text_start = .;
-    .text :
+    section_text_boot_start = .;
+    .text_boot :
     {
-        KEEP(*(.text.boot))
-        *(.text)
+        *(.text.boot)
     }
-    section_text_end = .;
+    section_text_boot_end = .;
      . = ALIGN(PAGE_SIZE);
     section_rodata_start = .;
     .rodata :
@@ -59,5 +58,13 @@ SECTIONS
     }
     section_pgd_kernel_end = .;
     section_pgd_end = .;
+    /* . = VIRTUAL_MEMORY_START; */
+    . = ALIGN(PAGE_SIZE);
+    section_text_start = .;
+    .text :
+    {
+        *(.text)
+    }
+    section_text_end = .;
     section_end = .;
 }

@@ -164,7 +164,7 @@ entry_err_invalid_el0_32:
 
 entry_svc_el0:
   bl irq_enable
-  adr x24, syscall_table
+  ## adr x24, syscall_table
   uxtw x25, w8
   mov x26, #4
   cmp x25, x26

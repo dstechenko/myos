@@ -115,22 +115,18 @@ boot_init_kernel:
   ldr x0, =(TCR_EL1_VALUE)
   msr tcr_el1, x0
 
-  isb
-
   // Set up memory attribute indirection register (additional attributes for translation).
   ldr x0, =(MAIR_VALUE)
   msr mair_el1, x0
 
   // Grab the offset before we enable MMU.
   ldr x2, =kernel_start
+  ## ldr x1, =VIRTUAL_MEMORY_START
+  ## add x2, x2, x1
 
   // Enable MMU via system control register.
   ldr x0, =(SCTLR_EL1_MMU_VALUE)
   msr sctlr_el1, x0
-
-  tlbi vmalle1is
-  dsb ish
-  isb
 
   // Jump to the kernel entry point. This should not return.
   br x2
@@ -170,13 +166,13 @@ boot_create_page_tables:
   // Map kernel and initial stack sections.
   ldr x1, =PHYSICAL_MEMORY_START
   ldr x2, =VIRTUAL_MEMORY_START
-  ldr x3, =(VIRTUAL_DEVICE_MEMORY_START - SECTION_SIZE)
+  ldr x3, =(VIRTUAL_DEVICE_MEMORY_START)
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_NORMAL_FLAGS, x4
 
   // Map device memory sections.
   ldr x1, =PHYSICAL_DEVICE_MEMORY_START
   ldr x2, =VIRTUAL_DEVICE_MEMORY_START
-  ldr x3, =(VIRTUAL_DEVICE_MEMORY_END - SECTION_SIZE)
+  ldr x3, =(VIRTUAL_DEVICE_MEMORY_END)
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_DEVICE_FLAGS, x4
 
   // Restore link register to jump back.

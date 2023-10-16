@@ -38,7 +38,7 @@ OD  := $(TOOLCHAIN)-objdump
 OC  := $(TOOLCHAIN)-objcopy
 VM  := qemu-system-$(TARGET_ARCH)
 
-AS_FLAGS  := -c -g -mgeneral-regs-only
+AS_FLAGS  := -c -g -mgeneral-regs-only -MMD
 C_FLAGS   := -c -g -mgeneral-regs-only -ffreestanding -nostdlib -nostartfiles -Wall -Wextra -MMD
 DBG_FLAGS := -q -iex "target remote localhost:1234"
 LD_FLAGS  := -g -ffreestanding -nostdlib -nostartfiles

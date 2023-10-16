@@ -68,7 +68,7 @@ void task_user(void) {
 
 void task_kernel(void) {
   LOG_INFO("tick from task in kernel, priv %d", registers_get_priv());
-  task_move_to_user((uintptr_t)&task_user);
+  task_move_to_user(((uintptr_t)&task_user));
 }
 
 void kernel_start(void) {
@@ -113,6 +113,8 @@ void kernel_start(void) {
   LOG_DEBUG("%lx", 0xDEADBEEFDEADBEEF);
 
   // debug_pages();
+
+  LOG_DEBUG("%lx", &fork_task);
 
   err = fork_task((uintptr_t)&task_kernel, (uintptr_t)NULL, FORK_KERNEL);
   if (err < 0) {
