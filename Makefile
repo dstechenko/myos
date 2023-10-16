@@ -44,8 +44,8 @@ DBG_FLAGS := -q -iex "target remote localhost:1234"
 LD_FLAGS  := -g -ffreestanding -nostdlib -nostartfiles
 LD_LIBS   := -lgcc
 PP_FLAGS  := -E -P -x c -D__ASSEMBLER__
-VM_FLAGS   := -M raspi3b -serial null -serial stdio
-OD_FLAGS   := -s -d
+VM_FLAGS  := -M raspi3b -serial null -serial stdio
+OD_FLAGS  := -s -d
 
 ifeq ($(VM_MODE), debug)
 VM_FLAGS := $(VM_FLAGS) -d int

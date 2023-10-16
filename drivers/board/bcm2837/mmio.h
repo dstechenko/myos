@@ -12,6 +12,6 @@
  * bus address range starting at 0x7E000000.
  */
 
-#define MMIO_BASE PHYSICAL_DEVICE_MEMORY_START
+#define MMIO_BASE VIRTUAL_DEVICE_MEMORY_START
 
 #endif // !DRIVERS_BOARD_BCM2837_MMIO_H

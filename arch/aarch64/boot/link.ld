@@ -12,8 +12,7 @@ ENTRY(BOOT_ENTRY_POINT_LABEL)
 
 SECTIONS
 {
-    . = 0x80000;
-    /* . = VIRTUAL_MEMORY_START; */
+    . = BOOT_LOAD_ADDRESS;
     . = ALIGN(PAGE_SIZE);
     section_start = .;
     BOOT_ENTRY_POINT_LABEL = .;
@@ -47,10 +46,18 @@ SECTIONS
     section_bss_end = .;
     . = ALIGN(PAGE_SIZE);
     section_pgd_start = .;
-    .pgd :
+    section_pgd_boot_start = .;
+    .pgd_boot :
     {
       . += PGD_SIZE;
     }
+    section_pgd_boot_end = .;
+    section_pgd_kernel_start = .;
+    .pgd_kernel :
+    {
+      . += PGD_SIZE;
+    }
+    section_pgd_kernel_end = .;
     section_pgd_end = .;
     section_end = .;
 }

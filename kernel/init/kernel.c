@@ -18,51 +18,51 @@
 #include <kernel/scheduler/fork.h>
 #include <kernel/scheduler/task.h>
 
-void task_a(void) {
-  while (true) {
-    LOG_INFO("tick from task a");
-    cdelay(50000000);
-  }
-}
+/* void task_a(void) { */
+/*   while (true) { */
+/*     LOG_INFO("tick from task a"); */
+/*     cdelay(50000000); */
+/*   } */
+/* } */
 
-void task_b(void) {
-  while (true) {
-    LOG_INFO("tick from task b");
-    cdelay(50000000);
-  }
-}
+/* void task_b(void) { */
+/*   while (true) { */
+/*     LOG_INFO("tick from task b"); */
+/*     cdelay(50000000); */
+/*   } */
+/* } */
 
 void task_user(void) {
-  int err;
-  uintptr_t stack;
+  /* int err; */
+  /* uintptr_t stack; */
 
   syscall_write_invoke("tick from task in user");
 
-  stack = syscall_alloc_invoke(CONFIG_KERNEL_SCHEDULER_STACK_SIZE);
-  if (!stack) {
-    LOG_ERROR("Failed to allocate user stack for task a");
-    goto exit;
-  }
+  /*   stack = syscall_alloc_invoke(CONFIG_KERNEL_SCHEDULER_STACK_SIZE); */
+  /*   if (!stack) { */
+  /*     LOG_ERROR("Failed to allocate user stack for task a"); */
+  /*     goto exit; */
+  /*   } */
 
-  err = syscall_clone_invoke((uintptr_t)&task_a, stack);
-  if (err < 0) {
-    LOG_ERROR("Failed to clone user task a, err %d", err);
-    goto exit;
-  }
+  /*   err = syscall_clone_invoke((uintptr_t)&task_a, stack); */
+  /*   if (err < 0) { */
+  /*     LOG_ERROR("Failed to clone user task a, err %d", err); */
+  /*     goto exit; */
+  /*   } */
 
-  stack = syscall_alloc_invoke(CONFIG_KERNEL_SCHEDULER_STACK_SIZE);
-  if (!stack) {
-    LOG_ERROR("Failed to allocate user stack for task b");
-    goto exit;
-  }
+  /*   stack = syscall_alloc_invoke(CONFIG_KERNEL_SCHEDULER_STACK_SIZE); */
+  /*   if (!stack) { */
+  /*     LOG_ERROR("Failed to allocate user stack for task b"); */
+  /*     goto exit; */
+  /*   } */
 
-  err = syscall_clone_invoke((uintptr_t)&task_b, stack);
-  if (err < 0) {
-    LOG_ERROR("Failed to clone user task b, err %d", err);
-    goto exit;
-  }
+  /*   err = syscall_clone_invoke((uintptr_t)&task_b, stack); */
+  /*   if (err < 0) { */
+  /*     LOG_ERROR("Failed to clone user task b, err %d", err); */
+  /*     goto exit; */
+  /*   } */
 
-exit:
+  /* exit: */
   syscall_exit_invoke();
 }
 
@@ -104,8 +104,6 @@ void kernel_start(void) {
   LOG_INFO("Virtual device memory size:   %lx", VIRTUAL_DEVICE_MEMORY_SIZE);
   LOG_INFO(">");
 
-  debug_pages();
-
   LOG_DEBUG("Logging test:");
   LOG_DEBUG("%c", 'c');
   LOG_DEBUG("%d", 123);
@@ -113,6 +111,8 @@ void kernel_start(void) {
   LOG_DEBUG("%o", 123);
   LOG_DEBUG("%x", 123);
   LOG_DEBUG("%lx", 0xDEADBEEFDEADBEEF);
+
+  // debug_pages();
 
   err = fork_task((uintptr_t)&task_kernel, (uintptr_t)NULL, FORK_KERNEL);
   if (err < 0) {

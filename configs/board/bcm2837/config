@@ -1,6 +1,7 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
+BOOT_LOAD_ADDRESS 0x80000
 BOOT_ENTRY_POINT_LABEL _start
 
 # One PGD descriptor can cover 2^39 = 512GB.

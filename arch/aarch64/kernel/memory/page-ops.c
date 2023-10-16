@@ -95,9 +95,13 @@ void print_page_global_directory(const uintptr_t pgd) {
     }
 }
 
-void section_pgd_start(void);
+void section_pgd_boot_start(void);
+void section_pgd_kernel_start(void);
 
 void debug_pages(void) {
-  print_page_global_directory((uintptr_t)section_pgd_start);
-  ABORT();
+  print("\nBoot level\n");
+  print_page_global_directory((uintptr_t)section_pgd_boot_start);
+
+  print("\nKernel level\n");
+  print_page_global_directory((uintptr_t)section_pgd_kernel_start);
 }

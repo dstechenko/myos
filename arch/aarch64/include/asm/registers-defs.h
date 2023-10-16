@@ -68,10 +68,10 @@
  * TCR_EL1, Translation Control Register (EL1).
  * Page 2685 of ARMv8-Architecture-Reference-Manual.
  */
-#define TCR_EL1_T0SZ (64 - 48)
-#define TCR_EL1_T1SZ ((64 - 48) << 16)
-#define TCR_EL1_TG0_4K (0 << 14)
-#define TCR_EL1_TG1_4K (2 << 30)
+#define TCR_EL1_T0SZ BIT(4)
+#define TCR_EL1_T1SZ BIT(20)
+#define TCR_EL1_TG0_4K NOBIT(14)
+#define TCR_EL1_TG1_4K (NOBIT(30) | BIT(31))
 #define TCR_EL1_VALUE (TCR_EL1_T0SZ | TCR_EL1_T1SZ | TCR_EL1_TG0_4K | TCR_EL1_TG1_4K)
 
 #endif // !ARCH_AARCH64_REGISTERS_DEFS_H
