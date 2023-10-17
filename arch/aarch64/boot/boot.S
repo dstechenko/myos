@@ -99,10 +99,6 @@ boot_init_kernel:
   // Set up initial kernel/device pages.
   bl boot_create_page_tables
 
-  // Reset the stack pointer for init task.
-  mov x0, VIRTUAL_MEMORY_START
-  add sp, x0, #LOW_MEMORY
-
   // Point identity boot level translation table base register.
   adrp x0, section_pgd_boot_start
   msr ttbr0_el1, x0
@@ -119,10 +115,12 @@ boot_init_kernel:
   ldr x0, =(MAIR_VALUE)
   msr mair_el1, x0
 
-  // Grab the offset before we enable MMU.
-  ldr x2, =kernel_start
+  // Grab the offset before we enable MMU and move to virtual.
+  // Also move the stack pointer for the init task into virtual.
   ldr x1, =VIRTUAL_MEMORY_START
+  ldr x2, =kernel_start
   add x2, x2, x1
+  add sp, sp, x1
 
   // Enable MMU via system control register.
   ldr x0, =(SCTLR_EL1_MMU_VALUE)

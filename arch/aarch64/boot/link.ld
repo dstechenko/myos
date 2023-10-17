@@ -58,7 +58,6 @@ SECTIONS
     }
     section_pgd_kernel_end = .;
     section_pgd_end = .;
-    /* . = VIRTUAL_MEMORY_START; */
     . = ALIGN(PAGE_SIZE);
     section_text_start = .;
     .text :
