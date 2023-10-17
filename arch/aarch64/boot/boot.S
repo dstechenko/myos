@@ -121,13 +121,14 @@ boot_init_kernel:
 
   // Grab the offset before we enable MMU.
   ldr x2, =kernel_start
-  ## ldr x1, =VIRTUAL_MEMORY_START
-  ## add x2, x2, x1
+  ldr x1, =VIRTUAL_MEMORY_START
+  add x2, x2, x1
 
   // Enable MMU via system control register.
   ldr x0, =(SCTLR_EL1_MMU_VALUE)
   msr sctlr_el1, x0
 
+boot_jump_kernel:
   // Jump to the kernel entry point. This should not return.
   br x2
 

@@ -71,6 +71,9 @@ void task_kernel(void) {
   task_move_to_user(((uintptr_t)&task_user));
 }
 
+void section_start(void);
+void section_end(void);
+
 void kernel_start(void) {
   int err;
 
@@ -114,13 +117,21 @@ void kernel_start(void) {
 
   // debug_pages();
 
-  LOG_DEBUG("%lx", &fork_task);
+  int a = 42;
+  int b = a + 1;
 
-  err = fork_task((uintptr_t)&task_kernel, (uintptr_t)NULL, FORK_KERNEL);
-  if (err < 0) {
-    LOG_ERROR("Failed to start task before user, err: %d", err);
-    return;
-  }
+  LOG_DEBUG("fork_task addr %lx", &fork_task);
+  LOG_DEBUG("a addr %lx", &a);
+  LOG_DEBUG("b addr %lx", &b);
+  LOG_DEBUG("kernel_start addr %lx", &kernel_start);
+  LOG_DEBUG("section_start addr %lx", &section_start);
+  LOG_DEBUG("section_start addr %lx", &section_end);
+
+  /* err = fork_task((uintptr_t)&task_kernel, (uintptr_t)NULL, FORK_KERNEL); */
+  /* if (err < 0) { */
+  /*   LOG_ERROR("Failed to start task before user, err: %d", err); */
+  /*   return; */
+  /* } */
 
   while (true)
     task_schedule();
