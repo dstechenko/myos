@@ -113,7 +113,7 @@ void kernel_start(void) {
   LOG_INFO("");
   LOG_INFO("");
 
-  debug_pages();
+  /* debug_pages(); */
 
   err = fork_task((uintptr_t)&task_kernel, (uintptr_t)NULL, FORK_KERNEL);
   if (err < 0) {

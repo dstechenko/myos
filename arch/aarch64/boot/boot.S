@@ -143,34 +143,34 @@ boot_create_page_tables:
   mov x29, x30
 
   // Prepare the pages before mapping (zero out).
-  adr x0, section_pgd_start
-  adr x1, section_pgd_end
+  ldr x0, =section_pgd_start
+  ldr x1, =section_pgd_end
   sub x1, x1, x0
   bl memzero
 
-  // Create page global directory entries (boot).
-  adr x0, section_pgd_boot_start
+  // Create boot page global directory entries (identity).
+  ldr x0, =section_pgd_boot_start
   ldr x1, =PHYSICAL_MEMORY_START
   boot_create_page_global_directory x0, x1, x2, x3
 
-  // Map boot sections. No need for device memory there.
+  // Map boot sections (identity).
   ldr x1, =PHYSICAL_MEMORY_START
   ldr x2, =PHYSICAL_MEMORY_START
   ldr x3, =(PHYSICAL_DEVICE_MEMORY_START - SECTION_SIZE)
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_NORMAL_FLAGS, x4
 
-  // Create page global directory entries (kernel).
-  adr x0, section_pgd_kernel_start
+  // Create kernel/device page global directory entries (virtual).
+  ldr x0, =section_pgd_kernel_start
   ldr x1, =VIRTUAL_MEMORY_START
   boot_create_page_global_directory x0, x1, x2, x3
 
-  // Map kernel and init stack sections.
+  // Map kernel sections (virtual).
   ldr x1, =PHYSICAL_MEMORY_START
   ldr x2, =VIRTUAL_MEMORY_START
   ldr x3, =(VIRTUAL_DEVICE_MEMORY_START - SECTION_SIZE)
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_NORMAL_FLAGS, x4
 
-  // Map device memory sections.
+  // Map device sections (virtual).
   ldr x1, =PHYSICAL_DEVICE_MEMORY_START
   ldr x2, =VIRTUAL_DEVICE_MEMORY_START
   ldr x3, =VIRTUAL_DEVICE_MEMORY_END

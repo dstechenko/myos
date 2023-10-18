@@ -31,7 +31,7 @@ static void log_page_entries(const uintptr_t table) {
 
   ASSERT(cursor);
 
-  for (size_t i = 0; i < 3; i++) {
+  for (size_t i = 0; i < PAGES_PER_TABLE; i++) {
     if (!cursor[i]) {
       empty++;
       continue;
