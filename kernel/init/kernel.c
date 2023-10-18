@@ -67,8 +67,11 @@ exit:
 }
 
 void task_kernel(void) {
+  uintptr_t task_user_in_user = (uintptr_t)task_user - VIRTUAL_MEMORY_START;
   LOG_INFO("tick from task in kernel, priv %d", registers_get_priv());
-  task_move_to_user(((uintptr_t)&task_user));
+  LOG_INFO("task in kernel addr %lx", &task_kernel);
+  LOG_INFO("task in user addr %lx", task_user_in_user);
+  task_move_to_user(task_user_in_user);
 }
 
 void kernel_start(void) {
@@ -110,13 +113,13 @@ void kernel_start(void) {
   LOG_INFO("");
   LOG_INFO("");
 
-  // debug_pages();
+  debug_pages();
 
-  /* err = fork_task((uintptr_t)&task_kernel, (uintptr_t)NULL, FORK_KERNEL); */
-  /* if (err < 0) { */
-  /*   LOG_ERROR("Failed to start task before user, err: %d", err); */
-  /*   return; */
-  /* } */
+  err = fork_task((uintptr_t)&task_kernel, (uintptr_t)NULL, FORK_KERNEL);
+  if (err < 0) {
+    LOG_ERROR("Failed to start task before user, err: %d", err);
+    return;
+  }
 
   while (true)
     task_schedule();

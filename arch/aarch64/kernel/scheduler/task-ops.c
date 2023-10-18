@@ -9,6 +9,9 @@
 #include <kernel/memory/allocator.h>
 #include <kernel/util/assert.h>
 
+// TODO: remove (debug)
+#include <kernel/logging/log.h>
+
 #include "task-context.h"
 
 #define PSR_MODE_EL0t 0x00000000
@@ -56,6 +59,11 @@ int task_move_to_user(const uintptr_t pc) {
   current->user_stack = zalloc(CONFIG_KERNEL_SCHEDULER_STACK_SIZE, ALLOC_USER);
   if (!current->user_stack)
     return -ENOMEM;
+
+  LOG_INFO("user stack addr %lx", (current->user_stack + CONFIG_KERNEL_SCHEDULER_STACK_SIZE));
+  uint64_t *ptr = (uint64_t *)(current->user_stack + CONFIG_KERNEL_SCHEDULER_STACK_SIZE);
+  ptr[2] = 42;
+  LOG_INFO("user stack read %ld", ptr[2]);
 
   current_regs->sp = (uint64_t)current->user_stack + CONFIG_KERNEL_SCHEDULER_STACK_SIZE;
   current_regs->pc = (uint64_t)pc;

@@ -110,6 +110,7 @@ boot_init_kernel:
   // Configure translation control register (pages size etc).
   ldr x0, =(TCR_EL1_VALUE)
   msr tcr_el1, x0
+  isb
 
   // Set up memory attribute indirection register (additional attributes for translation).
   ldr x0, =(MAIR_VALUE)
@@ -125,6 +126,7 @@ boot_init_kernel:
   // Enable MMU via system control register.
   ldr x0, =(SCTLR_EL1_MMU_VALUE)
   msr sctlr_el1, x0
+  isb
 
 boot_jump_kernel:
   // Jump to the kernel entry point. This should not return.
@@ -151,10 +153,10 @@ boot_create_page_tables:
   ldr x1, =PHYSICAL_MEMORY_START
   boot_create_page_global_directory x0, x1, x2, x3
 
-  // Map boot sections.
+  // Map boot sections. No need for device memory there.
   ldr x1, =PHYSICAL_MEMORY_START
   ldr x2, =PHYSICAL_MEMORY_START
-  ldr x3, =(PHYSICAL_MEMORY_START - SECTION_SIZE)
+  ldr x3, =(PHYSICAL_DEVICE_MEMORY_START - SECTION_SIZE)
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_NORMAL_FLAGS, x4
 
   // Create page global directory entries (kernel).
@@ -162,16 +164,16 @@ boot_create_page_tables:
   ldr x1, =VIRTUAL_MEMORY_START
   boot_create_page_global_directory x0, x1, x2, x3
 
-  // Map kernel and initial stack sections.
+  // Map kernel and init stack sections.
   ldr x1, =PHYSICAL_MEMORY_START
   ldr x2, =VIRTUAL_MEMORY_START
-  ldr x3, =(VIRTUAL_DEVICE_MEMORY_START)
+  ldr x3, =(VIRTUAL_DEVICE_MEMORY_START - SECTION_SIZE)
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_NORMAL_FLAGS, x4
 
   // Map device memory sections.
   ldr x1, =PHYSICAL_DEVICE_MEMORY_START
   ldr x2, =VIRTUAL_DEVICE_MEMORY_START
-  ldr x3, =(VIRTUAL_DEVICE_MEMORY_END)
+  ldr x3, =VIRTUAL_DEVICE_MEMORY_END
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_DEVICE_FLAGS, x4
 
   // Restore link register to jump back.

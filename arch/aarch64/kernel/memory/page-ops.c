@@ -102,6 +102,6 @@ void debug_pages(void) {
   print("\nBoot level\n");
   print_page_global_directory((uintptr_t)section_pgd_boot_start);
 
-  print("\nKernel level\n");
-  print_page_global_directory((uintptr_t)section_pgd_kernel_start);
+  /* print("\nKernel level\n"); */
+  /* print_page_global_directory((uintptr_t)section_pgd_kernel_start); */
 }
