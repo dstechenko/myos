@@ -5,7 +5,8 @@
 
 #include <stddef.h>
 
-#include <kernel/logging/print.h>
+#include <asm/memory-defs.h>
+#include <kernel/logging/log.h>
 #include <kernel/memory/page.h>
 #include <kernel/util/assert.h>
 #include <kernel/util/bits.h>
@@ -24,20 +25,20 @@
 #define GET_DESC_ADDR_BITS(desc) (desc & (BIT(48) - 1) & ~(BIT(12) - 1))
 #define GET_DESC_LOW_ATTR_BITS(desc) (desc & (BIT(12) - 1) & ~(BIT(2) - 1))
 
-static void print_page_entries(const uintptr_t table) {
+static void log_page_entries(const uintptr_t table) {
   uintptr_t *cursor = (uintptr_t *)table;
   size_t empty = 0;
 
   ASSERT(cursor);
 
-  for (size_t i = 0; i < PAGES_PER_TABLE; i++) {
+  for (size_t i = 0; i < 3; i++) {
     if (!cursor[i]) {
       empty++;
       continue;
     }
 
     if (empty) {
-      print("... %u empty entries ...\n", empty);
+      LOG_DEBUG("... %u empty entries ...", empty);
       empty = 0;
     }
 
@@ -46,28 +47,28 @@ static void print_page_entries(const uintptr_t table) {
     const uintptr_t addr = GET_DESC_ADDR_BITS(cursor[i]);
     const uint64_t flags = GET_DESC_LOW_ATTR_BITS(cursor[i]);
 
-    print("> %s [%s]\n", is_table ? "table" : "block", is_valid ? "valid" : "invalid");
-    print("  bits: %lx\n", cursor[i]);
-    print("  addr: %lx\n", addr);
-    print(" flags: %lx\n", flags);
+    LOG_DEBUG("> %s [%s]", is_table ? "table" : "block", is_valid ? "valid" : "invalid");
+    LOG_DEBUG("  bits: %lx", cursor[i]);
+    LOG_DEBUG("  addr: %lx", addr);
+    LOG_DEBUG(" flags: %lx", flags);
   }
   if (empty)
-    print("... %u empty entries ... \n", empty);
+    LOG_DEBUG("... %u empty entries ...", empty);
 }
 
-void print_page_global_directory(const uintptr_t pgd) {
+void log_page_global_directory(const uintptr_t pgd) {
   uintptr_t *pud, *pmd, *pte;
 
   ASSERT(pgd);
   pud = (uintptr_t *)pgd;
 
-  print("\nPage Global Directory (physical address %lx)\n", pgd);
-  print_page_entries(pgd);
+  LOG_DEBUG("Page Global Directory (physical address %lx)", pgd);
+  log_page_entries(pgd);
 
   for (size_t i = 0; i < PAGES_PER_TABLE; i++)
     if (pud[i]) {
-      print("\nPage Upper Directory (physical address %lx)\n", GET_DESC_ADDR_BITS(pud[i]));
-      print_page_entries(GET_DESC_ADDR_BITS(pud[i]));
+      LOG_DEBUG("Page Upper Directory (physical address %lx)", GET_DESC_ADDR_BITS(pud[i]));
+      log_page_entries(GET_DESC_ADDR_BITS(pud[i]));
     }
 
   for (size_t i = 0; i < PAGES_PER_TABLE; i++)
@@ -75,8 +76,8 @@ void print_page_global_directory(const uintptr_t pgd) {
       pmd = (uintptr_t *)GET_DESC_ADDR_BITS(pud[i]);
       for (size_t j = 0; j < PAGES_PER_TABLE; j++)
         if (pmd[j]) {
-          print("\nPage Middle Directory (physical address %lx)\n", GET_DESC_ADDR_BITS(pmd[j]));
-          print_page_entries(GET_DESC_ADDR_BITS(pmd[j]));
+          LOG_DEBUG("Page Middle Directory (physical address %lx)", GET_DESC_ADDR_BITS(pmd[j]));
+          log_page_entries(GET_DESC_ADDR_BITS(pmd[j]));
         }
     }
 
@@ -88,8 +89,8 @@ void print_page_global_directory(const uintptr_t pgd) {
           pte = (uintptr_t *)GET_DESC_ADDR_BITS(pmd[j]);
           for (size_t k = 0; k < PAGES_PER_TABLE; k++)
             if (pte[k] && GET_DESC_TABLE_BIT(pte[k])) {
-              print("\nPage Table Entry (physical address %lx)\n", GET_DESC_ADDR_BITS(pte[k]));
-              print_page_entries(GET_DESC_ADDR_BITS(pte[k]));
+              LOG_DEBUG("\nPage Table Entry (physical address %lx)", GET_DESC_ADDR_BITS(pte[k]));
+              log_page_entries(GET_DESC_ADDR_BITS(pte[k]));
             }
         }
     }
@@ -99,9 +100,11 @@ void section_pgd_boot_start(void);
 void section_pgd_kernel_start(void);
 
 void debug_pages(void) {
-  print("\nBoot level\n");
-  print_page_global_directory((uintptr_t)section_pgd_boot_start);
-
-  /* print("\nKernel level\n"); */
-  /* print_page_global_directory((uintptr_t)section_pgd_kernel_start); */
+  LOG_DEBUG("");
+  LOG_DEBUG("Boot level");
+  log_page_global_directory((uintptr_t)section_pgd_boot_start - VIRTUAL_MEMORY_START);
+  LOG_DEBUG("");
+  LOG_DEBUG("Kernel level");
+  log_page_global_directory((uintptr_t)section_pgd_kernel_start - VIRTUAL_MEMORY_START);
+  LOG_DEBUG("");
 }

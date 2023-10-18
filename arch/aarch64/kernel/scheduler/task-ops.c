@@ -14,6 +14,7 @@
 
 #include "task-context.h"
 
+// TODO: move out of here
 #define PSR_MODE_EL0t 0x00000000
 #define PSR_MODE_EL1t 0x00000004
 #define PSR_MODE_EL1h 0x00000005
@@ -60,6 +61,7 @@ int task_move_to_user(const uintptr_t pc) {
   if (!current->user_stack)
     return -ENOMEM;
 
+  // TODO: remove (debug)
   LOG_INFO("user stack addr %lx", (current->user_stack + CONFIG_KERNEL_SCHEDULER_STACK_SIZE));
   uint64_t *ptr = (uint64_t *)(current->user_stack + CONFIG_KERNEL_SCHEDULER_STACK_SIZE);
   ptr[2] = 42;

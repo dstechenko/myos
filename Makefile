@@ -40,16 +40,12 @@ VM  := qemu-system-$(TARGET_ARCH)
 
 AS_FLAGS  := -c -g -mgeneral-regs-only -MMD
 C_FLAGS   := -c -g -mgeneral-regs-only -ffreestanding -nostdlib -nostartfiles -Wall -Wextra -MMD
-DBG_FLAGS := -q -x $(TOOLS_DIR)/startup.gdb
+DBG_FLAGS := -q
 LD_FLAGS  := -g -ffreestanding -nostdlib -nostartfiles
 LD_LIBS   := -lgcc
 PP_FLAGS  := -E -P -x c -D__ASSEMBLER__
 VM_FLAGS  := -M raspi3b -serial null -serial stdio
 OD_FLAGS  := -s -d
-
-ifeq ($(VM_MODE), debug)
-VM_FLAGS := $(VM_FLAGS) -d int
-endif
 
 KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR) $(DRIVERS_DIR)
 KERNEL_OBJS := $(shell find $(KERNEL_DIRS) -type f -name *.c -or -name *.S)
@@ -138,9 +134,13 @@ install-cc:
 boot-vm: build-all
 	$(VM) $(VM_FLAGS) -kernel $(KERNEL_IMG)
 
-debug-vm: build-all
+debug-boot-vm: build-all
 	$(VM) $(VM_FLAGS) -s -S -kernel $(KERNEL_IMG) &
-	$(DBG) $(DBG_FLAGS) -s $(KERNEL_ELF)
+	$(DBG) $(DBG_FLAGS) -x $(TOOLS_DIR)/startup_boot.gdb
+
+debug-kernel-vm: build-all
+	$(VM) $(VM_FLAGS) -s -S -kernel $(KERNEL_IMG) &
+	$(DBG) $(DBG_FLAGS) -x $(TOOLS_DIR)/startup_kernel.gdb
 
 dump-all: build-all
 	$(OD) $(OD_FLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
