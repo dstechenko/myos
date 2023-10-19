@@ -18,12 +18,10 @@ struct page {
 uintptr_t get_page(void);
 uintptr_t get_kernel_page(void);
 uintptr_t get_user_page(struct task *task, uintptr_t vaddr);
-void free_page(uintptr_t page);
-
-void map_user_page();
-uintptr_t map_user_table();
-void map_user_table_entry();
+void put_page(uintptr_t page);
+int copy_user_pages(const struct task *src, struct task *dst);
 
 void debug_pages(void);
+void map_user_page(struct task *task, struct page page);
 
 #endif // !KERNEL_MEMORY_PAGE_H

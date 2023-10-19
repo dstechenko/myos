@@ -7,10 +7,17 @@
 
 #include <asm/memory-defs.h>
 #include <asm/page-defs.h>
+
 #include <kernel/core/config.h>
+#include <kernel/core/error.h>
 #include <kernel/memory/ops.h>
 #include <kernel/scheduler/task.h>
+#include <kernel/util/assert.h>
 #include <kernel/util/bool.h>
+#include <kernel/util/ptrs.h>
+
+// TODO: move to smaller pages
+// TODO: move to faster traversal
 
 #define STATIC_PAGES 30
 #define STATIC_PAGE_SIZE SECTION_SIZE
@@ -32,19 +39,53 @@ uintptr_t get_page(void) {
       return INDEX_TO_ADDRESS(i);
     }
 
-  return (uintptr_t)NULL;
+  return PTR_TO_ADR(NULL);
 }
 
 uintptr_t get_kernel_page(void) {
   uintptr_t page = get_page();
+
   if (page)
-    page = VIRTUAL_MEMORY_START + page;
+    page += VIRTUAL_MEMORY_START;
+
   return page;
 }
 
-uintptr_t get_user_page(struct task *task, uintptr_t vaddr) {}
+uintptr_t get_user_page(struct task *task, uintptr_t vaddr) {
+  uintptr_t page;
 
-void free_page(const uintptr_t page) {
+  ASSERT(task);
+  ASSERT(vaddr);
+
+  page = get_page();
+  if (page) {
+    map_user_page(task, (struct page){.vaddr = vaddr, .paddr = page});
+    page += VIRTUAL_MEMORY_START;
+  }
+
+  return page;
+}
+
+void put_page(const uintptr_t page) {
   if (page)
     pages[ADDRESS_TO_INDEX(page)] = false;
+}
+
+int copy_user_pages(const struct task *src, struct task *dst) {
+  size_t src_count;
+  const struct page *src_pages;
+
+  ASSERT(src);
+  ASSERT(dst);
+  src_count = src->memory.user_pages_count;
+  src_pages = src->memory.user_pages;
+
+  for (size_t i = 0; i < src_count; i++) {
+    uintptr_t page = get_user_page(dst, src_pages[i].vaddr);
+    if (!page)
+      return -ENOMEM;
+    memcpy(ADR_TO_PTR(page), ADR_TO_PTR(src_pages[i].vaddr), STATIC_PAGE_SIZE);
+  }
+
+  return 0;
 }

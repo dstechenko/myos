@@ -159,7 +159,7 @@ boot_create_page_tables:
   ldr x1, =PHYSICAL_MEMORY_START
   ldr x2, =PHYSICAL_MEMORY_START
   ldr x3, =(PHYSICAL_DEVICE_MEMORY_START - SECTION_SIZE)
-  boot_create_page_block_mapping x0, x1, x2, x3, MMU_NORMAL_FLAGS, x4
+  boot_create_page_block_mapping x0, x1, x2, x3, MMU_KERNEL_FLAGS, x4
 
   // Create kernel/device page global directory entries (virtual).
   ldr x0, =section_pgd_kernel_start
@@ -170,7 +170,7 @@ boot_create_page_tables:
   ldr x1, =PHYSICAL_MEMORY_START
   ldr x2, =VIRTUAL_MEMORY_START
   ldr x3, =(VIRTUAL_DEVICE_MEMORY_START - SECTION_SIZE)
-  boot_create_page_block_mapping x0, x1, x2, x3, MMU_NORMAL_FLAGS, x4
+  boot_create_page_block_mapping x0, x1, x2, x3, MMU_KERNEL_FLAGS, x4
 
   // Map device sections (virtual).
   ldr x1, =PHYSICAL_DEVICE_MEMORY_START

@@ -12,6 +12,7 @@
 
 struct proc_regs;
 struct task_context;
+struct page_context;
 
 enum task_state {
   TASK_RUNNING,
@@ -25,6 +26,7 @@ struct task_memory {
   size_t user_pages_count;
   struct page kernel_pages[TASK_MAX_PROCESS_PAGES];
   size_t kernel_pages_count;
+  struct page_context *context;
 };
 
 struct task {
@@ -57,7 +59,7 @@ void task_context_switch(struct task *next);
 void task_preempt_enable(void);
 void task_preempt_disable(void);
 uint64_t task_get_priority(void);
-int task_move_to_user(uintptr_t pc);
+int task_move_to_user(uintptr_t pc, uintptr_t text, size_t size);
 int task_copy_vmem_into(struct task *task);
 void task_exit(void);
 
