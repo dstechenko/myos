@@ -7,6 +7,7 @@
 #include <asm/irq.h>
 #include <asm/memory-defs.h>
 #include <asm/registers.h>
+#include <asm/sections.h>
 
 #include <drivers/irq.h>
 #include <drivers/timer.h>
@@ -19,6 +20,7 @@
 #include <kernel/scheduler/fork.h>
 #include <kernel/scheduler/task.h>
 #include <kernel/util/bool.h>
+#include <kernel/util/ptrs.h>
 
 void kernel_task(void) {
   LOG_INFO("Run in kernel, priv %d", registers_get_priv());
@@ -28,6 +30,8 @@ void kernel_task(void) {
     cdelay(50000000);
   }
 }
+
+SECTION_LABEL(section_text_start);
 
 void kernel_start(void) {
   int err;
@@ -61,19 +65,23 @@ void kernel_start(void) {
   LOG_INFO("Virtual device memory start:  %lx", VIRTUAL_DEVICE_MEMORY_START);
   LOG_INFO("Virtual device memory end:    %lx", VIRTUAL_DEVICE_MEMORY_END);
   LOG_INFO("Virtual device memory size:   %lx", VIRTUAL_DEVICE_MEMORY_SIZE);
-  LOG_INFO("Boot entry location:          %lx", BOOT_LOAD_ADDRESS);
-  LOG_INFO("Kernel entry location:        %lx", &kernel_start);
+  LOG_INFO("Boot load location:           %lx", BOOT_LOAD_ADDRESS);
+  LOG_INFO("Kernel start location:        %lx", SECTION_PTR(section_text_start));
+  LOG_INFO("Kernel entry location:        %lx", REF_TO_ADR(kernel_start));
   LOG_INFO("Kernel stack location:        %lx", &err);
   LOG_INFO("");
 
   /* debug_pages(); */
 
-  err = fork_task((uintptr_t)&kernel_task, FORK_KERNEL);
+  err = fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL);
   if (err < 0) {
     LOG_ERROR("Failed to start task before user, err: %d", err);
     return;
   }
 
-  while (true)
+  while (true) {
+    LOG_INFO("Tick from init task");
+    cdelay(50000000);
     task_schedule();
+  }
 }

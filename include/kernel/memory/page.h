@@ -18,8 +18,11 @@ struct page {
 uintptr_t get_page(void);
 uintptr_t get_kernel_page(void);
 uintptr_t get_user_page(struct task *task, uintptr_t vaddr);
-
 void free_page(uintptr_t page);
+
+void map_user_page();
+uintptr_t map_user_table();
+void map_user_table_entry();
 
 void debug_pages(void);
 

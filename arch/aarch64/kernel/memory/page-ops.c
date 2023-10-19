@@ -6,6 +6,8 @@
 #include <stddef.h>
 
 #include <asm/memory-defs.h>
+#include <asm/page-defs.h>
+#include <asm/sections.h>
 #include <kernel/logging/log.h>
 #include <kernel/memory/page.h>
 #include <kernel/util/assert.h>
@@ -96,15 +98,15 @@ void log_page_global_directory(const uintptr_t pgd) {
     }
 }
 
-void section_pgd_boot_start(void);
-void section_pgd_kernel_start(void);
+SECTION_LABEL(section_pgd_boot_start);
+SECTION_LABEL(section_pgd_kernel_start);
 
 void debug_pages(void) {
   LOG_DEBUG("");
   LOG_DEBUG("Boot level");
-  log_page_global_directory((uintptr_t)section_pgd_boot_start - VIRTUAL_MEMORY_START);
+  log_page_global_directory(SECTION_PTR(section_pgd_boot_start) - VIRTUAL_MEMORY_START);
   LOG_DEBUG("");
   LOG_DEBUG("Kernel level");
-  log_page_global_directory((uintptr_t)section_pgd_kernel_start - VIRTUAL_MEMORY_START);
+  log_page_global_directory(SECTION_PTR(section_pgd_kernel_start) - VIRTUAL_MEMORY_START);
   LOG_DEBUG("");
 }

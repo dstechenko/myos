@@ -9,6 +9,7 @@
 #include <asm/page-defs.h>
 #include <kernel/core/config.h>
 #include <kernel/memory/ops.h>
+#include <kernel/scheduler/task.h>
 #include <kernel/util/bool.h>
 
 #define STATIC_PAGES 30
@@ -40,6 +41,8 @@ uintptr_t get_kernel_page(void) {
     page = VIRTUAL_MEMORY_START + page;
   return page;
 }
+
+uintptr_t get_user_page(struct task *task, uintptr_t vaddr) {}
 
 void free_page(const uintptr_t page) {
   if (page)
