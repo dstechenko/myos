@@ -119,7 +119,7 @@ boot_init_kernel:
   // Grab the offset before we enable MMU and move to virtual.
   // Also move the stack pointer for the init task into virtual.
   ldr x1, =VIRTUAL_MEMORY_START
-  ldr x2, =0x60000
+  ldr x2, =section_start
   add x2, x2, x1
   mov sp, x2
   ldr x2, =kernel_start
