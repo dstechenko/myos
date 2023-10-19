@@ -8,13 +8,22 @@
 
 #include <asm/proc-regs.h>
 #include <kernel/core/config.h>
-#include <kernel/memory/ops.h>
+#include <kernel/memory/page.h>
 #include <kernel/scheduler/task.h>
 #include <kernel/util/assert.h>
 
 #include "task-context.h"
 
-int fork_task_context(struct task *forked, const uintptr_t pc, const uintptr_t sp, const uint8_t flags) {
+static void copy_task_memory(struct task *src, struct task *dst) {
+  ASSERT(src);
+  ASSERT(dst);
+
+  /* for (int i = 0; i < src->memory.user_pages_count; i++) { */
+  /*   // Copy all user pages here */
+  /* } */
+}
+
+int fork_task_context(struct task *forked, const uintptr_t pc, const uint8_t flags) {
   int err;
   struct task *current;
   struct task_context *forked_context;
@@ -41,9 +50,7 @@ int fork_task_context(struct task *forked, const uintptr_t pc, const uintptr_t s
     ASSERT(current_regs);
     *forked_regs = *current_regs;
     forked_regs->regs[0] = 0;
-    ASSERT(sp);
-    forked_regs->sp = sp + CONFIG_KERNEL_SCHEDULER_STACK_SIZE;
-    forked->user_stack = (void *)sp;
+    copy_task_memory(current, forked);
   }
 
   forked_context->pc = (uint64_t)entry_fork_return;

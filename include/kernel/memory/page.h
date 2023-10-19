@@ -15,10 +15,9 @@ struct page {
   uintptr_t paddr;
 };
 
-uintptr_t get_free_page(void);
-uintptr_t get_free_page_zero(void);
-uintptr_t get_free_page_kernel(void);
-uintptr_t get_free_page_user(struct task *task, uintptr_t vaddr);
+uintptr_t get_page(void);
+uintptr_t get_kernel_page(void);
+uintptr_t get_user_page(struct task *task, uintptr_t vaddr);
 
 void free_page(uintptr_t page);
 

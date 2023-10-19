@@ -11,7 +11,7 @@
 #include <kernel/memory/ops.h>
 #include <kernel/util/bool.h>
 
-#define STATIC_PAGES 100
+#define STATIC_PAGES 30
 #define STATIC_PAGE_SIZE SECTION_SIZE
 #define STATIC_MEMORY_MAX PHYSICAL_DEVICE_MEMORY_START
 #define STATIC_MEMORY_SIZE (STATIC_PAGES * STATIC_PAGE_SIZE)
@@ -22,7 +22,7 @@
 
 static bool pages[STATIC_PAGES];
 
-uintptr_t get_free_page() {
+uintptr_t get_page(void) {
   size_t i;
 
   for (i = 0; i < sizeof(pages); i++)
@@ -32,6 +32,13 @@ uintptr_t get_free_page() {
     }
 
   return (uintptr_t)NULL;
+}
+
+uintptr_t get_kernel_page(void) {
+  uintptr_t page = get_page();
+  if (page)
+    page = VIRTUAL_MEMORY_START + page;
+  return page;
 }
 
 void free_page(const uintptr_t page) {

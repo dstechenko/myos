@@ -14,7 +14,7 @@ void *alloc(const size_t size, const uint8_t flags) {
   ASSERT(size);
   ASSERT(size <= PAGE_SIZE);
 
-  return (void *)get_free_page();
+  return (void *)get_kernel_page();
 }
 
 void *zalloc(const size_t size, const uint8_t flags) {

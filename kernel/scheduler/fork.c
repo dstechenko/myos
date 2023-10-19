@@ -9,7 +9,7 @@
 
 #define TASK_PREEMPT_DISABLED 1
 
-int fork_task(const uintptr_t pc, const uintptr_t sp, const uint8_t flags) {
+int fork_task(const uintptr_t pc, const uint8_t flags) {
   int err;
   struct task *task;
 
@@ -18,7 +18,7 @@ int fork_task(const uintptr_t pc, const uintptr_t sp, const uint8_t flags) {
   if (!task)
     return -ENOMEM;
 
-  err = fork_task_context(task, pc, sp, flags);
+  err = fork_task_context(task, pc, flags);
   if (err)
     return err;
 

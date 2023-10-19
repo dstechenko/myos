@@ -197,6 +197,7 @@ entry_fork_return:
   bl task_schedule_tail
   cbz x19, entry_user_return
   blr x19
+  bl entry_halt_core
 
 entry_user_return:
   bl irq_disable

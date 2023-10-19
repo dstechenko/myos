@@ -13,6 +13,7 @@ ENTRY(BOOT_ENTRY_POINT_LABEL)
 SECTIONS
 {
     . = BOOT_LOAD_ADDRESS;
+
     . = ALIGN(PAGE_SIZE);
     section_start = .;
     BOOT_ENTRY_POINT_LABEL = .;
@@ -22,6 +23,16 @@ SECTIONS
         *(.text.boot)
     }
     section_text_boot_end = .;
+
+    /* Hack until we get file system... */
+    . = ALIGN(PAGE_SIZE);
+    section_user_start = .;
+    .text_user   : { build/user* (.text) }
+    .rodata_user : { build/user* (.rodata) }
+    .data_user   : { build/user* (.data) }
+    .bss_user    : { build/user* (.bss) }
+    section_user_end = .;
+
      . = ALIGN(PAGE_SIZE);
     section_rodata_start = .;
     .rodata :
@@ -29,6 +40,7 @@ SECTIONS
         *(.rodata)
     }
     section_rodata_end = .;
+
      . = ALIGN(PAGE_SIZE);
     section_data_start = .;
     .data :
@@ -36,6 +48,7 @@ SECTIONS
         *(.data)
     }
     section_data_end = .;
+
      . = ALIGN(PAGE_SIZE);
     section_bss_start = .;
     .bss :
@@ -43,6 +56,7 @@ SECTIONS
         *(.bss)
     }
     section_bss_end = .;
+
     . = ALIGN(PAGE_SIZE);
     section_pgd_start = .;
     section_pgd_boot_start = .;
@@ -58,6 +72,7 @@ SECTIONS
     }
     section_pgd_kernel_end = .;
     section_pgd_end = .;
+
     . = ALIGN(PAGE_SIZE);
     section_text_start = .;
     .text :

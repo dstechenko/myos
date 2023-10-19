@@ -91,8 +91,8 @@ boot_init_kernel:
   mov sp, x0
 
   // Also zero-out bss section to prepare kernel.
-  adr x0, section_bss_start
-  adr x1, section_bss_end
+  ldr x0, =section_bss_start
+  ldr x1, =(section_bss_end - 1)
   sub x1, x1, x0
   bl memzero
 
@@ -119,9 +119,11 @@ boot_init_kernel:
   // Grab the offset before we enable MMU and move to virtual.
   // Also move the stack pointer for the init task into virtual.
   ldr x1, =VIRTUAL_MEMORY_START
+  ldr x2, =0x60000
+  add x2, x2, x1
+  mov sp, x2
   ldr x2, =kernel_start
   add x2, x2, x1
-  add sp, sp, x1
 
   // Enable MMU via system control register.
   ldr x0, =(SCTLR_EL1_MMU_VALUE)
@@ -144,7 +146,7 @@ boot_create_page_tables:
 
   // Prepare the pages before mapping (zero out).
   ldr x0, =section_pgd_start
-  ldr x1, =section_pgd_end
+  ldr x1, =(section_pgd_end - 1)
   sub x1, x1, x0
   bl memzero
 

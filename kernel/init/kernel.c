@@ -7,71 +7,26 @@
 #include <asm/irq.h>
 #include <asm/memory-defs.h>
 #include <asm/registers.h>
+
 #include <drivers/irq.h>
 #include <drivers/timer.h>
+
 #include <kernel/core/build_info.h>
 #include <kernel/core/config.h>
-#include <kernel/core/syscall.h>
 #include <kernel/logging/log.h>
 #include <kernel/logging/print.h>
 #include <kernel/memory/page.h>
 #include <kernel/scheduler/fork.h>
 #include <kernel/scheduler/task.h>
+#include <kernel/util/bool.h>
 
-void task_a(void) {
+void kernel_task(void) {
+  LOG_INFO("Run in kernel, priv %d", registers_get_priv());
+  LOG_INFO("Current location %lx", &kernel_task);
   while (true) {
-    LOG_INFO("tick from task a");
+    LOG_INFO("Tick from kernel task");
     cdelay(50000000);
   }
-}
-
-void task_b(void) {
-  while (true) {
-    LOG_INFO("tick from task b");
-    cdelay(50000000);
-  }
-}
-
-void task_user(void) {
-  int err;
-  uintptr_t stack;
-
-  syscall_write_invoke("tick from task in user");
-
-  stack = syscall_alloc_invoke(CONFIG_KERNEL_SCHEDULER_STACK_SIZE);
-  if (!stack) {
-    LOG_ERROR("Failed to allocate user stack for task a");
-    goto exit;
-  }
-
-  err = syscall_clone_invoke((uintptr_t)&task_a, stack);
-  if (err < 0) {
-    LOG_ERROR("Failed to clone user task a, err %d", err);
-    goto exit;
-  }
-
-  stack = syscall_alloc_invoke(CONFIG_KERNEL_SCHEDULER_STACK_SIZE);
-  if (!stack) {
-    LOG_ERROR("Failed to allocate user stack for task b");
-    goto exit;
-  }
-
-  err = syscall_clone_invoke((uintptr_t)&task_b, stack);
-  if (err < 0) {
-    LOG_ERROR("Failed to clone user task b, err %d", err);
-    goto exit;
-  }
-
-exit:
-  syscall_exit_invoke();
-}
-
-void task_kernel(void) {
-  uintptr_t task_user_in_user = (uintptr_t)task_user - VIRTUAL_MEMORY_START;
-  LOG_INFO("tick from task in kernel, priv %d", registers_get_priv());
-  LOG_INFO("task in kernel addr %lx", &task_kernel);
-  LOG_INFO("task in user addr %lx", task_user_in_user);
-  task_move_to_user(task_user_in_user);
 }
 
 void kernel_start(void) {
@@ -84,7 +39,6 @@ void kernel_start(void) {
   irq_ctrl_init();
   irq_enable();
 
-  LOG_INFO("");
   LOG_INFO("");
   LOG_INFO("MyOS boot started!");
   LOG_INFO("");
@@ -111,11 +65,10 @@ void kernel_start(void) {
   LOG_INFO("Kernel entry location:        %lx", &kernel_start);
   LOG_INFO("Kernel stack location:        %lx", &err);
   LOG_INFO("");
-  LOG_INFO("");
 
   /* debug_pages(); */
 
-  err = fork_task((uintptr_t)&task_kernel, (uintptr_t)NULL, FORK_KERNEL);
+  err = fork_task((uintptr_t)&kernel_task, FORK_KERNEL);
   if (err < 0) {
     LOG_ERROR("Failed to start task before user, err: %d", err);
     return;
