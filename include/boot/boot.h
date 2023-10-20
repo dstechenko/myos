@@ -4,6 +4,7 @@
 #ifndef BOOT_BOOT_H
 #define BOOT_BOOT_H
 
+// TODO: remove?
 void boot_start(void);
 
 #endif // !BOOT_BOOT_H

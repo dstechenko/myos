@@ -20,13 +20,14 @@ TOOLS_DIR   := tools
 
 ARCH_DIR := $(ARCH_DIR)/$(TARGET_ARCH)
 BOOT_DIR := $(ARCH_DIR)/boot
+
 GEN_DIR  := $(OUT_DIR)/gen
 
 CONFIGS_ARCH_DIR  := $(ARCH_DIR)/configs
 CONFIGS_BOARD_DIR := $(CONFIGS_DIR)/board/$(TARGET_BOARD)
 
-KERNEL_ELF :=$(OUT_DIR)/kernel.elf
-KERNEL_IMG :=$(OUT_DIR)/kernel.img
+KERNEL_ELF := $(OUT_DIR)/kernel.elf
+KERNEL_IMG := $(OUT_DIR)/kernel.img
 
 TOOLCHAIN := $(TOOLS_DIR)/cc/bin/$(TARGET_ARCH)-elf
 
@@ -100,7 +101,12 @@ $(OUT_DIR)/%.o: %.c
 	mkdir -p $(@D)
 	$(CC) $(C_FLAGS) $(INC_FLAGS) -I$(<D) $< -o $@
 
-$(LD_FILE): $(BOOT_DIR)/link.ld
+$(OUT_DIR)/%.ld: $(ARCH_DIR)/%.ld
+	mkdir -p $(@D)
+	$(CC) $(PP_FLAGS) $(INC_FLAGS) -I$(<D) $< -o $@
+
+$(OUT_DIR)/%.ld: %.ld
+	mkdir -p $(@D)
 	$(CC) $(PP_FLAGS) $(INC_FLAGS) -I$(<D) $< -o $@
 
 build-target: $(KERNEL_OBJS) $(LD_FILE)

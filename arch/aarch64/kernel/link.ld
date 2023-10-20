@@ -6,34 +6,9 @@
 #include <asm/memory-defs.h>
 #include <asm/page-defs.h>
 
-ENTRY(BOOT_ENTRY_POINT_LABEL)
-
 SECTIONS
 {
     section_start = .;
-
-    . = ALIGN(PAGE_SIZE);
-    section_text_boot_start = .;
-    .text_boot (BOOT_LOAD_ADDRESS) : { *(.text.boot) }
-    section_text_boot_end = .;
-
-    . = ALIGN(PAGE_SIZE);
-    section_pgd_boot_start = .;
-    .pgd_boot : { . += PGD_SIZE; }
-    section_pgd_boot_end = .;
-
-    . = ALIGN(PAGE_SIZE);
-    section_pgd_kernel_start = .;
-    .pgd_kernel : { . += PGD_SIZE; }
-    section_pgd_kernel_end = .;
-
-    section_kernel_start = .;
-    . += VIRTUAL_MEMORY_START;
-
-    . = ALIGN(PAGE_SIZE);
-    section_entry_start = .;
-    .text_entry : AT(ADDR(.text_entry) - VIRTUAL_MEMORY_START) { out/kernel/init/entry* (.text) }
-    section_entry_end = .;
 
     . = ALIGN(PAGE_SIZE);
     section_user_start = .;

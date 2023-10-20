@@ -19,19 +19,41 @@
 #include <kernel/memory/page.h>
 #include <kernel/scheduler/fork.h>
 #include <kernel/scheduler/task.h>
+#include <kernel/util/assert.h>
 #include <kernel/util/bool.h>
 #include <kernel/util/ptrs.h>
 
+SECTION_LABEL(section_user_start);
+SECTION_LABEL(section_user_end);
+SECTION_LABEL(user_start);
+
 void kernel_task(void) {
-  LOG_INFO("Run in kernel, priv %d", registers_get_priv());
-  LOG_INFO("Current location %lx", &kernel_task);
+  /* int err; */
+  /* uintptr_t user_start_addr = SECTION_ADDR(user_start); */
+  /* uintptr_t section_user_start_addr = SECTION_ADDR(section_user_start); */
+  /* uintptr_t section_user_end_addr = SECTION_ADDR(section_user_end); */
+  /* size_t section_user_size = (section_user_end_addr - section_user_start_addr); */
+
+  /* LOG_INFO("Run in kernel, priv %d", registers_get_priv()); */
+  /* LOG_INFO("Current location    %lx", &kernel_task); */
+  /* LOG_INFO("User text start     %lx", section_user_start); */
+  /* LOG_INFO("User text end       %lx", section_user_end); */
+  /* LOG_INFO("User entry          %lx", user_start_addr); */
+  /* LOG_INFO("User size           %lx", section_user_size); */
+
+  /* ASSERT(section_user_end_addr > section_user_start_addr); */
+  /* err = task_move_to_user(user_start_addr, section_user_start_addr, section_user_size); */
+  /* if (err) */
+  /*   LOG_ERROR("Failed to move to user: %d", err); */
+
   while (true) {
-    LOG_INFO("Tick from kernel task");
-    cdelay(50000000);
   }
 }
 
 SECTION_LABEL(section_text_start);
+
+static int a[5] = {42};
+int b[5] = {42};
 
 void kernel_start(void) {
   int err;
@@ -65,11 +87,14 @@ void kernel_start(void) {
   LOG_INFO("Virtual device memory start:  %lx", VIRTUAL_DEVICE_MEMORY_START);
   LOG_INFO("Virtual device memory end:    %lx", VIRTUAL_DEVICE_MEMORY_END);
   LOG_INFO("Virtual device memory size:   %lx", VIRTUAL_DEVICE_MEMORY_SIZE);
-  LOG_INFO("Boot load location:           %lx", BOOT_LOAD_ADDRESS);
-  LOG_INFO("Kernel start location:        %lx", SECTION_PTR(section_text_start));
-  LOG_INFO("Kernel entry location:        %lx", REF_TO_ADR(kernel_start));
-  LOG_INFO("Kernel stack location:        %lx", &err);
+  /* LOG_INFO("Boot load location:           %lx", BOOT_LOAD_ADDRESS); */
+  /* LOG_INFO("Kernel start location:        %lx", SECTION_ADDR(section_text_start)); */
+  /* LOG_INFO("Kernel entry location:        %lx", REF_TO_ADR(kernel_start)); */
+  /* LOG_INFO("Kernel stack location:        %lx", &err); */
   LOG_INFO("");
+
+  LOG_INFO("a: %lx", (uintptr_t)a);
+  LOG_INFO("b: %lx", (uintptr_t)b);
 
   /* debug_pages(); */
 

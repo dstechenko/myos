@@ -6,7 +6,7 @@
 #ifndef __ASSEMBLER__
 
 #define SECTION_LABEL(label) void label(void)
-#define SECTION_PTR(label) ((uintptr_t)label)
+#define SECTION_ADDR(label) ((uintptr_t)label)
 
 #endif // !__ASSEMBLER__
 #endif // !ASM_SECTIONS_DEFS_H

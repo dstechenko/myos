@@ -9,6 +9,7 @@
 #include <kernel/core/config.h>
 #include <kernel/core/error.h>
 #include <kernel/memory/allocator.h>
+#include <kernel/memory/ops.h>
 #include <kernel/util/assert.h>
 #include <kernel/util/ptrs.h>
 
@@ -74,7 +75,7 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   current_regs->ps = (uint64_t)PSR_MODE_EL0t;
 
   text_page = get_user_page(current, SECTION_SIZE);
-  memcpy(text_page, text, size);
+  memcpy(ADR_TO_PTR(text_page), ADR_TO_PTR(text), size);
 
   ASSERT(current->memory.context);
   registers_set_user_page_table(current->memory.context->pgd);

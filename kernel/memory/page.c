@@ -55,7 +55,6 @@ uintptr_t get_user_page(struct task *task, uintptr_t vaddr) {
   uintptr_t page;
 
   ASSERT(task);
-  ASSERT(vaddr);
 
   page = get_page();
   if (page) {

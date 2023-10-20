@@ -101,17 +101,17 @@ void log_page_global_directory(const uintptr_t pgd) {
     }
 }
 
-SECTION_LABEL(section_pgd_boot_start);
-SECTION_LABEL(section_pgd_kernel_start);
+/* SECTION_LABEL(section_pgd_boot_start); */
+/* SECTION_LABEL(section_pgd_kernel_start); */
 
 void debug_pages(void) {
-  LOG_DEBUG("");
-  LOG_DEBUG("Boot level");
-  log_page_global_directory(SECTION_PTR(section_pgd_boot_start));
-  LOG_DEBUG("");
-  LOG_DEBUG("Kernel level");
-  log_page_global_directory(SECTION_PTR(section_pgd_kernel_start));
-  LOG_DEBUG("");
+  /* LOG_DEBUG(""); */
+  /* LOG_DEBUG("Boot level"); */
+  /* log_page_global_directory(SECTION_ADDR(section_pgd_boot_start)); */
+  /* LOG_DEBUG(""); */
+  /* LOG_DEBUG("Kernel level"); */
+  /* log_page_global_directory(SECTION_ADDR(section_pgd_kernel_start)); */
+  /* LOG_DEBUG(""); */
 }
 
 // TODO: this is ugly, need to fix...

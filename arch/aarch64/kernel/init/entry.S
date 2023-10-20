@@ -84,6 +84,11 @@
   b entry_halt_core
 .endm
 
+entry_kernel_from_boot:
+  ldr x0, =kernel_start
+  br x0
+  bl entry_halt_core
+
 .align 11
 entry_ex_vector:
   entry_ex entry_syn_invalid_el1t

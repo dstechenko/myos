@@ -16,9 +16,12 @@ static uint64_t tasks_next_id = 1;
 static struct task tasks_main = INIT_TASK_MAIN(tasks_main);
 
 static struct task *tasks_current = &tasks_main;
-static struct task *tasks_all[TASKS_TOTAL] = {&tasks_main};
+static struct task *tasks_all[TASKS_TOTAL];
 
-int task_main_init(void) { return task_init(&tasks_main); }
+int task_main_init(void) {
+  tasks_all[0] = &tasks_main;
+  return task_init(&tasks_main);
+}
 
 int task_enqueue(struct task *task) {
   ASSERT(task);

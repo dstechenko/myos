@@ -6,8 +6,6 @@
 #include <asm/page-defs.h>
 #include <asm/registers-defs.h>
 
-#include <kernel/core/config.h>
-
 // To keep this in the first portion of the binary.
 .section ".text.boot"
 
@@ -67,7 +65,7 @@ boot_init_el3:
   msr scr_el3, x0
   ldr x0, =SPSR_EL2h_VALUE
   msr spsr_el3, x0
-  adr x0, boot_init_el2
+  ldr x0, =boot_init_el2
   msr elr_el3, x0
   eret
 
@@ -81,30 +79,24 @@ boot_init_el2:
   msr hcr_el2, x0
   ldr x0, =SPSR_EL1h_VALUE
   msr spsr_el2, x0
-  adr x0, boot_init_kernel
+  ldr x0, =boot_init_kernel
   msr elr_el2, x0
   eret
 
 boot_init_kernel:
   // Set stack before we jump into kernel.
-  ldr x0, =boot_start
+  ldr x0, =section_start
   mov sp, x0
-
-  // Also zero-out bss section to prepare kernel.
-  ldr x0, =section_bss_start
-  ldr x1, =(section_bss_end - 1)
-  sub x1, x1, x0
-  bl memzero
 
   // Set up initial kernel/device pages.
   bl boot_create_page_tables
 
   // Point identity boot level translation table base register.
-  adrp x0, section_pgd_boot_start
+  ldr x0, =section_pgd_boot_start
   msr ttbr0_el1, x0
 
   // Point kernel level translation table base register.
-  adrp x0, section_pgd_kernel_start
+  ldr x0, =section_pgd_kernel_start
   msr ttbr1_el1, x0
 
   // Configure translation control register (pages size etc).
@@ -118,12 +110,13 @@ boot_init_kernel:
 
   // Grab the offset before we enable MMU and move to virtual.
   // Also move the stack pointer for the init task into virtual.
-  ldr x1, =VIRTUAL_MEMORY_START
-  ldr x2, =section_start
-  add x2, x2, x1
-  mov sp, x2
-  ldr x2, =kernel_start
-  add x2, x2, x1
+  ldr x0, =VIRTUAL_MEMORY_START
+  ldr x1, =boot_start
+  add x1, x1, x0
+  mov sp, x1
+
+  ldr x1, =section_kernel_start;
+  add x1, x1, x0
 
   // Enable MMU via system control register.
   ldr x0, =(SCTLR_EL1_MMU_VALUE)
@@ -132,7 +125,7 @@ boot_init_kernel:
 
 boot_jump_kernel:
   // Jump to the kernel entry point. This should not return.
-  br x2
+  br x1
 
 boot_halt_core:
   // For failsafe, halt this core.
@@ -140,15 +133,21 @@ boot_halt_core:
   wfe
   b boot_halt_core
 
+boot_memzero:
+  str xzr, [x0], #8
+  subs x1, x1, #8
+  bgt boot_memzero
+  ret
+
 boot_create_page_tables:
   // Save link register to return after.
   mov x29, x30
 
-  // Prepare the pages before mapping (zero out).
-  ldr x0, =section_pgd_start
-  ldr x1, =(section_pgd_end - 1)
+  // Prepare boot pages before mapping (zero out).
+  ldr x0, =section_pgd_boot_start
+  ldr x1, =section_pgd_boot_end
   sub x1, x1, x0
-  bl memzero
+  bl boot_memzero
 
   // Create boot page global directory entries (identity).
   ldr x0, =section_pgd_boot_start
@@ -160,6 +159,12 @@ boot_create_page_tables:
   ldr x2, =PHYSICAL_MEMORY_START
   ldr x3, =(PHYSICAL_DEVICE_MEMORY_START - SECTION_SIZE)
   boot_create_page_block_mapping x0, x1, x2, x3, MMU_KERNEL_FLAGS, x4
+
+  // Prepare kernel pages before mapping (zero out).
+  ldr x0, =section_pgd_kernel_start
+  ldr x1, =section_pgd_kernel_end
+  sub x1, x1, x0
+  bl boot_memzero
 
   // Create kernel/device page global directory entries (virtual).
   ldr x0, =section_pgd_kernel_start
