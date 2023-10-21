@@ -16,8 +16,8 @@
 #include <kernel/util/bool.h>
 #include <kernel/util/ptrs.h>
 
-// TODO: move to smaller pages
-// TODO: move to faster traversal
+// TODO(dstechenko): move to smaller pages
+// TODO(dstechenko): move to faster traversal
 
 #define STATIC_PAGES 30
 #define STATIC_PAGE_SIZE SECTION_SIZE
@@ -30,7 +30,7 @@
 
 static bool pages[STATIC_PAGES];
 
-// TODO: add proper zero pages
+// TODO(dstechenko): add proper zero pages
 uintptr_t get_page(void) {
   size_t i;
 

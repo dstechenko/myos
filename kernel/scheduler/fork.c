@@ -28,10 +28,10 @@ int fork_task(const uintptr_t pc, const uint8_t flags) {
   task->ticks = task->priority;
   task->preempt = TASK_PREEMPT_DISABLED;
 
-  // TODO: handle inability to add tasks
+  // TODO(dstechenko): handle inability to add tasks
   task_enqueue(task);
   task_preempt_enable();
 
-  // TODO: make sure task ids always fit into ints
+  // TODO(dstechenko): make sure task ids always fit into ints
   return (int)task->id;
 }

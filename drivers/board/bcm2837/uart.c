@@ -22,7 +22,7 @@ void uart_init(void) {
 }
 
 char uart_getc(void) {
-  // TODO: convert \r -> \n?
+  // TODO(dstechenko): convert \r -> \n?
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
   return uart_mini_getc();
 #else  // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
@@ -31,7 +31,7 @@ char uart_getc(void) {
 }
 
 void uart_putc(const char c) {
-// TODO: convert \n -> \r\n?
+// TODO(dstechenko): convert \n -> \r\n?
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
   uart_mini_putc(c);
 #else  // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)

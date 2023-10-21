@@ -167,7 +167,7 @@ entry_fiq_invalid_el0_32:
 entry_err_invalid_el0_32:
   entry_handle_invalid ENTRY_ERR_INVALID_EL0_32, 0
 
-// TODO: fix syscall hardcode num
+// TODO(dstechenko): fix syscall hardcode num
 entry_svc_el0:
   bl irq_enable
   adr x24, syscall_table

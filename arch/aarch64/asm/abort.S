@@ -3,7 +3,7 @@
 
 .globl abort
 
-// TODO: Should do this for all cores and print state
+// TODO(dstechenko): Should do this for all cores and print state
 abort:
   wfe
   b  abort

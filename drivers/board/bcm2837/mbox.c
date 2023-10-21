@@ -22,11 +22,11 @@
 int mbox_send(const unsigned char channel, const mbox_data_t *data) {
   unsigned int msg;
 
-  // TODO: add asserts...
+  // TODO(dstechenko): add asserts...
 
   // Wait until we can write to the mailbox.
   while (mmio_read32(MBOX_STATUS) & MBOX_FULL)
-    // TODO: replace with NOPs?
+    // TODO(dstechenko): replace with NOPs?
     cdelay(1);
 
   // Write the address of the message and channel identifier.
@@ -35,7 +35,7 @@ int mbox_send(const unsigned char channel, const mbox_data_t *data) {
 
   // Send the message and wait for the response, check if ours/valid.
   while ((mmio_read32(MBOX_STATUS) & MBOX_EMPTY) || (mmio_read32(MBOX_READ) != msg))
-    // TODO: replace with NOPs?
+    // TODO(dstechenko): replace with NOPs?
     cdelay(1);
 
   return data[1] == MBOX_RESPONSE;

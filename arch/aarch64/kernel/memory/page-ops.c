@@ -114,7 +114,7 @@ void debug_pages(void) {
   /* LOG_DEBUG(""); */
 }
 
-// TODO: this is ugly, need to fix...
+// TODO(dstechenko): this is ugly, need to fix...
 #define TO_VADDR(addr) (addr + VIRTUAL_MEMORY_START)
 #define TO_VADDR_PTR(addr) ((uintptr_t *)TO_VADDR(addr))
 #define TO_VADDR_PAGE(addr) ((struct page){.paddr = addr, .vaddr = TO_VADDR(addr)})

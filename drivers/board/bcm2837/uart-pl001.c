@@ -120,14 +120,14 @@ void uart_pl001_init(void) {
 
 char uart_pl001_getc(void) {
   while (mmio_read32(UART_PL001_FR) & BIT(4))
-    // TODO: replace with NOPs?
+    // TODO(dstechenko): replace with NOPs?
     cdelay(1);
   return MASK_LOW_BYTE(mmio_read32(UART_PL001_DR));
 }
 
 void uart_pl001_putc(const char c) {
   while (mmio_read32(UART_PL001_FR) & BIT(5))
-    // TODO: replace with NOPs?
+    // TODO(dstechenko): replace with NOPs?
     cdelay(1);
   mmio_write32(UART_PL001_DR, c);
 }

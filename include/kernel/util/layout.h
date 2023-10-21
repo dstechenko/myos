@@ -4,7 +4,7 @@
 #ifndef KERNEL_UTIL_LAYOUT_H
 #define KERNEL_UTIL_LAYOUT_H
 
-// TODO: make these portable across compilers...
+// TODO(dstechenko): make these portable across compilers...
 
 #define PACKED __attribute__((__packed__))
 #define ALIGNED(val) __attribute__((aligned(val)))

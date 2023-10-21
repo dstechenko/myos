@@ -16,7 +16,7 @@
 #include "../memory/page-context.h"
 #include "task-context.h"
 
-// TODO: move out of here
+// TODO(dstechenko): move out of here
 #define PSR_MODE_EL0t 0x00000000
 #define PSR_MODE_EL1t 0x00000004
 #define PSR_MODE_EL1h 0x00000005

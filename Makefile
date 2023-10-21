@@ -18,6 +18,8 @@ INC_DIR     := include
 KERNEL_DIR  := kernel
 TOOLS_DIR   := tools
 
+SRC_DIRS    := $(ARCH_DIR) $(CONFIGS_DIR) $(DRIVERS_DIR) $(INC_DIRS) $(KERNEL_DIR)
+
 ARCH_DIR := $(ARCH_DIR)/$(TARGET_ARCH)
 BOOT_DIR := $(ARCH_DIR)/boot
 
@@ -128,8 +130,10 @@ clean:
 	rm -rf $(OUT_DIR)
 
 format:
-	find $(SRC_DIR) -name *.c -or -name *.h | xargs clang-format -i --style=file
-	find $(INC_DIR)               -name *.h | xargs clang-format -i --style=file
+	find $(SRC_DIRS) -name *.c -or -name *.h | xargs clang-format -i --style=file
+
+format-diff:
+	git diff -U0 --no-color | clang-format-diff -i -p1 -style=file
 
 install-deps:
 	$(TOOLS_DIR)/install_deps.sh
@@ -156,3 +160,6 @@ boot-copy: build-all
 
 serial:
 	picocom -b 115200 /dev/ttyUSB0
+
+todo:
+	grep -r . -e "TODO($(USER)): " || echo "No user TODOs found!"
