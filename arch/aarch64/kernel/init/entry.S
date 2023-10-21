@@ -80,7 +80,7 @@
   mrs	x1, esr_el1
   mrs	x2, elr_el1
   mrs x3, far_el1
-  bl entry_log_invalid_message
+  bl log_entry_invalid_message
   b entry_halt_core
 .endm
 

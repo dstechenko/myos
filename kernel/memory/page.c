@@ -13,8 +13,8 @@
 #include <kernel/memory/ops.h>
 #include <kernel/scheduler/task.h>
 #include <kernel/util/assert.h>
-#include <kernel/util/bool.h>
 #include <kernel/util/ptrs.h>
+#include <uapi/bool.h>
 
 // TODO(dstechenko): move to smaller pages
 // TODO(dstechenko): move to faster traversal

@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/core/syscall.h>
-#include <kernel/util/bool.h>
+#include <uapi/bool.h>
+#include <uapi/syscall.h>
 
 void user_task_a(void);
 void user_task_b(void);
@@ -10,10 +10,10 @@ void user_task_b(void);
 void user_start(void) {
   int pid;
 
-  pid = syscall_clone_invoke();
+  pid = syscall_clone();
   if (pid < 0) {
-    syscall_write_invoke("Failed to clone user task a\n");
-    syscall_exit_invoke();
+    syscall_write("Failed to clone user task a\n");
+    syscall_exit();
     return;
   }
 
@@ -25,14 +25,14 @@ void user_start(void) {
 
 void user_task_a(void) {
   while (true) {
-    syscall_write_invoke("* Tick from user task a\n");
-    syscall_cdelay_invoke(50000000);
+    syscall_write("* Tick from user task a\n");
+    syscall_cdelay(50000000);
   }
 }
 
 void user_task_b(void) {
   while (true) {
-    syscall_write_invoke("* Tick from user task b\n");
-    syscall_cdelay_invoke(50000000);
+    syscall_write("* Tick from user task b\n");
+    syscall_cdelay(50000000);
   }
 }

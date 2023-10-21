@@ -9,7 +9,7 @@
 #include <drivers/mmio.h>
 #include <kernel/core/config.h>
 #include <kernel/util/bits.h>
-#include <kernel/util/bool.h>
+#include <uapi/bool.h>
 
 #include "aux.h"
 #include "gpio.h"

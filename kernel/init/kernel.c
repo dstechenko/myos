@@ -20,8 +20,8 @@
 #include <kernel/scheduler/fork.h>
 #include <kernel/scheduler/task.h>
 #include <kernel/util/assert.h>
-#include <kernel/util/bool.h>
 #include <kernel/util/ptrs.h>
+#include <uapi/bool.h>
 
 SECTION_LABEL(section_user_start);
 SECTION_LABEL(section_user_end);

@@ -11,6 +11,7 @@
 #include <asm/sections.h>
 
 #include <kernel/logging/log.h>
+#include <kernel/memory/ops.h>
 #include <kernel/util/assert.h>
 #include <kernel/util/bits.h>
 
@@ -119,6 +120,7 @@ void debug_pages(void) {
 #define TO_VADDR_PTR(addr) ((uintptr_t *)TO_VADDR(addr))
 #define TO_VADDR_PAGE(addr) ((struct page){.paddr = addr, .vaddr = TO_VADDR(addr)})
 
+// TODO(dstechenko): fix memzero on pages
 void map_user_page(struct task *task, struct page page) {
   bool created;
   struct task_memory *memory;
@@ -159,8 +161,6 @@ static size_t get_table_index(size_t shift, uintptr_t vaddr) { return (vaddr >> 
 uintptr_t map_user_table(uintptr_t *table, size_t shift, uintptr_t vaddr, bool *created) {
   uintptr_t ret;
   size_t index;
-
-  LOG_DEBUG("Map user table: %lx, %lx, %lx, %lx", table, shift, vaddr, created);
 
   ASSERT(table);
   ASSERT(created);

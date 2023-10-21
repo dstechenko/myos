@@ -16,9 +16,10 @@ DRIVERS_DIR := drivers
 OUT_DIR     := out
 INC_DIR     := include
 KERNEL_DIR  := kernel
+USER_DIR    := user
 TOOLS_DIR   := tools
 
-SRC_DIRS    := $(ARCH_DIR) $(CONFIGS_DIR) $(DRIVERS_DIR) $(INC_DIRS) $(KERNEL_DIR)
+SRC_DIRS := $(ARCH_DIR) $(CONFIGS_DIR) $(DRIVERS_DIR) $(INC_DIRS) $(KERNEL_DIR) $(USER_DIR)
 
 ARCH_DIR := $(ARCH_DIR)/$(TARGET_ARCH)
 BOOT_DIR := $(ARCH_DIR)/boot
@@ -50,7 +51,7 @@ PP_FLAGS  := -E -P -x c -D__ASSEMBLER__
 VM_FLAGS  := -M raspi3b -serial null -serial stdio
 OD_FLAGS  := -s -d
 
-KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR) $(DRIVERS_DIR)
+KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR) $(DRIVERS_DIR) $(USER_DIR)
 KERNEL_OBJS := $(shell find $(KERNEL_DIRS) -type f -name *.c -or -name *.S)
 KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.S=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.c=$(OUT_DIR)/%.o)

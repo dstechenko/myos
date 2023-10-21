@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-#include <kernel/util/bool.h>
+#include <uapi/bool.h>
 
 void irq_init(void);
 void irq_enable(void);

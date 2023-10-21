@@ -4,7 +4,7 @@
 #ifndef KERNEL_CORE_CONFIG_H
 #define KERNEL_CORE_CONFIG_H
 
-#include <kernel/util/bool.h>
+#include <uapi/bool.h>
 
 #define CONFIG_SET(config, value) (config == value)
 #define CONFIG_ENABLED(config) (CONFIG_SET(config, true))
