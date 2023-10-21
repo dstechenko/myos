@@ -66,16 +66,15 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   current_regs = task_get_proc_regs(current);
   ASSERT(current_regs);
 
-  current->user_stack = ADR_TO_PTR(get_user_page(current, 0));
-  if (!current->user_stack)
-    return -ENOMEM;
+  get_user_page(current, 0);
+  current->user_stack = 0;
+
+  text_page = get_user_page(current, PAGE_SIZE);
+  memcpy(ADR_TO_PTR(text_page), ADR_TO_PTR(text), size);
 
   current_regs->sp = (uint64_t)current->user_stack + TASK_STACK_SIZE;
-  current_regs->pc = (uint64_t)pc;
+  current_regs->pc = (uint64_t)PAGE_SIZE;
   current_regs->ps = (uint64_t)PSR_MODE_EL0t;
-
-  text_page = get_user_page(current, SECTION_SIZE);
-  memcpy(ADR_TO_PTR(text_page), ADR_TO_PTR(text), size);
 
   ASSERT(current->memory.context);
   registers_set_user_page_table(current->memory.context->pgd);

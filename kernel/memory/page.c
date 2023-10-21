@@ -30,6 +30,7 @@
 
 static bool pages[STATIC_PAGES];
 
+// TODO: add proper zero pages
 uintptr_t get_page(void) {
   size_t i;
 
@@ -83,7 +84,7 @@ int copy_user_pages(const struct task *src, struct task *dst) {
     uintptr_t page = get_user_page(dst, src_pages[i].vaddr);
     if (!page)
       return -ENOMEM;
-    memcpy(ADR_TO_PTR(page), ADR_TO_PTR(src_pages[i].vaddr), STATIC_PAGE_SIZE);
+    memcpy(ADR_TO_PTR(page), ADR_TO_PTR(src_pages[i].vaddr), PAGE_SIZE - 1);
   }
 
   return 0;

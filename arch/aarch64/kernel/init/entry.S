@@ -167,11 +167,12 @@ entry_fiq_invalid_el0_32:
 entry_err_invalid_el0_32:
   entry_handle_invalid ENTRY_ERR_INVALID_EL0_32, 0
 
+// TODO: fix syscall hardcode num
 entry_svc_el0:
   bl irq_enable
   adr x24, syscall_table
   uxtw x25, w8
-  mov x26, #4
+  mov x26, #5
   cmp x25, x26
   bhs entry_syscall_error
   ldr x27, [x24, x25, lsl #3]
@@ -202,7 +203,6 @@ entry_fork_return:
   bl task_schedule_tail
   cbz x19, entry_user_return
   blr x19
-  bl entry_halt_core
 
 entry_user_return:
   bl irq_disable

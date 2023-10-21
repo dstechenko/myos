@@ -15,19 +15,9 @@ syscall_alloc_invoke:
   ret
 
 syscall_clone_invoke:
-  mov x10, x0
-  mov x11, x1
-  mov x0, x1
   mov w8, #SYSCALL_CLONE_NUM
   svc #0
-  cmp x0, #0
-  beq syscall_clone_thread_start
   ret
-
-syscall_clone_thread_start:
-  mov x29, xzr
-  blr x10
-  bl  syscall_exit_invoke
 
 syscall_exit_invoke:
   mov w8, #SYSCALL_EXIT_NUM

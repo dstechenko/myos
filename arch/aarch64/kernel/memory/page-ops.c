@@ -130,21 +130,25 @@ void map_user_page(struct task *task, struct page page) {
 
   if (!memory->context->pgd) {
     memory->context->pgd = get_page();
+    memzero(TO_VADDR_PTR(memory->context->pgd), PAGE_SIZE - 1);
     memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(memory->context->pgd);
   }
   pgd = memory->context->pgd;
 
   pud = map_user_table(TO_VADDR_PTR(pgd), PGD_SHIFT, page.vaddr, &created);
-  if (created)
+  if (created) {
     memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(pud);
+  }
 
   pmd = map_user_table(TO_VADDR_PTR(pud), PUD_SHIFT, page.vaddr, &created);
-  if (created)
+  if (created) {
     memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(pmd);
+  }
 
   pte = map_user_table(TO_VADDR_PTR(pmd), PMD_SHIFT, page.vaddr, &created);
-  if (created)
+  if (created) {
     memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(pte);
+  }
 
   map_user_table_entry(TO_VADDR_PTR(pte), page);
   memory->user_pages[memory->user_pages_count++] = page;
@@ -156,6 +160,8 @@ uintptr_t map_user_table(uintptr_t *table, size_t shift, uintptr_t vaddr, bool *
   uintptr_t ret;
   size_t index;
 
+  LOG_DEBUG("Map user table: %lx, %lx, %lx, %lx", table, shift, vaddr, created);
+
   ASSERT(table);
   ASSERT(created);
 
@@ -166,6 +172,7 @@ uintptr_t map_user_table(uintptr_t *table, size_t shift, uintptr_t vaddr, bool *
   } else {
     *created = true;
     uintptr_t next_table = get_page();
+    memzero(TO_VADDR_PTR(next_table), PAGE_SIZE - 1);
     table[index] = next_table | MMU_TYPE_PAGE_TABLE;
     ret = next_table;
   }
@@ -179,5 +186,5 @@ void map_user_table_entry(uintptr_t *entry, struct page page) {
   ASSERT(entry);
 
   index = get_table_index(PAGE_SHIFT, page.vaddr);
-  entry[index] = (page.paddr | MMU_USER_FLAGS);
+  entry[index] = page.paddr | MMU_USER_FLAGS;
 }
