@@ -17,23 +17,14 @@
 
 #include "page-context.h"
 
-/**
- *                                  Descriptor format
- * +------------------------------------------------------------------------------------------+
- * | Upper attributes | Address (bits 47:12) | Lower attributes | Block/table bit | Valid bit |
- * +------------------------------------------------------------------------------------------+
- * 63                 47                     11                 2                 1           0
- *
- */
-
 #define GET_DESC_VALID_BIT(desc) (desc & BIT(0))
 #define GET_DESC_TABLE_BIT(desc) (desc & BIT(1))
 #define GET_DESC_ADDR_BITS(desc) (desc & (BIT(48) - 1) & ~(BIT(12) - 1))
 #define GET_DESC_LOW_ATTR_BITS(desc) (desc & (BIT(12) - 1) & ~(BIT(2) - 1))
 
-static void log_page_entries(const uintptr_t table) {
+static void log_page_entries(const uintptr_t table, size_t limit) {
   uintptr_t *cursor = (uintptr_t *)table;
-  size_t empty = 0;
+  size_t empty = 0, unseen = 0;
 
   ASSERT(cursor);
 
@@ -43,38 +34,44 @@ static void log_page_entries(const uintptr_t table) {
       continue;
     }
 
-    if (empty) {
-      LOG_DEBUG("... %u empty entries ...", empty);
+    if (limit && empty) {
+      LOG_DEBUG("    ... %u empty entries ...", empty);
       empty = 0;
+      limit--;
     }
 
-    const bool is_valid = GET_DESC_VALID_BIT(cursor[i]);
-    const bool is_table = GET_DESC_TABLE_BIT(cursor[i]);
-    const uintptr_t addr = GET_DESC_ADDR_BITS(cursor[i]);
-    const uint64_t flags = GET_DESC_LOW_ATTR_BITS(cursor[i]);
-
-    LOG_DEBUG("> %s [%s]", is_table ? "table" : "block", is_valid ? "valid" : "invalid");
-    LOG_DEBUG("  bits: %lx", cursor[i]);
-    LOG_DEBUG("  addr: %lx", addr);
-    LOG_DEBUG(" flags: %lx", flags);
+    if (limit) {
+      const bool is_valid = GET_DESC_VALID_BIT(cursor[i]);
+      const bool is_table = GET_DESC_TABLE_BIT(cursor[i]);
+      const uintptr_t addr = GET_DESC_ADDR_BITS(cursor[i]);
+      const uint64_t flags = GET_DESC_LOW_ATTR_BITS(cursor[i]);
+      LOG_DEBUG("    type=%s[%s] bits=%lx, addr=%lx, flags=%lx", is_table ? "table" : "block",
+                is_valid ? "valid" : "invalid", cursor[i], addr, flags);
+      limit--;
+    } else {
+      unseen++;
+    }
   }
-  if (empty)
-    LOG_DEBUG("... %u empty entries ...", empty);
+
+  if (unseen)
+    LOG_DEBUG("    ... %u more entries ...", unseen);
+  else if (empty)
+    LOG_DEBUG("    ... %u empty entries ...", empty);
 }
 
-void log_page_global_directory(const uintptr_t pgd) {
+void log_page_global_directory(const uintptr_t pgd, const size_t limit) {
   uintptr_t *pud, *pmd, *pte;
 
   ASSERT(pgd);
   pud = (uintptr_t *)pgd;
 
-  LOG_DEBUG("Page Global Directory (physical address %lx)", pgd);
-  log_page_entries(pgd);
+  LOG_DEBUG("  Page Global Directory (physical address %lx)", pgd);
+  log_page_entries(pgd, limit);
 
   for (size_t i = 0; i < PAGES_PER_TABLE; i++)
     if (pud[i]) {
-      LOG_DEBUG("Page Upper Directory (physical address %lx)", GET_DESC_ADDR_BITS(pud[i]));
-      log_page_entries(GET_DESC_ADDR_BITS(pud[i]));
+      LOG_DEBUG("  Page Upper Directory (physical address %lx)", GET_DESC_ADDR_BITS(pud[i]));
+      log_page_entries(GET_DESC_ADDR_BITS(pud[i]), limit);
     }
 
   for (size_t i = 0; i < PAGES_PER_TABLE; i++)
@@ -82,8 +79,8 @@ void log_page_global_directory(const uintptr_t pgd) {
       pmd = (uintptr_t *)GET_DESC_ADDR_BITS(pud[i]);
       for (size_t j = 0; j < PAGES_PER_TABLE; j++)
         if (pmd[j]) {
-          LOG_DEBUG("Page Middle Directory (physical address %lx)", GET_DESC_ADDR_BITS(pmd[j]));
-          log_page_entries(GET_DESC_ADDR_BITS(pmd[j]));
+          LOG_DEBUG("  Page Middle Directory (physical address %lx)", GET_DESC_ADDR_BITS(pmd[j]));
+          log_page_entries(GET_DESC_ADDR_BITS(pmd[j]), limit);
         }
     }
 
@@ -95,35 +92,32 @@ void log_page_global_directory(const uintptr_t pgd) {
           pte = (uintptr_t *)GET_DESC_ADDR_BITS(pmd[j]);
           for (size_t k = 0; k < PAGES_PER_TABLE; k++)
             if (pte[k] && GET_DESC_TABLE_BIT(pte[k])) {
-              LOG_DEBUG("\nPage Table Entry (physical address %lx)", GET_DESC_ADDR_BITS(pte[k]));
-              log_page_entries(GET_DESC_ADDR_BITS(pte[k]));
+              LOG_DEBUG("  Page Table Entry (physical address %lx)", GET_DESC_ADDR_BITS(pte[k]));
+              log_page_entries(GET_DESC_ADDR_BITS(pte[k]), limit);
             }
         }
     }
 }
 
-void debug_pages(void) {
-  LOG_DEBUG("");
-  LOG_DEBUG("User tables");
-  log_page_global_directory(registers_get_user_page_table());
-  LOG_DEBUG("");
-  LOG_DEBUG("Kernel tables");
-  log_page_global_directory(registers_get_kernel_page_table());
-  LOG_DEBUG("");
-
-  /* LOG_INFO("Physical memory start:        %lx", PHYSICAL_MEMORY_START); */
-  /* LOG_INFO("Physical memory end:          %lx", PHYSICAL_MEMORY_END); */
-  /* LOG_INFO("Physical memory size:         %lx", PHYSICAL_MEMORY_SIZE); */
-  /* LOG_INFO("Physical device memory start: %lx", PHYSICAL_DEVICE_MEMORY_START); */
-  /* LOG_INFO("Physical device memory end:   %lx", PHYSICAL_DEVICE_MEMORY_END); */
-  /* LOG_INFO("Physical device memory size:  %lx", PHYSICAL_DEVICE_MEMORY_SIZE); */
-  /* LOG_INFO("Virtual memory start:         %lx", VIRTUAL_MEMORY_START); */
-  /* LOG_INFO("Virtual memory end:           %lx", VIRTUAL_MEMORY_END); */
-  /* LOG_INFO("Virtual memory size:          %lx", VIRTUAL_MEMORY_SIZE); */
-  /* LOG_INFO("Virtual device memory start:  %lx", VIRTUAL_DEVICE_MEMORY_START); */
-  /* LOG_INFO("Virtual device memory end:    %lx", VIRTUAL_DEVICE_MEMORY_END); */
-  /* LOG_INFO("Virtual device memory size:   %lx", VIRTUAL_DEVICE_MEMORY_SIZE); */
-  /* LOG_INFO(""); */
+void debug_pages(const size_t limit) {
+  LOG_DEBUG("Memory configurations:");
+  LOG_DEBUG("  Physical memory start        - %lx", PHYSICAL_MEMORY_START);
+  LOG_DEBUG("  Physical memory end:         - %lx", PHYSICAL_MEMORY_END);
+  LOG_DEBUG("  Physical memory size:        - %lx", PHYSICAL_MEMORY_SIZE);
+  LOG_DEBUG("  Physical device memory start - %lx", PHYSICAL_DEVICE_MEMORY_START);
+  LOG_DEBUG("  Physical device memory end   - %lx", PHYSICAL_DEVICE_MEMORY_END);
+  LOG_DEBUG("  Physical device memory size  - %lx", PHYSICAL_DEVICE_MEMORY_SIZE);
+  LOG_DEBUG("  Virtual memory start         - %lx", VIRTUAL_MEMORY_START);
+  LOG_DEBUG("  Virtual memory end           - %lx", VIRTUAL_MEMORY_END);
+  LOG_DEBUG("  Virtual memory size          - %lx", VIRTUAL_MEMORY_SIZE);
+  LOG_DEBUG("  Virtual device memory start  - %lx", VIRTUAL_DEVICE_MEMORY_START);
+  LOG_DEBUG("  Virtual device memory end    - %lx", VIRTUAL_DEVICE_MEMORY_END);
+  LOG_DEBUG("  Virtual device memory size   - %lx", VIRTUAL_DEVICE_MEMORY_SIZE);
+  LOG_DEBUG("  Boot load address            - %lx", BOOT_LOAD_ADDRESS);
+  LOG_DEBUG("User tables:");
+  log_page_global_directory(registers_get_user_page_table(), limit);
+  LOG_DEBUG("Kernel tables:");
+  log_page_global_directory(registers_get_kernel_page_table(), limit);
 }
 
 // TODO(dstechenko): this is ugly, need to fix (phys_to_virt / virt_to_phys)

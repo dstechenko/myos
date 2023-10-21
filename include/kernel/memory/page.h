@@ -5,6 +5,7 @@
 #define KERNEL_MEMORY_PAGE_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 #include <asm/page-defs.h>
 
@@ -21,7 +22,7 @@ uintptr_t get_user_page(struct task *task, uintptr_t vaddr);
 void put_page(uintptr_t page);
 int copy_user_pages(const struct task *src, struct task *dst);
 
-void debug_pages(void);
+void debug_pages(size_t limit);
 void map_user_page(struct task *task, struct page page);
 
 #endif // !KERNEL_MEMORY_PAGE_H

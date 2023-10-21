@@ -60,7 +60,7 @@ void kernel_start(void) {
   LOG_DEBUG("  Host arch    - %s", BUILD_INFO_HOST_ARCH);
 
   debug_sections();
-  /* debug_pages(); */
+  debug_pages(/* limit = */ 3);
 
   err = fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL);
   if (err < 0) {

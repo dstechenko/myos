@@ -88,10 +88,18 @@
   b entry_halt_core
 .endm
 
-// TODO(dstechenko): add bss zero out
 entry_kernel_from_boot:
+  // We couldn't do this in the boot section, so zero out now.
+  ldr x0, =section_kernel_bss_start
+  ldr x1, =section_kernel_bss_end
+  sub x1, x1, x0
+  bl memzero
+
+  // Now should be safe to start the kernel in virtual space.
   ldr x0, =kernel_start
   br x0
+
+  // Should no reach it, but if we do - halt.
   bl entry_halt_core
 
 .align 11
