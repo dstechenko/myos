@@ -85,7 +85,7 @@ boot_init_el2:
 
 boot_init_kernel:
   // Set stack before we jump into kernel.
-  ldr x0, =section_start
+  ldr x0, =boot_start
   mov sp, x0
 
   // Set up initial kernel/device pages.
@@ -115,7 +115,7 @@ boot_init_kernel:
   add x1, x1, x0
   mov sp, x1
 
-  ldr x1, =section_kernel_start;
+  ldr x1, =section_kernel_entry_point;
   add x1, x1, x0
 
   // Enable MMU via system control register.

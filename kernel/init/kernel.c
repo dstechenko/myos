@@ -23,7 +23,6 @@
 #include <kernel/util/ptrs.h>
 #include <uapi/bool.h>
 
-SECTION_LABEL(section_text_start);
 SECTION_LABEL(section_user_start);
 SECTION_LABEL(section_user_end);
 SECTION_LABEL(user_start);
@@ -74,9 +73,6 @@ void kernel_start(void) {
   LOG_INFO("Virtual device memory end:    %lx", VIRTUAL_DEVICE_MEMORY_END);
   LOG_INFO("Virtual device memory size:   %lx", VIRTUAL_DEVICE_MEMORY_SIZE);
   LOG_INFO("Boot load location:           %lx", BOOT_LOAD_ADDRESS);
-  LOG_INFO("Kernel start location:        %lx", SECTION_ADR(section_text_start));
-  LOG_INFO("Kernel entry location:        %lx", REF_TO_ADR(kernel_start));
-  LOG_INFO("Kernel stack location:        %lx", &err);
   LOG_INFO("");
 
   /* debug_pages(); */

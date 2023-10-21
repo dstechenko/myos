@@ -6,62 +6,69 @@
 #include <asm/memory-defs.h>
 #include <asm/page-defs.h>
 
+#define VIRTUAL(label) AT(ADDR(label) - VIRTUAL_MEMORY_START)
+
 ENTRY(BOOT_ENTRY_POINT_LABEL)
 
 SECTIONS
 {
-    section_start = .;
+  section_boot (BOOT_LOAD_ADDRESS) : {
+    section_boot_start = .;
+    KEEP(*(.text.boot))
+    section_boot_end = .;
+  }
 
-    . = ALIGN(PAGE_SIZE);
-    section_text_boot_start = .;
-    .text_boot (BOOT_LOAD_ADDRESS) : { *(.text.boot) }
-    section_text_boot_end = .;
-
-    . = ALIGN(PAGE_SIZE);
+  . = ALIGN(PAGE_SIZE);
+  section_pgd_boot :  {
     section_pgd_boot_start = .;
-    .pgd_boot : { . += PGD_SIZE; }
+    . += PGD_SIZE;
     section_pgd_boot_end = .;
-
-    . = ALIGN(PAGE_SIZE);
+  }
+  section_pgd_kernel : {
     section_pgd_kernel_start = .;
-    .pgd_kernel : { . += PGD_SIZE; }
+    . += PGD_SIZE;
     section_pgd_kernel_end = .;
+  }
 
-    section_kernel_start = .;
-    . += VIRTUAL_MEMORY_START;
+  . = ALIGN(PAGE_SIZE);
+  section_kernel_entry_point = .;
+  . += VIRTUAL_MEMORY_START;
 
-    . = ALIGN(PAGE_SIZE);
-    section_entry_start = .;
-    .text_entry : AT(ADDR(.text_entry) - VIRTUAL_MEMORY_START) { out/kernel/init/entry* (.text) }
-    section_entry_end = .;
+  section_kernel_entry : VIRTUAL(section_kernel_entry) {
+    section_kernel_entry_start = .;
+    KEEP(*(.text.entry))
+    section_kernel_entry_end = .;
+  }
 
-    . = ALIGN(PAGE_SIZE);
-    section_user_start = .;
-    .text_user : AT(ADDR(.text_user) - VIRTUAL_MEMORY_START) { out/user* (.text) }
-    .rodata_user : AT(ADDR(.rodata_user) - VIRTUAL_MEMORY_START) { out/user* (.rodata) }
-    .data_user : AT(ADDR(.data_user) - VIRTUAL_MEMORY_START) { out/user* (.data) }
-    .bss_user : AT(ADDR(.bss_user) - VIRTUAL_MEMORY_START) { out/user* (.bss) }
-    section_user_end = .;
+  . = ALIGN(PAGE_SIZE);
+  section_user_start = .;
+  section_text_user : VIRTUAL(section_text_user) { out/user* (.text) }
+  section_rodata_user : VIRTUAL(section_rodata_user) { out/user* (.rodata) }
+  section_data_user : VIRTUAL(section_data_user) { out/user* (.data) }
+  section_bss_user : VIRTUAL(section_bss_user) { out/user* (.bss) }
+  section_user_end = .;
 
-    . = ALIGN(PAGE_SIZE);
-    section_text_start = .;
-    .text : AT(ADDR(.text) - VIRTUAL_MEMORY_START) { *(.text) }
-    section_text_end = .;
-
-     . = ALIGN(PAGE_SIZE);
-    section_rodata_start = .;
-    .rodata : AT(ADDR(.rodata) - VIRTUAL_MEMORY_START) { *(.rodata) }
-    section_rodata_end = .;
-
-     . = ALIGN(PAGE_SIZE);
-    section_data_start = .;
-    .data : AT(ADDR(.data) - VIRTUAL_MEMORY_START) { *(.data) }
-    section_data_end = .;
-
-     . = ALIGN(PAGE_SIZE);
-    section_bss_start = .;
-    .bss : AT(ADDR(.bss) - VIRTUAL_MEMORY_START) { *(.bss) }
-    section_bss_end = .;
-
-    section_end = .;
+  . = ALIGN(PAGE_SIZE);
+  section_kernel_start = .;
+  section_kernel_text : VIRTUAL(section_kernel_text) {
+    section_kernel_text_start = .;
+    *(.text)
+    section_kernel_text_end = .;
+  }
+  section_kernel_rodata : VIRTUAL(section_kernel_rodata) {
+    section_kernel_rodata_start = .;
+    *(.rodata)
+    section_kernel_rodata_end = .;
+  }
+  section_kernel_data : VIRTUAL(section_kernel_data) {
+    section_kernel_data_start = .;
+    *(.data)
+    section_kernel_data_end = .;
+  }
+  section_kernel_bss : VIRTUAL(section_kernel_bss) {
+    section_kernel_bss_start = .;
+    *(.bss)
+    section_kernel_bss_end = .;
+  }
+  section_kernel_end = .;
 }

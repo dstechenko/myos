@@ -4,7 +4,11 @@
 #include <asm/entry-defs.h>
 #include <asm/registers-defs.h>
 
-.globl entry_ex_vector, entry_fork_return
+// To keep this in the first portion of the kernel virtual memory.
+.section ".text.entry"
+
+.globl entry_ex_vector
+.globl entry_fork_return
 
 .macro entry_save_regs level
   sub	sp, sp, #ENTRY_STACK_FRAME_SIZE
