@@ -79,7 +79,7 @@ void kernel_start(void) {
   LOG_INFO("Kernel stack location:        %lx", &err);
   LOG_INFO("");
 
-  debug_pages();
+  /* debug_pages(); */
 
   err = fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL);
   if (err < 0) {
