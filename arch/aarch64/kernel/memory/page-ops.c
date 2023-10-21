@@ -8,7 +8,7 @@
 #include <asm/memory-defs.h>
 #include <asm/mmu-defs.h>
 #include <asm/page-defs.h>
-#include <asm/sections.h>
+#include <asm/registers.h>
 
 #include <kernel/logging/log.h>
 #include <kernel/memory/ops.h>
@@ -102,20 +102,17 @@ void log_page_global_directory(const uintptr_t pgd) {
     }
 }
 
-/* SECTION_LABEL(section_pgd_boot_start); */
-/* SECTION_LABEL(section_pgd_kernel_start); */
-
 void debug_pages(void) {
-  /* LOG_DEBUG(""); */
-  /* LOG_DEBUG("Boot level"); */
-  /* log_page_global_directory(SECTION_ADDR(section_pgd_boot_start)); */
-  /* LOG_DEBUG(""); */
-  /* LOG_DEBUG("Kernel level"); */
-  /* log_page_global_directory(SECTION_ADDR(section_pgd_kernel_start)); */
-  /* LOG_DEBUG(""); */
+  LOG_DEBUG("");
+  LOG_DEBUG("User tables");
+  log_page_global_directory(registers_get_user_page_table());
+  LOG_DEBUG("");
+  LOG_DEBUG("Kernel tables");
+  log_page_global_directory(registers_get_kernel_page_table());
+  LOG_DEBUG("");
 }
 
-// TODO(dstechenko): this is ugly, need to fix...
+// TODO(dstechenko): this is ugly, need to fix (phys_to_virt / virt_to_phys)
 #define TO_VADDR(addr) (addr + VIRTUAL_MEMORY_START)
 #define TO_VADDR_PTR(addr) ((uintptr_t *)TO_VADDR(addr))
 #define TO_VADDR_PAGE(addr) ((struct page){.paddr = addr, .vaddr = TO_VADDR(addr)})

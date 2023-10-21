@@ -84,6 +84,7 @@
   b entry_halt_core
 .endm
 
+// TODO(dstechenko): add bss zero out
 entry_kernel_from_boot:
   ldr x0, =kernel_start
   br x0

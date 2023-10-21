@@ -3,7 +3,9 @@
 
 .globl registers_get_priv
 .globl registers_set_user_page_table
+.globl registers_get_user_page_table
 .globl registers_set_kernel_page_table
+.globl registers_get_kernel_page_table
 
 registers_get_priv:
     // Read from the system register for exception levels.
@@ -23,6 +25,10 @@ registers_set_user_page_table:
     isb
     ret
 
+registers_get_user_page_table:
+  mrs x0, ttbr0_el1
+  ret
+
 registers_set_kernel_page_table:
     // Set lower page table pointer.
     msr ttbr1_el1, x0
@@ -31,3 +37,7 @@ registers_set_kernel_page_table:
     dsb ish
     isb
     ret
+
+registers_get_kernel_page_table:
+  mrs x0, ttbr1_el1
+  ret

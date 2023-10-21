@@ -23,31 +23,23 @@
 #include <kernel/util/ptrs.h>
 #include <uapi/bool.h>
 
+SECTION_LABEL(section_text_start);
 SECTION_LABEL(section_user_start);
 SECTION_LABEL(section_user_end);
 SECTION_LABEL(user_start);
 
 void kernel_task(void) {
   int err;
-  uintptr_t user_start_addr = SECTION_ADDR(user_start);
-  uintptr_t section_user_start_addr = SECTION_ADDR(section_user_start);
-  uintptr_t section_user_end_addr = SECTION_ADDR(section_user_end);
+  uintptr_t user_start_addr = SECTION_ADR(user_start);
+  uintptr_t section_user_start_addr = SECTION_ADR(section_user_start);
+  uintptr_t section_user_end_addr = SECTION_ADR(section_user_end);
   size_t section_user_size = (section_user_end_addr - section_user_start_addr);
-
-  LOG_INFO("Run in kernel, priv %d", registers_get_priv());
-  LOG_INFO("Current location    %lx", &kernel_task);
-  LOG_INFO("User text start     %lx", section_user_start);
-  LOG_INFO("User text end       %lx", section_user_end);
-  LOG_INFO("User entry          %lx", user_start_addr);
-  LOG_INFO("User size           %lx", section_user_size);
 
   ASSERT(section_user_end_addr > section_user_start_addr);
   err = task_move_to_user(user_start_addr, section_user_start_addr, section_user_size);
   if (err)
     LOG_ERROR("Failed to move to user: %d", err);
 }
-
-SECTION_LABEL(section_text_start);
 
 void kernel_start(void) {
   int err;
@@ -82,12 +74,12 @@ void kernel_start(void) {
   LOG_INFO("Virtual device memory end:    %lx", VIRTUAL_DEVICE_MEMORY_END);
   LOG_INFO("Virtual device memory size:   %lx", VIRTUAL_DEVICE_MEMORY_SIZE);
   LOG_INFO("Boot load location:           %lx", BOOT_LOAD_ADDRESS);
-  LOG_INFO("Kernel start location:        %lx", SECTION_ADDR(section_text_start));
+  LOG_INFO("Kernel start location:        %lx", SECTION_ADR(section_text_start));
   LOG_INFO("Kernel entry location:        %lx", REF_TO_ADR(kernel_start));
   LOG_INFO("Kernel stack location:        %lx", &err);
   LOG_INFO("");
 
-  /* debug_pages(); */
+  debug_pages();
 
   err = fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL);
   if (err < 0) {
@@ -95,6 +87,9 @@ void kernel_start(void) {
     return;
   }
 
-  while (true)
+  while (true) {
+    print("* Tick from kernel init task\n");
+    cdelay(50000000);
     task_schedule();
+  }
 }
