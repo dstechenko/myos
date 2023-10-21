@@ -9,6 +9,7 @@ void *memcpy(void *dst, const void *src, size_t cnt) {
   uint8_t *out = (uint8_t *)dst;
   const uint8_t *in = (uint8_t *)src;
 
+  // TODO(dstechenko): fix this
   /* ASSERT(out); */
   /* ASSERT(in); */
   ASSERT(cnt);
@@ -23,6 +24,7 @@ void *memcpy(void *dst, const void *src, size_t cnt) {
 void *memset(void *dst, const uint8_t val, size_t cnt) {
   uint8_t *out = (uint8_t *)dst;
 
+  // TODO(dstechenko): fix this
   /* ASSERT(out); */
   ASSERT(cnt);
 

@@ -19,13 +19,6 @@ static struct task *tasks_current = &tasks_main;
 static struct task *tasks_all[TASKS_TOTAL] = {NULL};
 
 int task_main_init(void) {
-  int id;
-
-  // TODO(dstechenko): do manual bss cleanup...
-  for (id = 0; id < TASKS_TOTAL; id++) {
-    tasks_all[id] = NULL;
-  }
-
   tasks_all[0] = &tasks_main;
   return task_init(&tasks_main);
 }
