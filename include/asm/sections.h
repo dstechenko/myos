@@ -10,5 +10,7 @@
 #define SECTION_LABEL(label) void label(void)
 #define SECTION_ADR(label) ((uintptr_t)label)
 
+void debug_sections(void);
+
 #endif // !__ASSEMBLER__
 #endif // !ASM_SECTIONS_DEFS_H

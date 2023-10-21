@@ -110,6 +110,20 @@ void debug_pages(void) {
   LOG_DEBUG("Kernel tables");
   log_page_global_directory(registers_get_kernel_page_table());
   LOG_DEBUG("");
+
+  /* LOG_INFO("Physical memory start:        %lx", PHYSICAL_MEMORY_START); */
+  /* LOG_INFO("Physical memory end:          %lx", PHYSICAL_MEMORY_END); */
+  /* LOG_INFO("Physical memory size:         %lx", PHYSICAL_MEMORY_SIZE); */
+  /* LOG_INFO("Physical device memory start: %lx", PHYSICAL_DEVICE_MEMORY_START); */
+  /* LOG_INFO("Physical device memory end:   %lx", PHYSICAL_DEVICE_MEMORY_END); */
+  /* LOG_INFO("Physical device memory size:  %lx", PHYSICAL_DEVICE_MEMORY_SIZE); */
+  /* LOG_INFO("Virtual memory start:         %lx", VIRTUAL_MEMORY_START); */
+  /* LOG_INFO("Virtual memory end:           %lx", VIRTUAL_MEMORY_END); */
+  /* LOG_INFO("Virtual memory size:          %lx", VIRTUAL_MEMORY_SIZE); */
+  /* LOG_INFO("Virtual device memory start:  %lx", VIRTUAL_DEVICE_MEMORY_START); */
+  /* LOG_INFO("Virtual device memory end:    %lx", VIRTUAL_DEVICE_MEMORY_END); */
+  /* LOG_INFO("Virtual device memory size:   %lx", VIRTUAL_DEVICE_MEMORY_SIZE); */
+  /* LOG_INFO(""); */
 }
 
 // TODO(dstechenko): this is ugly, need to fix (phys_to_virt / virt_to_phys)

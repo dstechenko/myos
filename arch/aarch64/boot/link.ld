@@ -41,12 +41,14 @@ SECTIONS
   }
 
   . = ALIGN(PAGE_SIZE);
-  section_user_start = .;
-  section_text_user : VIRTUAL(section_text_user) { out/user* (.text) }
-  section_rodata_user : VIRTUAL(section_rodata_user) { out/user* (.rodata) }
-  section_data_user : VIRTUAL(section_data_user) { out/user* (.data) }
-  section_bss_user : VIRTUAL(section_bss_user) { out/user* (.bss) }
-  section_user_end = .;
+  section_user : VIRTUAL(section_user) {
+    section_user_start = .;
+    out/user* (.text)
+    out/user* (.rodata)
+    out/user* (.data)
+    out/user* (.bss)
+    section_user_end = .;
+  }
 
   . = ALIGN(PAGE_SIZE);
   section_kernel_start = .;
