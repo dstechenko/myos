@@ -16,10 +16,11 @@
 #include <kernel/util/ptrs.h>
 #include <uapi/bool.h>
 
-// TODO(dstechenko): mark kernel/boot pages as used
 // TODO(dstechenko): move to smaller pages
+// TODO(dstechenko): mark kernel/boot pages as used
 // TODO(dstechenko): move to faster traversal
 // TODO(dstechenko): do not map the first page into virtual for user/kernel
+// TODO(dstechenko): add handle mem abort to map pages
 
 #define STATIC_PAGES 30
 #define STATIC_PAGE_SIZE SECTION_SIZE

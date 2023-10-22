@@ -20,7 +20,7 @@ SECTION_LABEL(section_kernel_bss_end);
 SECTION_LABEL(section_user_start);
 SECTION_LABEL(section_user_end);
 
-void debug_sections(void) {
+void sections_debug(void) {
   LOG_DEBUG("Memory locations:");
   LOG_DEBUG("  Kernel entry start  - %lx", SECTION_ADR(section_kernel_entry_start));
   LOG_DEBUG("  Kernel entry end    - %lx", SECTION_ADR(section_kernel_entry_end));

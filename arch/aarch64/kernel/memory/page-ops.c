@@ -14,6 +14,7 @@
 #include <kernel/memory/ops.h>
 #include <kernel/util/assert.h>
 #include <kernel/util/bits.h>
+#include <kernel/util/ptrs.h>
 
 #include "page-context.h"
 
@@ -60,12 +61,11 @@ static void log_page_entries(const uintptr_t table, size_t limit) {
 }
 
 void log_page_global_directory(const uintptr_t pgd, const size_t limit) {
-  uintptr_t *pud, *pmd, *pte;
-
-  ASSERT(pgd);
-  pud = (uintptr_t *)pgd;
+  uintptr_t *pud = (uintptr_t *)pgd, *pmd, *pte;
 
   LOG_DEBUG("  Page Global Directory (physical address %lx)", pgd);
+  if (!pgd)
+    return;
   log_page_entries(pgd, limit);
 
   for (size_t i = 0; i < PAGES_PER_TABLE; i++)
@@ -99,7 +99,12 @@ void log_page_global_directory(const uintptr_t pgd, const size_t limit) {
     }
 }
 
-void debug_pages(const size_t limit) {
+// TODO(dstechenko): this is ugly, need to fix (phys_to_virt / virt_to_phys)
+#define TO_VADDR(addr) (addr + VIRTUAL_MEMORY_START)
+#define TO_VADDR_PTR(addr) ((uintptr_t *)TO_VADDR(addr))
+#define TO_VADDR_PAGE(addr) ((struct page){.paddr = addr, .vaddr = TO_VADDR(addr)})
+
+void page_debug(const size_t limit) {
   LOG_DEBUG("Memory configurations:");
   LOG_DEBUG("  Physical memory start        - %lx", PHYSICAL_MEMORY_START);
   LOG_DEBUG("  Physical memory end:         - %lx", PHYSICAL_MEMORY_END);
@@ -114,16 +119,13 @@ void debug_pages(const size_t limit) {
   LOG_DEBUG("  Virtual device memory end    - %lx", VIRTUAL_DEVICE_MEMORY_END);
   LOG_DEBUG("  Virtual device memory size   - %lx", VIRTUAL_DEVICE_MEMORY_SIZE);
   LOG_DEBUG("  Boot load address            - %lx", BOOT_LOAD_ADDRESS);
-  LOG_DEBUG("User tables:");
+  LOG_DEBUG("User pages:");
   log_page_global_directory(registers_get_user_page_table(), limit);
-  LOG_DEBUG("Kernel tables:");
+  LOG_DEBUG("Kernel pages:");
   log_page_global_directory(registers_get_kernel_page_table(), limit);
 }
 
-// TODO(dstechenko): this is ugly, need to fix (phys_to_virt / virt_to_phys)
-#define TO_VADDR(addr) (addr + VIRTUAL_MEMORY_START)
-#define TO_VADDR_PTR(addr) ((uintptr_t *)TO_VADDR(addr))
-#define TO_VADDR_PAGE(addr) ((struct page){.paddr = addr, .vaddr = TO_VADDR(addr)})
+void page_init(void) {}
 
 // TODO(dstechenko): fix memzero on pages
 void map_user_page(struct task *task, struct page page) {

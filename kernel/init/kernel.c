@@ -59,8 +59,11 @@ void kernel_start(void) {
   LOG_DEBUG("  Target mode  - %s", BUILD_INFO_TARGET_MODE);
   LOG_DEBUG("  Host arch    - %s", BUILD_INFO_HOST_ARCH);
 
-  debug_sections();
-  debug_pages(/* limit = */ 3);
+  sections_debug();
+
+  page_debug(/* limit = */ 3);
+  page_init();
+  page_debug(/* limit = */ 3);
 
   err = fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL);
   if (err < 0) {
