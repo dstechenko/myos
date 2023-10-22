@@ -22,25 +22,35 @@
 // TODO(dstechenko): do not map the first page into virtual for user/kernel
 // TODO(dstechenko): add handle mem abort to map pages
 
-#define STATIC_PAGES 30
-#define STATIC_PAGE_SIZE SECTION_SIZE
-#define STATIC_MEMORY_MAX PHYSICAL_DEVICE_MEMORY_START
-#define STATIC_MEMORY_SIZE (STATIC_PAGES * STATIC_PAGE_SIZE)
-#define STATIC_MEMORY_MIN (STATIC_MEMORY_MAX - STATIC_MEMORY_SIZE)
+#define PAGE_MEMORY_START PHYSICAL_MEMORY_START
+#define PAGE_MEMORY_SIZE PHYSICAL_MEMORY_SIZE
+#define PAGE_COUNT (PAGE_MEMORY_SIZE / PAGE_SIZE)
+#define PAGE_FROM_INDEX(index) ((uintptr_t)(PAGE_MEMORY_START + index * PAGE_SIZE))
+#define PAGE_TO_INDEX(page) ((page - PAGE_MEMORY_START) / PAGE_SIZE)
+static struct page_metadata pages[PAGE_COUNT];
 
-#define INDEX_TO_ADDRESS(page) ((uintptr_t)(STATIC_MEMORY_MIN + page * STATIC_PAGE_SIZE))
-#define ADDRESS_TO_INDEX(addr) ((addr - STATIC_MEMORY_MIN) / STATIC_PAGE_SIZE)
+void page_init(void) {
+  page_init_sections(pages);
+  page_init_tables();
+}
 
-static bool pages[STATIC_PAGES];
+void page_reserve_range(uintptr_t begin, const uintptr_t end) {
+  // TODO(dstechenko): assert it is page aligned
+  ASSERT(begin < end);
+  while (begin < end) {
+    pages[PAGE_TO_INDEX(begin)].used = true;
+    begin += PAGE_SIZE;
+  }
+}
 
 // TODO(dstechenko): add proper zero pages
 uintptr_t get_page(void) {
   size_t i;
 
   for (i = 0; i < sizeof(pages); i++)
-    if (!pages[i]) {
-      pages[i] = true;
-      return INDEX_TO_ADDRESS(i);
+    if (!pages[i].used) {
+      pages[i].used = true;
+      return PAGE_FROM_INDEX(i);
     }
 
   return PTR_TO_ADR(NULL);
@@ -71,7 +81,7 @@ uintptr_t get_user_page(struct task *task, uintptr_t vaddr) {
 
 void put_page(const uintptr_t page) {
   if (page)
-    pages[ADDRESS_TO_INDEX(page)] = false;
+    pages[PAGE_TO_INDEX(page)].used = false;
 }
 
 int copy_user_pages(const struct task *src, struct task *dst) {

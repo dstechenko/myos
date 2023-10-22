@@ -9,6 +9,7 @@
 #include <asm/mmu-defs.h>
 #include <asm/page-defs.h>
 #include <asm/registers.h>
+#include <asm/sections.h>
 
 #include <kernel/logging/log.h>
 #include <kernel/memory/ops.h>
@@ -125,9 +126,17 @@ void page_debug(const size_t limit) {
   log_page_global_directory(registers_get_kernel_page_table(), limit);
 }
 
-void page_init(void) {}
+SECTION_LABEL(section_kernel_end);
 
-// TODO(dstechenko): fix memzero on pages
+void page_init_sections(struct page_metadata *pages) {
+  // TODO(dstechenko): re-use boot pages, move out page tables, use virt_to_phys
+  page_reserve_range(PHYSICAL_MEMORY_START, SECTION_ADR(section_kernel_end) - VIRTUAL_MEMORY_START);
+  // TODO(dstechenko): do not assume page alignment on device memory?
+  page_reserve_range(PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_MEMORY_END);
+}
+
+void page_init_tables(void) {}
+
 void map_user_page(struct task *task, struct page page) {
   bool created;
   struct task_memory *memory;
@@ -139,6 +148,7 @@ void map_user_page(struct task *task, struct page page) {
 
   if (!memory->context->pgd) {
     memory->context->pgd = get_page();
+    // TODO(dstechenko): fix memzero on pages
     memzero(TO_VADDR_PTR(memory->context->pgd), PAGE_SIZE - 1);
     memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(memory->context->pgd);
   }
@@ -179,6 +189,7 @@ uintptr_t map_user_table(uintptr_t *table, size_t shift, uintptr_t vaddr, bool *
   } else {
     *created = true;
     uintptr_t next_table = get_page();
+    // TODO(dstechenko): fix memzero on pages
     memzero(TO_VADDR_PTR(next_table), PAGE_SIZE - 1);
     table[index] = next_table | MMU_TYPE_PAGE_TABLE;
     ret = next_table;

@@ -72,5 +72,6 @@ SECTIONS
     *(.bss)
     section_kernel_bss_end = .;
   }
+  . = ALIGN(PAGE_SIZE);
   section_kernel_end = .;
 }

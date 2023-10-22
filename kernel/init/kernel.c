@@ -43,6 +43,7 @@ void kernel_task(void) {
 void kernel_start(void) {
   int err;
 
+  page_init();
   print_init();
   task_main_init();
   irq_init();
@@ -60,9 +61,6 @@ void kernel_start(void) {
   LOG_DEBUG("  Host arch    - %s", BUILD_INFO_HOST_ARCH);
 
   sections_debug();
-
-  page_debug(/* limit = */ 3);
-  page_init();
   page_debug(/* limit = */ 3);
 
   err = fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL);

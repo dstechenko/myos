@@ -10,7 +10,8 @@
 #include <kernel/memory/page.h>
 #include <kernel/scheduler/task.h>
 
-void page_init(void);
+void page_init_sections(struct page_metadata *pages);
+void page_init_tables(void);
 void page_debug(size_t limit);
 
 void map_user_page(struct task *task, struct page page);
