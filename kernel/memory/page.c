@@ -22,6 +22,7 @@
 // TODO(dstechenko): do not map the first page into virtual for user/kernel
 // TODO(dstechenko): add handle mem abort to map pages
 // TODO(dstechenko): unmap pages
+// TODO(dstechenko): add phys_addr_t / virt_addr_t types, use page type
 
 #define PAGE_MEMORY_START PHYSICAL_MEMORY_START
 #define PAGE_MEMORY_SIZE PHYSICAL_MEMORY_SIZE
@@ -66,6 +67,7 @@ uintptr_t get_kernel_page(void) {
   return page;
 }
 
+// TODO(dstecheko): use pages, use last available vaddr?
 uintptr_t get_user_page(struct task *task, uintptr_t vaddr) {
   uintptr_t page;
 

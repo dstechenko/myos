@@ -66,15 +66,14 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   current_regs = task_get_proc_regs(current);
   ASSERT(current_regs);
 
-  // TODO(dstechenko): do not map the first page
-  get_user_page(current, 0);
-  current->user_stack = 0;
+  get_user_page(current, 1 * PAGE_SIZE);
+  current->user_stack = PAGE_SIZE;
 
-  text_page = get_user_page(current, PAGE_SIZE);
+  text_page = get_user_page(current, 2 * PAGE_SIZE);
   memcpy(ADR_TO_PTR(text_page), ADR_TO_PTR(text), size);
 
   current_regs->sp = (uint64_t)current->user_stack + TASK_STACK_SIZE;
-  current_regs->pc = (uint64_t)PAGE_SIZE;
+  current_regs->pc = (uint64_t)(2 * PAGE_SIZE);
   current_regs->ps = (uint64_t)PSR_MODE_EL0t;
 
   ASSERT(current->memory.context);
