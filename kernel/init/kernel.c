@@ -43,10 +43,10 @@ void kernel_task(void) {
 void kernel_start(void) {
   int err;
 
-  page_init();
   print_init();
-  task_main_init();
   irq_init();
+  page_init();
+  task_main_init();
   timer_init();
   irq_ctrl_init();
   irq_enable();

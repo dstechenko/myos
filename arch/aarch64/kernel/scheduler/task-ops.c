@@ -66,6 +66,7 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   current_regs = task_get_proc_regs(current);
   ASSERT(current_regs);
 
+  // TODO(dstechenko): do not map the first page
   get_user_page(current, 0);
   current->user_stack = 0;
 

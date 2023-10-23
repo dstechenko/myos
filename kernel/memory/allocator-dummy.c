@@ -16,6 +16,7 @@ void *alloc(const size_t size, const uint8_t flags) {
   ASSERT(size <= PAGE_SIZE);
 
   if (flags & ALLOC_USER) {
+    // TODO: do proper alloc for users
     return (void *)get_kernel_page();
   } else {
     return (void *)get_kernel_page();
@@ -26,7 +27,8 @@ void *zalloc(const size_t size, const uint8_t flags) {
   void *obj = alloc(size, flags);
 
   if (obj)
-    memzero(obj, size);
+    // TODO: user zero pages instead of writing
+    memzero(obj, size - 1);
 
   return obj;
 }

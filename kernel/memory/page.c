@@ -21,6 +21,7 @@
 // TODO(dstechenko): move to faster traversal
 // TODO(dstechenko): do not map the first page into virtual for user/kernel
 // TODO(dstechenko): add handle mem abort to map pages
+// TODO(dstechenko): unmap pages
 
 #define PAGE_MEMORY_START PHYSICAL_MEMORY_START
 #define PAGE_MEMORY_SIZE PHYSICAL_MEMORY_SIZE
@@ -30,7 +31,7 @@
 static struct page_metadata pages[PAGE_COUNT];
 
 void page_init(void) {
-  page_init_sections(pages);
+  page_init_sections();
   page_init_tables();
 }
 

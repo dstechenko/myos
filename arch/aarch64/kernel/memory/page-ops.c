@@ -19,6 +19,12 @@
 
 #include "page-context.h"
 
+// TODO(dstechenko): this is ugly, need to fix (phys_to_virt / virt_to_phys)
+#define TO_PADDR(addr) (addr - VIRTUAL_MEMORY_START)
+#define TO_VADDR(addr) (addr + VIRTUAL_MEMORY_START)
+#define TO_VADDR_PTR(addr) ((uintptr_t *)TO_VADDR(addr))
+#define TO_VADDR_PAGE(addr) ((struct page){.paddr = addr, .vaddr = TO_VADDR(addr)})
+
 #define GET_DESC_VALID_BIT(desc) (desc & BIT(0))
 #define GET_DESC_TABLE_BIT(desc) (desc & BIT(1))
 #define GET_DESC_ADDR_BITS(desc) (desc & (BIT(48) - 1) & ~(BIT(12) - 1))
@@ -62,48 +68,44 @@ static void log_page_entries(const uintptr_t table, size_t limit) {
 }
 
 void log_page_global_directory(const uintptr_t pgd, const size_t limit) {
-  uintptr_t *pud = (uintptr_t *)pgd, *pmd, *pte;
+  uintptr_t *pud = TO_VADDR_PTR(pgd), *pmd, *pte;
 
-  LOG_DEBUG("  Page Global Directory (physical address %lx)", pgd);
   if (!pgd)
     return;
-  log_page_entries(pgd, limit);
 
-  for (size_t i = 0; i < PAGES_PER_TABLE; i++)
+  LOG_DEBUG("  Page Global Directory (physical address %lx)", pgd);
+  log_page_entries(TO_VADDR(pgd), limit);
+
+  for (size_t i = 0; i < limit; i++)
     if (pud[i]) {
       LOG_DEBUG("  Page Upper Directory (physical address %lx)", GET_DESC_ADDR_BITS(pud[i]));
-      log_page_entries(GET_DESC_ADDR_BITS(pud[i]), limit);
+      log_page_entries(TO_VADDR(GET_DESC_ADDR_BITS(pud[i])), limit);
     }
 
-  for (size_t i = 0; i < PAGES_PER_TABLE; i++)
+  for (size_t i = 0; i < limit; i++)
     if (pud[i]) {
-      pmd = (uintptr_t *)GET_DESC_ADDR_BITS(pud[i]);
-      for (size_t j = 0; j < PAGES_PER_TABLE; j++)
+      pmd = TO_VADDR_PTR(GET_DESC_ADDR_BITS(pud[i]));
+      for (size_t j = 0; j < limit; j++)
         if (pmd[j]) {
           LOG_DEBUG("  Page Middle Directory (physical address %lx)", GET_DESC_ADDR_BITS(pmd[j]));
-          log_page_entries(GET_DESC_ADDR_BITS(pmd[j]), limit);
+          log_page_entries(TO_VADDR(GET_DESC_ADDR_BITS(pmd[j])), limit);
         }
     }
 
-  for (size_t i = 0; i < PAGES_PER_TABLE; i++)
+  for (size_t i = 0; i < limit; i++)
     if (pud[i]) {
-      pmd = (uintptr_t *)GET_DESC_ADDR_BITS(pud[i]);
-      for (size_t j = 0; j < PAGES_PER_TABLE; j++)
+      pmd = TO_VADDR_PTR(GET_DESC_ADDR_BITS(pud[i]));
+      for (size_t j = 0; j < limit; j++)
         if (pmd[j]) {
-          pte = (uintptr_t *)GET_DESC_ADDR_BITS(pmd[j]);
-          for (size_t k = 0; k < PAGES_PER_TABLE; k++)
+          pte = TO_VADDR_PTR(GET_DESC_ADDR_BITS(pmd[j]));
+          for (size_t k = 0; k < limit; k++)
             if (pte[k] && GET_DESC_TABLE_BIT(pte[k])) {
               LOG_DEBUG("  Page Table Entry (physical address %lx)", GET_DESC_ADDR_BITS(pte[k]));
-              log_page_entries(GET_DESC_ADDR_BITS(pte[k]), limit);
+              log_page_entries(TO_VADDR(GET_DESC_ADDR_BITS(pte[k])), limit);
             }
         }
     }
 }
-
-// TODO(dstechenko): this is ugly, need to fix (phys_to_virt / virt_to_phys)
-#define TO_VADDR(addr) (addr + VIRTUAL_MEMORY_START)
-#define TO_VADDR_PTR(addr) ((uintptr_t *)TO_VADDR(addr))
-#define TO_VADDR_PAGE(addr) ((struct page){.paddr = addr, .vaddr = TO_VADDR(addr)})
 
 void page_debug(const size_t limit) {
   LOG_DEBUG("Memory configurations:");
@@ -128,54 +130,16 @@ void page_debug(const size_t limit) {
 
 SECTION_LABEL(section_kernel_end);
 
-void page_init_sections(struct page_metadata *pages) {
+void page_init_sections(void) {
   // TODO(dstechenko): re-use boot pages, move out page tables, use virt_to_phys
-  page_reserve_range(PHYSICAL_MEMORY_START, SECTION_ADR(section_kernel_end) - VIRTUAL_MEMORY_START);
+  page_reserve_range(PHYSICAL_MEMORY_START, TO_PADDR(SECTION_ADR(section_kernel_end)));
   // TODO(dstechenko): do not assume page alignment on device memory?
-  page_reserve_range(PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_MEMORY_END);
-}
-
-void page_init_tables(void) {}
-
-void map_user_page(struct task *task, struct page page) {
-  bool created;
-  struct task_memory *memory;
-  uintptr_t pgd, pud, pmd, pte;
-
-  ASSERT(task);
-  memory = &task->memory;
-  ASSERT(memory->context);
-
-  if (!memory->context->pgd) {
-    memory->context->pgd = get_page();
-    // TODO(dstechenko): fix memzero on pages
-    memzero(TO_VADDR_PTR(memory->context->pgd), PAGE_SIZE - 1);
-    memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(memory->context->pgd);
-  }
-  pgd = memory->context->pgd;
-
-  pud = map_user_table(TO_VADDR_PTR(pgd), PGD_SHIFT, page.vaddr, &created);
-  if (created) {
-    memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(pud);
-  }
-
-  pmd = map_user_table(TO_VADDR_PTR(pud), PUD_SHIFT, page.vaddr, &created);
-  if (created) {
-    memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(pmd);
-  }
-
-  pte = map_user_table(TO_VADDR_PTR(pmd), PMD_SHIFT, page.vaddr, &created);
-  if (created) {
-    memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(pte);
-  }
-
-  map_user_table_entry(TO_VADDR_PTR(pte), page);
-  memory->user_pages[memory->user_pages_count++] = page;
+  page_reserve_range(PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END);
 }
 
 static size_t get_table_index(size_t shift, uintptr_t vaddr) { return (vaddr >> shift) & (PAGES_PER_TABLE - 1); }
 
-uintptr_t map_user_table(uintptr_t *table, size_t shift, uintptr_t vaddr, bool *created) {
+static uintptr_t map_table(uintptr_t *table, size_t shift, uintptr_t vaddr, bool *created) {
   uintptr_t ret;
   size_t index;
 
@@ -198,11 +162,85 @@ uintptr_t map_user_table(uintptr_t *table, size_t shift, uintptr_t vaddr, bool *
   return ret;
 }
 
-void map_user_table_entry(uintptr_t *entry, struct page page) {
+static void map_table_entry(uintptr_t *entry, struct page page, const uint64_t flags) {
   size_t index;
 
   ASSERT(entry);
 
   index = get_table_index(PAGE_SHIFT, page.vaddr);
-  entry[index] = page.paddr | MMU_USER_FLAGS;
+  entry[index] = page.paddr | flags;
+}
+
+static void map_kernel_page_into(uintptr_t pgd, struct page page, const uint64_t flags) {
+  bool created;
+  uintptr_t pud, pmd, pte;
+
+  pud = map_table(TO_VADDR_PTR(pgd), PGD_SHIFT, page.vaddr, &created);
+  pmd = map_table(TO_VADDR_PTR(pud), PUD_SHIFT, page.vaddr, &created);
+  pte = map_table(TO_VADDR_PTR(pmd), PMD_SHIFT, page.vaddr, &created);
+
+  map_table_entry(TO_VADDR_PTR(pte), page, flags);
+}
+
+void map_kernel_page(struct page page) {
+  map_kernel_page_into(registers_get_kernel_page_table(), page, MMU_KERNEL_PAGES_FLAGS);
+  registers_set_kernel_page_table(registers_get_kernel_page_table());
+}
+
+static void map_kernel_range(const uintptr_t pgd, uintptr_t begin, const uintptr_t end, const uint64_t flags) {
+  while (begin < end) {
+    map_kernel_page_into(pgd, TO_VADDR_PAGE(begin), flags);
+    begin += PAGE_SIZE;
+  }
+}
+
+void page_init_tables(void) {
+  uintptr_t pgd = get_page();
+
+  // TODO(dstechenko): fix memzero on pages
+  memzero(TO_VADDR_PTR(pgd), PAGE_SIZE - 1);
+
+  // TODO(dstechenko): map code/data separately with rules
+  map_kernel_range(pgd, PHYSICAL_MEMORY_START + PAGE_SIZE, PHYSICAL_DEVICE_MEMORY_START, MMU_KERNEL_PAGES_FLAGS);
+  map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END, MMU_DEVICE_PAGES_FLAGS);
+  map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_END, PHYSICAL_MEMORY_END, MMU_KERNEL_PAGES_FLAGS);
+
+  registers_set_user_page_table(PTR_TO_ADR(NULL));
+  registers_set_kernel_page_table(pgd);
+}
+
+void map_user_page(struct task *task, struct page page) {
+  bool created;
+  struct task_memory *memory;
+  uintptr_t pgd, pud, pmd, pte;
+
+  ASSERT(task);
+  memory = &task->memory;
+  ASSERT(memory->context);
+
+  if (!memory->context->pgd) {
+    memory->context->pgd = get_page();
+    // TODO(dstechenko): fix memzero on pages
+    memzero(TO_VADDR_PTR(memory->context->pgd), PAGE_SIZE - 1);
+    memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(memory->context->pgd);
+  }
+  pgd = memory->context->pgd;
+
+  pud = map_table(TO_VADDR_PTR(pgd), PGD_SHIFT, page.vaddr, &created);
+  if (created) {
+    memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(pud);
+  }
+
+  pmd = map_table(TO_VADDR_PTR(pud), PUD_SHIFT, page.vaddr, &created);
+  if (created) {
+    memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(pmd);
+  }
+
+  pte = map_table(TO_VADDR_PTR(pmd), PMD_SHIFT, page.vaddr, &created);
+  if (created) {
+    memory->kernel_pages[memory->kernel_pages_count++] = TO_VADDR_PAGE(pte);
+  }
+
+  map_table_entry(TO_VADDR_PTR(pte), page, MMU_USER_FLAGS);
+  memory->user_pages[memory->user_pages_count++] = page;
 }

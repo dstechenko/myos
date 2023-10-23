@@ -28,9 +28,10 @@ uintptr_t get_user_page(struct task *task, uintptr_t vaddr);
 void put_page(uintptr_t page);
 int copy_user_pages(const struct task *src, struct task *dst);
 
-void page_init_sections(struct page_metadata *pages);
+void page_init_sections(void);
 void page_init_tables(void);
 void page_debug(size_t limit);
 void map_user_page(struct task *task, struct page page);
+void map_kernel_page(struct page page);
 
 #endif // !KERNEL_MEMORY_PAGE_H
