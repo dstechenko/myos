@@ -4,7 +4,7 @@
 #include <kernel/allocator.h>
 
 #include <kernel/assert.h>
-#include <kernel/ops.h>
+#include <kernel/memory-ops.h>
 #include <kernel/page.h>
 #include <kernel/ptrs.h>
 

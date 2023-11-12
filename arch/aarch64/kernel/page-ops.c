@@ -14,7 +14,7 @@
 #include <kernel/assert.h>
 #include <kernel/bits.h>
 #include <kernel/log.h>
-#include <kernel/ops.h>
+#include <kernel/memory-ops.h>
 #include <kernel/ptrs.h>
 
 #include "page-context.h"
