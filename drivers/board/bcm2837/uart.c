@@ -5,7 +5,7 @@
 
 #include <stddef.h>
 
-#include <kernel/core/config.h>
+#include <kernel/config.h>
 
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
 #include "uart-mini.h"

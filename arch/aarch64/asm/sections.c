@@ -3,7 +3,7 @@
 
 #include <asm/sections.h>
 
-#include <kernel/logging/log.h>
+#include <kernel/log.h>
 
 SECTION_LABEL(section_kernel_entry_start);
 SECTION_LABEL(section_kernel_entry_end);

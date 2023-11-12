@@ -58,8 +58,8 @@ KERNEL_OBJS := $(KERNEL_OBJS:$(ARCH_DIR)/%.c=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:%.c=$(OUT_DIR)/%.o)
 KERNEL_OBJS := $(KERNEL_OBJS:%.S=$(OUT_DIR)/%.o)
 
-KERNEL_BUILD_INFO := $(GEN_DIR)/include/kernel/core/build_info.h
-KERNEL_CONF       := $(GEN_DIR)/include/kernel/core/config.h
+KERNEL_BUILD_INFO := $(GEN_DIR)/include/kernel/build-info.h
+KERNEL_CONF       := $(GEN_DIR)/include/kernel/config.h
 KERNEL_CONF_DIRS  := $(CONFIGS_DIR) $(CONFIGS_ARCH_DIR) $(CONFIGS_BOARD_DIR)
 KERNEL_CONF_FILES := $(KERNEL_CONF_DIRS:%=%/config)
 

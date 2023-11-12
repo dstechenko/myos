@@ -4,7 +4,7 @@
 #ifndef DRIVERS_BOARD_BCM2837_MBOX_H
 #define DRIVERS_BOARD_BCM2837_MBOX_H
 
-#include <kernel/util/layout.h>
+#include <kernel/layout.h>
 
 /**
  * Mailboxes facilitate communication between the ARM and the VideoCore.

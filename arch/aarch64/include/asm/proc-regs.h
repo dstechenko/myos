@@ -8,7 +8,7 @@
 #include <stdint.h>
 
 #include <asm/entry-defs.h>
-#include <kernel/util/assert.h>
+#include <kernel/assert.h>
 
 struct proc_regs {
   uint64_t regs[31];

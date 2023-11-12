@@ -4,8 +4,8 @@
 #ifndef ASM_PAGE_DEFS_H
 #define ASM_PAGE_DEFS_H
 
-#include <kernel/core/config.h>
-#include <kernel/util/bits.h>
+#include <kernel/config.h>
+#include <kernel/bits.h>
 
 #define PAGE_SHIFT CONFIG_PAGE_SHIFT
 #define PAGE_SIZE BIT(PAGE_SHIFT)

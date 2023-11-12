@@ -5,7 +5,7 @@
 
 #include <asm/delay.h>
 #include <drivers/mmio.h>
-#include <kernel/util/bits.h>
+#include <kernel/bits.h>
 
 #define MBOX_BASE 0x0000B880
 #define MBOX_RESPONSE 0x80000000

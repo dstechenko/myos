@@ -4,7 +4,7 @@
 #ifndef ARCH_AARCH64_ASM_REGISTERS_DEFS_H
 #define ARCH_AARCH64_ASM_REGISTERS_DEFS_H
 
-#include <kernel/util/bits.h>
+#include <kernel/bits.h>
 
 #include "mmu-defs.h"
 

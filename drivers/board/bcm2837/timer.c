@@ -4,7 +4,7 @@
 #include <drivers/timer.h>
 
 #include <drivers/mmio.h>
-#include <kernel/scheduler/task.h>
+#include <kernel/task.h>
 
 #include "timer.h"
 

@@ -7,8 +7,8 @@
 
 #include <asm/delay.h>
 #include <drivers/mmio.h>
-#include <kernel/core/config.h>
-#include <kernel/util/bits.h>
+#include <kernel/bits.h>
+#include <kernel/config.h>
 
 #include "aux.h"
 #include "gpio.h"

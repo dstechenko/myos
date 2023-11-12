@@ -4,7 +4,7 @@
 #ifndef ASM_MEMORY_DEFS_H
 #define ASM_MEMORY_DEFS_H
 
-#include <kernel/core/config.h>
+#include <kernel/config.h>
 
 #define BOOT_LOAD_ADDRESS CONFIG_BOOT_LOAD_ADDRESS
 

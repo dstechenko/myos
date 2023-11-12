@@ -4,7 +4,7 @@
 #ifndef DRIVERS_BOARD_BCM2837_TIMER_H
 #define DRIVERS_BOARD_BCM2837_TIMER_H
 
-#include <kernel/util/bits.h>
+#include <kernel/bits.h>
 
 /**
  * The  base address for the system timers is 0x7E003000.

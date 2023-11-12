@@ -4,7 +4,7 @@
 #ifndef DRIVERS_BOARD_BCM2837_IRQ_H
 #define DRIVERS_BOARD_BCM2837_IRQ_H
 
-#include <kernel/util/bits.h>
+#include <kernel/bits.h>
 
 /**
  * The base address for the ARM interrupt register is 0x7E00B000.

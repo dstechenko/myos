@@ -4,7 +4,7 @@
 #ifndef ARCH_AARCH64_ASM_MMU_DEFS_H
 #define ARCH_AARCH64_ASM_MMU_DEFS_H
 
-#include <kernel/util/bits.h>
+#include <kernel/bits.h>
 
 #define MEMORY_TYPE_DEVICE 0x0
 #define MEMORY_TYPE_DEVICE_FLAGS 0x0
