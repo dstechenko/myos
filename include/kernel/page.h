@@ -28,6 +28,10 @@ uintptr_t get_user_page(struct task *task, uintptr_t vaddr);
 void put_page(uintptr_t page);
 int copy_user_pages(const struct task *src, struct task *dst);
 
+uintptr_t phys_to_virt(uintptr_t paddr);
+uintptr_t virt_to_phys(uintptr_t vaddr);
+struct page phys_to_page(uintptr_t paddr);
+
 void page_init_sections(void);
 void page_init_tables(void);
 void page_debug(size_t limit);

@@ -22,7 +22,6 @@
 // TODO(dstechenko): do not map the first page into virtual for user/kernel
 // TODO(dstechenko): add handle mem abort to map pages
 // TODO(dstechenko): unmap pages
-// TODO(dstechenko): add phys_addr_t / virt_addr_t types, use page type
 
 #define PAGE_MEMORY_START PHYSICAL_MEMORY_START
 #define PAGE_MEMORY_SIZE PHYSICAL_MEMORY_SIZE
@@ -59,27 +58,22 @@ uintptr_t get_page(void) {
 }
 
 uintptr_t get_kernel_page(void) {
-  uintptr_t page = get_page();
+  uintptr_t paddr = get_page();
 
-  if (page)
-    page += VIRTUAL_MEMORY_START;
-
-  return page;
+  return paddr ? phys_to_virt(paddr) : paddr;
 }
 
-// TODO(dstecheko): use pages, use last available vaddr?
-uintptr_t get_user_page(struct task *task, uintptr_t vaddr) {
-  uintptr_t page;
+// TODO(dstecheko): use pages, use last available vaddr for task?
+uintptr_t get_user_page(struct task *task, const uintptr_t vaddr) {
+  uintptr_t paddr;
 
   ASSERT(task);
 
-  page = get_page();
-  if (page) {
-    map_user_page(task, (struct page){.vaddr = vaddr, .paddr = page});
-    page += VIRTUAL_MEMORY_START;
-  }
+  paddr = get_page();
+  if (paddr)
+    map_user_page(task, (struct page){.vaddr = vaddr, .paddr = paddr});
 
-  return page;
+  return paddr ? phys_to_virt(paddr) : paddr;
 }
 
 void put_page(const uintptr_t page) {

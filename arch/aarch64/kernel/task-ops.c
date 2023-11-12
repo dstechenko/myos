@@ -67,7 +67,7 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   ASSERT(current_regs);
 
   get_user_page(current, 1 * PAGE_SIZE);
-  current->user_stack = PAGE_SIZE;
+  current->user_stack = (void *)PAGE_SIZE;
 
   text_page = get_user_page(current, 2 * PAGE_SIZE);
   memcpy(ADR_TO_PTR(text_page), ADR_TO_PTR(text), size);
