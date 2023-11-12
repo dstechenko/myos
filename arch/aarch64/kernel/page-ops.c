@@ -25,7 +25,8 @@
 #define GET_DESC_LOW_ATTR_BITS(desc) (desc & (BIT(12) - 1) & ~(BIT(2) - 1))
 
 static uintptr_t *phys_to_virt_array(const uintptr_t paddr) { return (uintptr_t *)phys_to_virt(paddr); }
-static struct page phys_to_page(const uintptr_t paddr) {
+
+static struct page phys_to_virt_page(const uintptr_t paddr) {
   return (struct page){.paddr = paddr, .vaddr = phys_to_virt(paddr)};
 }
 
@@ -130,9 +131,9 @@ void page_debug(const size_t limit) {
 SECTION_LABEL(section_kernel_end);
 
 void page_init_sections(void) {
-  // TODO(dstechenko): re-use boot pages, move out page tables, use virt_to_phys
+  // TODO(dstechenko): re-use boot pages, move out page tables
   page_reserve_range(PHYSICAL_MEMORY_START, virt_to_phys(SECTION_ADR(section_kernel_end)));
-  // TODO(dstechenko): do not assume page alignment on device memory?
+  // TODO(dstechenko): do not assume page alignment on device memory
   page_reserve_range(PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END);
 }
 
