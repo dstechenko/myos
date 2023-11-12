@@ -1,7 +1,7 @@
 # myos
 
 TODOs(progress):
-- Add pages for user/kernel
+- Move everything into single folder for simplicity
 
 TODOs(backlog):
 - Add irq enabled/disabled/save/load functions
