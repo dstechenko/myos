@@ -14,7 +14,7 @@
  * - 1 PUD page with 1 entry.
  * - 1 PMD page with most entries (each 2MB in block mode).
  */
-#define PGD_SIZE (3 * PAGE_SIZE)
+#define BOOT_PGD_SIZE (3 * PAGE_SIZE)
 
 #define VIRTUAL(label) AT(ADDR(label) - VIRTUAL_MEMORY_START)
 
@@ -31,12 +31,12 @@ SECTIONS
   . = ALIGN(PAGE_SIZE);
   section_pgd_boot :  {
     section_pgd_boot_start = .;
-    . += PGD_SIZE;
+    . += BOOT_PGD_SIZE;
     section_pgd_boot_end = .;
   }
   section_pgd_kernel : {
     section_pgd_kernel_start = .;
-    . += PGD_SIZE;
+    . += BOOT_PGD_SIZE;
     section_pgd_kernel_end = .;
   }
 
