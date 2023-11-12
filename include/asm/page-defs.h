@@ -11,8 +11,6 @@
 #define PAGE_SIZE BIT(PAGE_SHIFT)
 #define PAGE_MASK ~(PAGE_SIZE - 1)
 
-// TODO(dstechenko): remove this
-#define PGD_SIZE (CONFIG_PGD_SIZE * PAGE_SIZE)
 #define TABLE_SHIFT CONFIG_TABLE_SHIFT
 
 #define SECTION_SHIFT (PAGE_SHIFT + TABLE_SHIFT)
