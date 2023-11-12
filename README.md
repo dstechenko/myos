@@ -1,20 +1,21 @@
 # myos
 
 TODOs(progress):
-- Move everything into single folder for simplicity
+- Make code/data pages separation
+- Add a simple allocation mechanism
 
 TODOs(backlog):
 - Add irq enabled/disabled/save/load functions
+- Add atomics, spinlocks, mutexes, per_cpu and per_task variables
+- Set up multiple cores
 - Expose jiffies in kernel
-- Make memory paging/mapping board independent
-- Add UART irqs to handle inputs
 - Make kernel tasks exit by themselves and clean up
 - Separate fork into user/kernel implementations
+- Add UART irqs to handle inputs
 - Refine syscall system with generated wrappers and arguments, syscall table
 - Add comments and docs everywhere after vmem bits
 - Add qemu bcm overlay
 - Add task priority setting, unlimited task allocation
-- Add atomics, spinlocks, mutexes, per_cpu and per_task variables
 - Driver config switch with no facade file - use ifdefs
 - Use local interrupt controller
 - Extract ticks into global functionality
@@ -23,7 +24,6 @@ TODOs(backlog):
 - Add stack protector
 - Add libc primitives
 - Run all timers
-- Set up multiple cores
 - Add cpu core asm code
 - Add cpu registers breakdown doc strings
 - Flip syscall and syscall-invoke
