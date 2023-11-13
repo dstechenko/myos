@@ -5,32 +5,32 @@
 
 #include <kernel/assert.h>
 
-void *memcpy(void *dst, const void *src, size_t cnt) {
-  uint8_t *out = (uint8_t *)dst;
-  const uint8_t *in = (uint8_t *)src;
+void *memcpy(void *dst, const void *src, const size_t cnt) {
+  size_t tmp;
+  uint8_t *out = dst;
+  const uint8_t *in = src;
 
-  // TODO(dstechenko): fix this
-  /* ASSERT(out); */
-  /* ASSERT(in); */
+  ASSERT(out);
+  ASSERT(in);
   ASSERT(cnt);
 
-  do {
-    out[cnt] = in[cnt];
-  } while (cnt--);
+  for (tmp = 0; tmp < cnt; tmp++) {
+    out[tmp] = in[tmp];
+  }
 
   return dst;
 }
 
-void *memset(void *dst, const uint8_t val, size_t cnt) {
-  uint8_t *out = (uint8_t *)dst;
+void *memset(void *dst, const uint8_t val, const size_t cnt) {
+  size_t tmp;
+  uint8_t *out = dst;
 
-  // TODO(dstechenko): fix this
-  /* ASSERT(out); */
+  ASSERT(out);
   ASSERT(cnt);
 
-  do {
-    out[cnt] = val;
-  } while (cnt--);
+  for (tmp = 0; tmp < cnt; tmp++) {
+    out[tmp] = val;
+  }
 
   return dst;
 }

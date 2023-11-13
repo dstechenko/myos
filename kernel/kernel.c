@@ -39,6 +39,7 @@ void kernel_task(void) {
     LOG_ERROR("Failed to move to user: %d", err);
 }
 
+// TODO(dstechenko): rename this file
 void kernel_start(void) {
   int err;
 
@@ -67,6 +68,8 @@ void kernel_start(void) {
     LOG_ERROR("Failed to start task before user, err: %d", err);
     return;
   }
+
+  *((uint64_t *)&kernel_start) = 42;
 
   while (true) {
     print("* Tick from kernel init task\n");

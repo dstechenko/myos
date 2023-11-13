@@ -24,6 +24,9 @@
 #define GET_DESC_ADDR_BITS(desc) (desc & (BIT(48) - 1) & ~(BIT(12) - 1))
 #define GET_DESC_LOW_ATTR_BITS(desc) (desc & (BIT(12) - 1) & ~(BIT(2) - 1))
 
+SECTION_LABEL(section_kernel_end);
+#define PHYSICAL_KERNEL_MEMORY_END virt_to_phys(SECTION_ADR(section_kernel_end))
+
 static uintptr_t *phys_to_virt_array(const uintptr_t paddr) { return (uintptr_t *)phys_to_virt(paddr); }
 
 static struct page phys_to_virt_page(const uintptr_t paddr) {
@@ -128,11 +131,9 @@ void page_debug(const size_t limit) {
   log_page_global_directory(registers_get_kernel_page_table(), limit);
 }
 
-SECTION_LABEL(section_kernel_end);
-
 void page_init_sections(void) {
   // TODO(dstechenko): re-use boot pages, move out page tables
-  page_reserve_range(PHYSICAL_MEMORY_START, virt_to_phys(SECTION_ADR(section_kernel_end)));
+  page_reserve_range(PHYSICAL_MEMORY_START, PHYSICAL_KERNEL_MEMORY_END);
   // TODO(dstechenko): do not assume page alignment on device memory
   page_reserve_range(PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END);
 }
@@ -154,7 +155,7 @@ static uintptr_t map_table(uintptr_t *table, size_t shift, uintptr_t vaddr, bool
     *created = true;
     uintptr_t next_table = get_page();
     // TODO(dstechenko): fix memzero on pages
-    memzero(phys_to_virt_array(next_table), PAGE_SIZE - 1);
+    memzero(phys_to_virt_array(next_table), PAGE_SIZE);
     table[index] = next_table | MMU_TYPE_PAGE_TABLE;
     ret = next_table;
   }
@@ -195,10 +196,10 @@ static void map_kernel_range(const uintptr_t pgd, uintptr_t begin, const uintptr
 }
 
 void page_init_tables(void) {
-  uintptr_t pgd = get_page();
+  const uintptr_t pgd = get_page();
 
   // TODO(dstechenko): fix memzero on pages
-  memzero(phys_to_virt_array(pgd), PAGE_SIZE - 1);
+  memzero(phys_to_virt_array(pgd), PAGE_SIZE);
 
   // TODO(dstechenko): map code/data separately with rules
   map_kernel_range(pgd, PHYSICAL_MEMORY_START + PAGE_SIZE, PHYSICAL_DEVICE_MEMORY_START, MMU_KERNEL_PAGES_FLAGS);
@@ -221,7 +222,7 @@ void map_user_page(struct task *task, struct page page) {
   if (!memory->context->pgd) {
     memory->context->pgd = get_page();
     // TODO(dstechenko): fix memzero on pages
-    memzero(phys_to_virt_array(memory->context->pgd), PAGE_SIZE - 1);
+    memzero(phys_to_virt_array(memory->context->pgd), PAGE_SIZE);
     memory->kernel_pages[memory->kernel_pages_count++] = phys_to_virt_page(memory->context->pgd);
   }
   pgd = memory->context->pgd;
@@ -241,6 +242,7 @@ void map_user_page(struct task *task, struct page page) {
     memory->kernel_pages[memory->kernel_pages_count++] = phys_to_virt_page(pte);
   }
 
+  // TODO(dstechenko): map code/data separately with rules
   map_table_entry(phys_to_virt_array(pte), page, MMU_USER_FLAGS);
   memory->user_pages[memory->user_pages_count++] = page;
 }

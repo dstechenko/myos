@@ -28,7 +28,7 @@ void *zalloc(const size_t size, const uint8_t flags) {
 
   if (obj)
     // TODO: user zero pages instead of writing
-    memzero(obj, size - 1);
+    memzero(obj, size);
 
   return obj;
 }

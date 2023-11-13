@@ -1,14 +1,17 @@
 # myos
 
 TODOs(progress):
-- Make code/data pages separation
-- Add a simple allocation mechanism
-
-TODOs(backlog):
 - Add irq enabled/disabled/save/load functions
 - Add atomics, spinlocks, mutexes, per_cpu and per_task variables
+- Add a simple allocation mechanism
 - Set up multiple cores
 - Expose jiffies in kernel
+
+TODOs(backlog):
+- Add kernel/user testing framework
+- Make code/data pages separation
+- Cover existing core functionality by tests
+- Add file systems
 - Make kernel tasks exit by themselves and clean up
 - Separate fork into user/kernel implementations
 - Add UART irqs to handle inputs

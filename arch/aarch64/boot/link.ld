@@ -60,6 +60,7 @@ SECTIONS
     section_user_end = .;
   }
 
+  /* Align this separately to make non-writable. */
   . = ALIGN(PAGE_SIZE);
   section_kernel_start = .;
   section_kernel_text : VIRTUAL(section_kernel_text) {
@@ -67,6 +68,7 @@ SECTIONS
     *(.text)
     section_kernel_text_end = .;
   }
+  . = ALIGN(PAGE_SIZE);
   section_kernel_rodata : VIRTUAL(section_kernel_rodata) {
     section_kernel_rodata_start = .;
     *(.rodata)
