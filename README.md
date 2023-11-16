@@ -1,6 +1,7 @@
 # myos
 
 TODOs(progress):
+- Add barriers (io, compilers)
 - Add irq enabled/disabled/save/load functions
 - Add atomics, spinlocks, mutexes, per_cpu and per_task variables
 - Add a simple allocation mechanism

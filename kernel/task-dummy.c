@@ -38,9 +38,9 @@ void task_tick(void) {
   tasks_current->ticks--;
   if (tasks_current->ticks > 0 || tasks_current->preempt > 0)
     return;
-  irq_enable();
+  local_irq_enable();
   task_schedule();
-  irq_disable();
+  local_irq_disable();
 }
 
 struct task *task_pick(void) {

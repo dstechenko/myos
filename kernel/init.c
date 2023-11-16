@@ -39,17 +39,16 @@ void kernel_task(void) {
     LOG_ERROR("Failed to move to user: %d", err);
 }
 
-// TODO(dstechenko): rename this file
-void kernel_start(void) {
+void init_start(void) {
   int err;
 
   print_init();
-  irq_init();
+  local_irq_init();
   page_init();
   task_main_init();
   timer_init();
   irq_ctrl_init();
-  irq_enable();
+  local_irq_enable();
 
   LOG_INFO("Booting kernel...");
   LOG_DEBUG("Kernel build info:");
@@ -68,8 +67,6 @@ void kernel_start(void) {
     LOG_ERROR("Failed to start task before user, err: %d", err);
     return;
   }
-
-  *((uint64_t *)&kernel_start) = 42;
 
   while (true) {
     print("* Tick from kernel init task\n");

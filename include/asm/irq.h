@@ -9,13 +9,16 @@
 
 #include <uapi/bool.h>
 
-void irq_init(void);
-void irq_enable(void);
-bool irq_enabled(void);
-void irq_disable(void);
-bool irq_disabled(void);
-void irq_save(uint64_t *flags);
-void irq_restore(uint64_t *flags);
+void local_irq_init(void);
+
+void local_irq_enable(void);
+void local_irq_disable(void);
+
+bool local_irq_enabled(void);
+bool local_irq_disabled(void);
+
+void local_irq_save(uint64_t *flags);
+void local_irq_restore(uint64_t *flags);
 
 #endif // !__ASSEMBLER__
 #endif // !ASM_IRQ_H

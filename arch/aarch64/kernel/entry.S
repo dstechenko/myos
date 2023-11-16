@@ -89,14 +89,15 @@
 .endm
 
 entry_kernel_from_boot:
+  // This has to be the top of this section to jump from boot.
   // We couldn't do this in the boot section, so zero out now.
   ldr x0, =section_kernel_bss_start
   ldr x1, =section_kernel_bss_end
   sub x1, x1, x0
   bl memzero
 
-  // Now should be safe to start the kernel in virtual space.
-  ldr x0, =kernel_start
+  // Now should be safe to init the kernel in virtual space.
+  ldr x0, =init_start
   br x0
 
   // Should no reach it, but if we do - halt.
@@ -182,7 +183,7 @@ entry_err_invalid_el0_32:
 
 // TODO(dstechenko): fix syscall hardcode num
 entry_svc_el0:
-  bl irq_enable
+  bl local_irq_enable
   adr x24, syscall_table
   uxtw x25, w8
   mov x26, #5
@@ -192,12 +193,12 @@ entry_svc_el0:
   blr x27
 
 entry_syscall_return:
-  bl irq_disable
+  bl local_irq_disable
   str x0, [sp, #0]
   entry_kernel_out 0
 
 entry_da_el0:
-  bl irq_enable
+  bl local_irq_enable
   mrs x0, far_el1
   mrs x1, esr_el1
   bl handle_data_abort
@@ -206,7 +207,7 @@ entry_da_el0:
   entry_handle_invalid ENTRY_ERROR_DATA_ABORT, 0
 
 entry_da_el0_out:
-  bl irq_disable
+  bl local_irq_disable
   entry_kernel_out 0
 
 entry_syscall_error:
@@ -218,7 +219,7 @@ entry_fork_return:
   blr x19
 
 entry_user_return:
-  bl irq_disable
+  bl local_irq_disable
   entry_kernel_out 0
 
 entry_halt_core:
