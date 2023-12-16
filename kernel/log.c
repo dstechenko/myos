@@ -25,12 +25,11 @@ static const char *log_level_to_string(const uint8_t level) {
 void log(const uint8_t level, const char *format, ...) {
   va_list args;
 
-  // TODO(dstechenko): add assert here...
-  // TODO(dstechenko): add timestamps to logs...
-
+  ASSERT(format);
   if (CONFIG_LOG_LEVEL < level)
     return;
 
+  // TODO(dstechenko): add timestamps to logs...
   print("[%s] ", log_level_to_string(level));
   va_start(args, format);
   print_args(format, &args);
