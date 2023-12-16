@@ -13,6 +13,7 @@
 #include <kernel/assert.h>
 #include <kernel/build-info.h>
 #include <kernel/config.h>
+#include <kernel/cpu.h>
 #include <kernel/fork.h>
 #include <kernel/log.h>
 #include <kernel/page.h>
@@ -22,37 +23,16 @@
 
 #include <uapi/bool.h>
 
-SECTION_LABEL(section_user_start);
-SECTION_LABEL(section_user_end);
-SECTION_LABEL(user_start);
+SECTIONS(section_user);
+SECTIONS(user);
 
 static void kernel_task(void) {
   int err;
-  uintptr_t user_start_addr = SECTION_ADR(user_start);
-  uintptr_t section_user_start_addr = SECTION_ADR(section_user_start);
-  uintptr_t section_user_end_addr = SECTION_ADR(section_user_end);
-  size_t section_user_size = (section_user_end_addr - section_user_start_addr);
 
-  ASSERT(section_user_end_addr > section_user_start_addr);
-  err = task_move_to_user(user_start_addr, section_user_start_addr, section_user_size);
-  if (err)
+  ASSERT(SECTIONS_LENGTH(section_user));
+  err = task_move_to_user(SECTIONS_START(user), SECTIONS_START(section_user), SECTIONS_LENGTH(section_user));
+  if (err) {
     LOG_ERROR("Failed to move to user: %d", err);
-}
-
-static void kernel_pre_init(void) {
-  print_init();
-  local_irq_init();
-  page_init();
-  task_main_init();
-}
-
-static void kernel_post_init(void) { local_irq_enable(); }
-
-static void init_schedule(void) {
-  while (true) {
-    print("* Tick from kernel init task on core %d\n", registers_get_core());
-    delay_cycles(50000000);
-    task_schedule();
   }
 }
 
@@ -72,13 +52,30 @@ static void init_debug(void) {
   LOG_DEBUG("Random value sampled: %d", random_get(1, 100));
 }
 
-static void init_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL)); }
+static void init_start_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL)); }
+
+static void init_loop_schedule(void) {
+  while (true) {
+    delay_cycles(50000000);
+    print("* Tick from kernel init task on core %d\n", registers_get_core());
+    if (cpu_is_primary()) {
+      task_schedule();
+    }
+  }
+}
 
 void init_start(void) {
-  kernel_pre_init();
-  subsystem_init();
-  kernel_post_init();
-  init_debug();
-  init_user();
-  init_schedule();
+  if (cpu_is_primary()) {
+    sections_init();
+    local_irq_init();
+    print_init();
+    page_init();
+    task_main_init();
+    subsystem_init();
+    init_debug();
+    init_start_user();
+  }
+  local_irq_init();
+  local_irq_enable();
+  init_loop_schedule();
 }

@@ -90,13 +90,6 @@
 .endm
 
 entry_kernel_from_boot:
-  // This has to be the top of this section to jump from boot.
-  // We couldn't do this in the boot section, so zero out now.
-  ldr x0, =section_kernel_bss_start
-  ldr x1, =section_kernel_bss_end
-  sub x1, x1, x0
-  bl memzero
-
   // Now should be safe to init the kernel in virtual space.
   ldr x0, =init_start
   br x0

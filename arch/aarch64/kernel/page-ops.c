@@ -24,8 +24,8 @@
 #define GET_DESC_ADDR_BITS(desc) (desc & (BIT(48) - 1) & ~(BIT(12) - 1))
 #define GET_DESC_LOW_ATTR_BITS(desc) (desc & (BIT(12) - 1) & ~(BIT(2) - 1))
 
-SECTION_LABEL(section_kernel_end);
-#define PHYSICAL_KERNEL_MEMORY_END virt_to_phys(SECTION_ADR(section_kernel_end))
+SECTIONS(section_kernel);
+#define PHYSICAL_KERNEL_MEMORY_END virt_to_phys(SECTIONS_END(section_kernel))
 
 static uintptr_t *phys_to_virt_array(const uintptr_t paddr) { return (uintptr_t *)phys_to_virt(paddr); }
 
@@ -206,7 +206,7 @@ void page_init_tables(void) {
   map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END, MMU_DEVICE_PAGES_FLAGS);
   map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_END, PHYSICAL_MEMORY_END, MMU_KERNEL_PAGES_FLAGS);
 
-  registers_set_user_page_table(PTR_TO_ADR(NULL));
+  // registers_set_user_page_table(PTR_TO_ADR(NULL));
   registers_set_kernel_page_table(pgd);
 }
 

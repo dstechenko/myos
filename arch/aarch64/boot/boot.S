@@ -44,14 +44,6 @@
 
 BOOT_ENTRY_POINT_LABEL:
 boot_start:
-  // Entry point for the kernel.
-  // We need to halt all of the non-primary CPUs since they
-  // all might execute the same code. Depends on the firmware.
-  // Check a multiprocessor affinity register to id it (0 is primary core).
-  mrs x0, mpidr_el1
-  and x0, x0, #0xFF
-  cbnz x0, boot_halt_core
-
   // Check our current exception level.
   // Depending on the boot loader we could be in EL2 or EL3.
   mrs x0, currentel
@@ -79,18 +71,29 @@ boot_init_el2:
   msr hcr_el2, x0
   ldr x0, =SPSR_EL1h_VALUE
   msr spsr_el2, x0
-  ldr x0, =boot_init_kernel
+  ldr x0, =boot_init_stack
   msr elr_el2, x0
   eret
 
-boot_init_kernel:
+boot_init_stack:
   // Set stack before we jump into kernel.
   ldr x0, =boot_start
   mov sp, x0
 
+  // Move stack separately for each core.
+  mrs x0, mpidr_el1
+  and x0, x0, #0xFF
+  mov x1, #PAGE_SIZE
+  mul x2, x0, x1
+  sub sp, sp, x2
+
+  // Skip page table creation for non-primary core.
+  cbnz x0, boot_init_page_tables
+
   // Set up initial kernel/device pages.
   bl boot_create_page_tables
 
+boot_init_page_tables:
   // Point identity boot level translation table base register.
   ldr x0, =section_pgd_boot_start
   msr ttbr0_el1, x0
@@ -115,6 +118,13 @@ boot_init_kernel:
   add x1, x1, x0
   mov sp, x1
 
+  // Move stack separately for each core.
+  mrs x3, mpidr_el1
+  and x3, x3, #0xFF
+  mov x4, #PAGE_SIZE
+  mul x3, x3, x4
+  sub sp, sp, x3
+
   ldr x1, =section_kernel_entry_point;
   add x1, x1, x0
 
@@ -126,12 +136,6 @@ boot_init_kernel:
 boot_jump_kernel:
   // Jump to the kernel entry point. This should not return.
   br x1
-
-boot_halt_core:
-  // For failsafe, halt this core.
-  // We should not reach here, but if we do - we cannot recover.
-  wfe
-  b boot_halt_core
 
 boot_memzero:
   str xzr, [x0], #8

@@ -7,9 +7,18 @@
 
 #include <stdint.h>
 
-#define SECTION_LABEL(label) void label(void)
-#define SECTION_ADR(label) ((uintptr_t)label)
+#define SECTIONS_LABEL(name) \
+  void name(void);
 
+#define SECTIONS(label) \
+  SECTIONS_LABEL(label ## _start); \
+  SECTIONS_LABEL(label ## _end);
+
+#define SECTIONS_START(label) ((uintptr_t)(label ## _start))
+#define SECTIONS_END(label) ((uintptr_t)(label ## _end))
+#define SECTIONS_LENGTH(label) ((size_t)(SECTIONS_END(label) - SECTIONS_START(label)))
+
+void sections_init(void);
 void sections_debug(void);
 
 #endif // !__ASSEMBLER__

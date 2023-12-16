@@ -19,9 +19,7 @@ void random_init(void) {
   mmio_write32(RANDOM_CTRL, random_ctrl_enabled);
 }
 
-static bool random_is_ready(void) {
-  return mmio_read32(RANDOM_STATUS) >> RANDOM_READY_SHIFT;
-}
+static bool random_is_ready(void) { return mmio_read32(RANDOM_STATUS) >> RANDOM_READY_SHIFT; }
 
 static uint32_t random_get_data(const uint32_t min, const uint32_t max) {
   return mmio_read32(RANDOM_DATA) % (max - min) + min;
@@ -29,6 +27,7 @@ static uint32_t random_get_data(const uint32_t min, const uint32_t max) {
 
 uint32_t random_get(const uint32_t min, const uint32_t max) {
   // Need to wait for entropy: bits 24-31 store the number of words ready.
-  while (!random_is_ready()) delay_nop();
+  while (!random_is_ready())
+    delay_nop();
   return random_get_data(min, max);
 }
