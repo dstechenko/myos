@@ -7,7 +7,7 @@
 .globl syscall_clone
 .globl syscall_exit
 .globl syscall_write
-.globl syscall_cdelay
+.globl syscall_delay
 
 syscall_alloc:
   mov w8, #SYSCALL_ALLOC_NUM
@@ -29,7 +29,7 @@ syscall_write:
   svc #0
   ret
 
-syscall_cdelay:
-  mov w8, #SYSCALL_CDELAY_NUM
+syscall_delay:
+  mov w8, #SYSCALL_DELAY_NUM
   svc #0
   ret

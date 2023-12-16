@@ -7,6 +7,7 @@
 #include <asm/registers.h>
 #include <asm/sections.h>
 
+#include <drivers/random.h>
 #include <drivers/subsystem.h>
 
 #include <kernel/assert.h>
@@ -50,7 +51,7 @@ static void kernel_post_init(void) { local_irq_enable(); }
 static void init_schedule(void) {
   while (true) {
     print("* Tick from kernel init task on core %d\n", registers_get_core());
-    cdelay(50000000);
+    delay_cycles(50000000);
     task_schedule();
   }
 }
@@ -66,11 +67,12 @@ static void init_debug(void) {
   LOG_DEBUG("  Host arch    - %s", BUILD_INFO_HOST_ARCH);
   sections_debug();
   page_debug(/* limit = */ 3);
+  LOG_DEBUG("Random value sampled: %d", random_get(1, 100));
+  LOG_DEBUG("Random value sampled: %d", random_get(1, 100));
+  LOG_DEBUG("Random value sampled: %d", random_get(1, 100));
 }
 
-static void init_user(void) {
-  ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL));
-}
+static void init_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL)); }
 
 void init_start(void) {
   kernel_pre_init();

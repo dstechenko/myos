@@ -98,9 +98,9 @@ void uart_pl001_init(void) {
   mmio_write32(GPFSEL1, reg);
   // Remove pull-up/down state from pins 14,15 and flush it.
   mmio_write32(GPPUD, 0);
-  cdelay(150);
+  delay_cycles(150);
   mmio_write32(GPPUDCLK0, BIT(14) | BIT(15));
-  cdelay(150);
+  delay_cycles(150);
   mmio_write32(GPPUDCLK0, 0);
 
   // Clear pending interrupts.
@@ -121,13 +121,13 @@ void uart_pl001_init(void) {
 char uart_pl001_getc(void) {
   while (mmio_read32(UART_PL001_FR) & BIT(4))
     // TODO(dstechenko): replace with NOPs?
-    cdelay(1);
+    delay_cycles(1);
   return MASK_LOW_BYTE(mmio_read32(UART_PL001_DR));
 }
 
 void uart_pl001_putc(const char c) {
   while (mmio_read32(UART_PL001_FR) & BIT(5))
     // TODO(dstechenko): replace with NOPs?
-    cdelay(1);
+    delay_cycles(1);
   mmio_write32(UART_PL001_DR, c);
 }

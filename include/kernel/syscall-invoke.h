@@ -11,6 +11,6 @@ uintptr_t syscall_alloc_invoke(size_t size);
 int syscall_clone_invoke(void);
 void syscall_exit_invoke(void);
 void syscall_write_invoke(const char *buf);
-void syscall_cdelay_invoke(unsigned long cycles);
+void syscall_delay_cycles_invoke(unsigned long cycles);
 
 #endif // !KERNEL_SYSCALL_H

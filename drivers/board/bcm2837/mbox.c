@@ -5,8 +5,8 @@
 
 #include <asm/delay.h>
 #include <drivers/mmio.h>
-#include <kernel/bits.h>
 #include <kernel/assert.h>
+#include <kernel/bits.h>
 
 #define MBOX_BASE 0x0000B880
 #define MBOX_RESPONSE 0x80000000
@@ -28,7 +28,7 @@ int mbox_send(const unsigned char channel, const mbox_data_t *data) {
   // Wait until we can write to the mailbox.
   while (mmio_read32(MBOX_STATUS) & MBOX_FULL)
     // TODO(dstechenko): replace with NOPs?
-    cdelay(1);
+    delay_cycles(1);
 
   // Write the address of the message and channel identifier.
   msg = ((uintptr_t)data & ~0xF) | MASK_LOW_HALF_BYTE(channel);
@@ -37,7 +37,7 @@ int mbox_send(const unsigned char channel, const mbox_data_t *data) {
   // Send the message and wait for the response, check if ours/valid.
   while ((mmio_read32(MBOX_STATUS) & MBOX_EMPTY) || (mmio_read32(MBOX_READ) != msg))
     // TODO(dstechenko): replace with NOPs?
-    cdelay(1);
+    delay_cycles(1);
 
   return data[1] == MBOX_RESPONSE;
 }

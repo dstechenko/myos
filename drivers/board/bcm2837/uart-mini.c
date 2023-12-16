@@ -59,9 +59,9 @@ void uart_mini_init(void) {
   mmio_write32(GPFSEL1, reg);
   // Remove pull-up/down state from pins 14,15 and flush it.
   mmio_write32(GPPUD, 0);
-  cdelay(150);
+  delay_cycles(150);
   mmio_write32(GPPUDCLK0, BIT(14) | BIT(15));
-  cdelay(150);
+  delay_cycles(150);
   mmio_write32(GPPUDCLK0, 0);
 
   // Enable Mini UART (this also enables access to its registers).
