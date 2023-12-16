@@ -6,6 +6,7 @@
 #include <asm/delay.h>
 #include <drivers/mmio.h>
 #include <kernel/bits.h>
+#include <kernel/assert.h>
 
 #define MBOX_BASE 0x0000B880
 #define MBOX_RESPONSE 0x80000000
@@ -22,7 +23,7 @@
 int mbox_send(const unsigned char channel, const mbox_data_t *data) {
   unsigned int msg;
 
-  // TODO(dstechenko): add asserts...
+  ASSERT(data);
 
   // Wait until we can write to the mailbox.
   while (mmio_read32(MBOX_STATUS) & MBOX_FULL)
