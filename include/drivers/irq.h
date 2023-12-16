@@ -4,7 +4,6 @@
 #ifndef DRIVERS_IRQ_H
 #define DRIVERS_IRQ_H
 
-void irq_ctrl_init(void);
 void irq_handle(void);
 
 #endif // !DRIVERS_IRQ_H

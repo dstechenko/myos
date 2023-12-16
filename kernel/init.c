@@ -7,8 +7,7 @@
 #include <asm/registers.h>
 #include <asm/sections.h>
 
-#include <drivers/irq.h>
-#include <drivers/timer.h>
+#include <drivers/subsystem.h>
 
 #include <kernel/assert.h>
 #include <kernel/build-info.h>
@@ -26,7 +25,7 @@ SECTION_LABEL(section_user_start);
 SECTION_LABEL(section_user_end);
 SECTION_LABEL(user_start);
 
-void kernel_task(void) {
+static void kernel_task(void) {
   int err;
   uintptr_t user_start_addr = SECTION_ADR(user_start);
   uintptr_t section_user_start_addr = SECTION_ADR(section_user_start);
@@ -39,16 +38,21 @@ void kernel_task(void) {
     LOG_ERROR("Failed to move to user: %d", err);
 }
 
-void init_start(void) {
-  int err;
-
+static void kernel_pre_init(void) {
   print_init();
   local_irq_init();
   page_init();
   task_main_init();
-  timer_init();
-  irq_ctrl_init();
-  local_irq_enable();
+}
+
+static void kernel_post_init(void) { local_irq_enable(); }
+
+void init_start(void) {
+  int err;
+
+  kernel_pre_init();
+  subsystem_init();
+  kernel_post_init();
 
   LOG_INFO("Booting kernel...");
   LOG_DEBUG("Kernel build info:");

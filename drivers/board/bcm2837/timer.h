@@ -35,4 +35,6 @@
 #define TIMER_CS_M2 BIT(2)
 #define TIMER_CS_M3 BIT(3)
 
+void timer_init(void);
+
 #endif // !DRIVERS_BOARD_BCM2837_TIMER_H
