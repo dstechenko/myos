@@ -82,15 +82,19 @@ void uart_mini_init(void) {
 }
 
 char uart_mini_getc(void) {
-  while (true)
-    if (mmio_read32(AUX_MU_LSR_REG) & BIT(0))
+  while (true) {
+    if (mmio_read32(AUX_MU_LSR_REG) & BIT(0)) {
       break;
+    }
+  }
   return (MASK_LOW_BYTE(mmio_read32(AUX_MU_IO_REG)));
 }
 
 void uart_mini_putc(const char c) {
-  while (true)
-    if (mmio_read32(AUX_MU_LSR_REG) & BIT(5))
+  while (true) {
+    if (mmio_read32(AUX_MU_LSR_REG) & BIT(5)) {
       break;
+    }
+  }
   mmio_write32(AUX_MU_IO_REG, c);
 }

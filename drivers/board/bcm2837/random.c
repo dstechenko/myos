@@ -27,7 +27,8 @@ static uint32_t random_get_data(const uint32_t min, const uint32_t max) {
 
 uint32_t random_get(const uint32_t min, const uint32_t max) {
   // Need to wait for entropy: bits 24-31 store the number of words ready.
-  while (!random_is_ready())
+  while (!random_is_ready()) {
     delay_nop();
+  }
   return random_get_data(min, max);
 }
