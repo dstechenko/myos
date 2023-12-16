@@ -47,13 +47,15 @@ static void kernel_pre_init(void) {
 
 static void kernel_post_init(void) { local_irq_enable(); }
 
-void init_start(void) {
-  int err;
+static void init_schedule(void) {
+  while (true) {
+    print("* Tick from kernel init task on core %d\n", registers_get_core());
+    cdelay(50000000);
+    task_schedule();
+  }
+}
 
-  kernel_pre_init();
-  subsystem_init();
-  kernel_post_init();
-
+static void init_debug(void) {
   LOG_INFO("Booting kernel...");
   LOG_DEBUG("Kernel build info:");
   LOG_DEBUG("  Commit hash  - %s", BUILD_INFO_COMMIT_HASH);
@@ -62,19 +64,19 @@ void init_start(void) {
   LOG_DEBUG("  Target board - %s", BUILD_INFO_TARGET_BOARD);
   LOG_DEBUG("  Target mode  - %s", BUILD_INFO_TARGET_MODE);
   LOG_DEBUG("  Host arch    - %s", BUILD_INFO_HOST_ARCH);
-
   sections_debug();
   page_debug(/* limit = */ 3);
+}
 
-  err = fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL);
-  if (err < 0) {
-    LOG_ERROR("Failed to start task before user, err: %d", err);
-    return;
-  }
+static void init_user(void) {
+  ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL));
+}
 
-  while (true) {
-    print("* Tick from kernel init task\n");
-    cdelay(50000000);
-    task_schedule();
-  }
+void init_start(void) {
+  kernel_pre_init();
+  subsystem_init();
+  kernel_post_init();
+  init_debug();
+  init_user();
+  init_schedule();
 }
