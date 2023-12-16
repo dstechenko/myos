@@ -163,4 +163,4 @@ serial:
 	picocom -b 115200 /dev/ttyUSB0
 
 todo:
-	grep -r . -e "TODO($(USER)): " || echo "No user TODOs found!"
+	grep --recursive --exclude-dir=$(OUT_DIR) --regexp="TODO($(USER)): " || echo "No user TODOs found!"

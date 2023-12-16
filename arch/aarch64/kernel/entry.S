@@ -3,6 +3,7 @@
 
 #include <asm/entry-defs.h>
 #include <asm/registers-defs.h>
+#include <uapi/syscall.h>
 
 // To keep this in the first portion of the kernel virtual memory.
 .section ".text.entry"
@@ -181,12 +182,11 @@ entry_fiq_invalid_el0_32:
 entry_err_invalid_el0_32:
   entry_handle_invalid ENTRY_ERR_INVALID_EL0_32, 0
 
-// TODO(dstechenko): fix syscall hardcode num
 entry_svc_el0:
   bl local_irq_enable
   adr x24, syscall_table
   uxtw x25, w8
-  mov x26, #5
+  mov x26, (SYSCALL_MAX + 1)
   cmp x25, x26
   bhs entry_syscall_error
   ldr x27, [x24, x25, lsl #3]
