@@ -1,11 +1,24 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
+.globl atomic32_get
+.globl atomic32_set
 .globl atomic32_add
 .globl atomic32_cmp_swp
 
+.globl atomic64_get
+.globl atomic64_set
 .globl atomic64_add
 .globl atomic64_cmp_swp
+
+atomic32_get:
+  ldar w1, [x0]
+  mov w0, w1
+  ret
+
+atomic32_set:
+  stlr w1, [x0]
+  ret
 
 atomic32_add:
   ldaxr w2, [x0]
@@ -23,6 +36,15 @@ atomic32_cmp_swp:
 
 atomic32_cmp_swp_ret:
   mov w0, w3
+  ret
+
+atomic64_get:
+  ldar x1, [x0]
+  mov x0, x1
+  ret
+
+atomic64_set:
+  stlr x1, [x0]
   ret
 
 atomic64_add:

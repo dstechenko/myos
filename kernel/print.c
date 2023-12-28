@@ -136,7 +136,6 @@ int print_init(void) {
   return err;
 }
 
-// TODO(dstechenko): on hw seems like lines not getting fully sent
 void print(const char *format, ...) {
   va_list args;
 

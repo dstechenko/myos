@@ -2,7 +2,7 @@
 
 TODOs(progress):
 - Add atomics, spinlocks, sleep/yield, mutexes, per_cpu
-- Add idle tasks, cleanup in init, set priority, dynamic max size
+- Add idle tasks, cleanup in init, set priority, set affinity, dynamic max size
 - Add barriers (io, compilers)
 - Add irq enabled/disabled/save/load
 - Add memory allocator

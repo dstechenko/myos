@@ -5,7 +5,6 @@
 
 #include <drivers/mmio.h>
 #include <drivers/timer.h>
-#include <kernel/log.h>
 
 #include "irq.h"
 

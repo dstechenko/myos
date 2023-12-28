@@ -10,5 +10,6 @@
 #include <uapi/bool.h>
 
 #define TYPE(name, def) typedef struct { def value; } name
+#define ALIAS(name, def) typedef def name
 
 #endif // !KERNEL_TYPES_H

@@ -6,6 +6,9 @@
 #include <stddef.h>
 
 #include <kernel/config.h>
+#include <kernel/spinlock.h>
+
+static spinlock_t uart_lock;
 
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
 #include "uart-mini.h"
@@ -22,16 +25,21 @@ void uart_init(void) {
 }
 
 char uart_getc(void) {
-  // TODO(dstechenko): convert \r -> \n?
+  char c;
+  irqflags_t flags;
+
+  flags = spin_lock_irq(&uart_lock);
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
-  return uart_mini_getc();
+  c = uart_mini_getc();
 #else  // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
-  return uart_pl001_getc();
+  c = uart_pl001_getc();
 #endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
+  spin_unlock_irq(&uart_lock, flags);
+
+  return c;
 }
 
-void uart_putc(const char c) {
-// TODO(dstechenko): convert \n -> \r\n?
+static void uart_putc_unlocked(const char c) {
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
   uart_mini_putc(c);
 #else  // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
@@ -39,9 +47,21 @@ void uart_putc(const char c) {
 #endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
 }
 
+void uart_putc(const char c) {
+  irqflags_t flags;
+
+  flags = spin_lock_irq(&uart_lock);
+  uart_putc_unlocked(c);
+  spin_unlock_irq(&uart_lock, flags);
+}
+
 void uart_puts(const char *s) {
   size_t i;
+  irqflags_t flags;
+
+  flags = spin_lock_irq(&uart_lock);
   for (i = 0; s[i] != '\0'; i++) {
-    uart_putc(s[i]);
+    uart_putc_unlocked(s[i]);
   }
+  spin_unlock_irq(&uart_lock, flags);
 }
