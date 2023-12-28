@@ -4,6 +4,7 @@
 #include <drivers/timer.h>
 
 #include <drivers/mmio.h>
+#include <kernel/cpu.h>
 #include <kernel/task.h>
 
 #include "timer.h"
@@ -28,8 +29,10 @@ void timer_init(void) {
 }
 
 void timer_handle(void) {
-  timer_tick();
-  mmio_write32(TIMER_CS, TIMER_CS_M1);
+  if (cpu_is_primary()) {
+    timer_tick();
+    mmio_write32(TIMER_CS, TIMER_CS_M1);
+  }
   task_tick();
 }
 

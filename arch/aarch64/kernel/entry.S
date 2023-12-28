@@ -176,7 +176,7 @@ entry_err_invalid_el0_32:
   entry_handle_invalid ENTRY_ERR_INVALID_EL0_32, 0
 
 entry_svc_el0:
-  bl local_irq_enable
+  bl irq_local_enable
   adr x24, syscall_table
   uxtw x25, w8
   mov x26, (SYSCALL_MAX + 1)
@@ -186,12 +186,12 @@ entry_svc_el0:
   blr x27
 
 entry_syscall_return:
-  bl local_irq_disable
+  bl irq_local_disable
   str x0, [sp, #0]
   entry_kernel_out 0
 
 entry_da_el0:
-  bl local_irq_enable
+  bl irq_local_enable
   mrs x0, far_el1
   mrs x1, esr_el1
   bl handle_data_abort
@@ -200,7 +200,7 @@ entry_da_el0:
   entry_handle_invalid ENTRY_ERROR_DATA_ABORT, 0
 
 entry_da_el0_out:
-  bl local_irq_disable
+  bl irq_local_disable
   entry_kernel_out 0
 
 entry_syscall_error:
@@ -212,7 +212,7 @@ entry_fork_return:
   blr x19
 
 entry_user_return:
-  bl local_irq_disable
+  bl irq_local_disable
   entry_kernel_out 0
 
 entry_halt_core:

@@ -11,7 +11,7 @@ irqflags_t spin_lock_irq(spinlock_t *lock) {
   irqflags_t flags;
 
   ASSERT(lock);
-  flags = local_irq_disable();
+  flags = irq_local_disable();
 
   while (true) {
     if (!atomic32_cmp_swp(&lock->value, false, true)) {
@@ -28,5 +28,5 @@ irqflags_t spin_lock_irq(spinlock_t *lock) {
 void spin_unlock_irq(spinlock_t *lock, irqflags_t flags) {
   ASSERT(lock);
   atomic32_set(&lock->value, false);
-  local_irq_restore(flags);
+  irq_local_restore(flags);
 }

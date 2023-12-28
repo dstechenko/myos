@@ -1,7 +1,6 @@
 # myos
 
 TODOs(progress):
-- Expose jiffies in kernel
 - Add sleep/yield, mutexes, per_cpu
 - Add idle tasks, cleanup in init, set priority, set affinity, dynamic max size
 - Add irq enabled/disabled/save/load

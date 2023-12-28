@@ -9,14 +9,14 @@
 
 ALIAS(irqflags_t, unsigned long);
 
-void local_irq_init(void);
-void local_irq_enable(void);
-irqflags_t local_irq_disable(void);
-void local_irq_restore(irqflags_t flags);
-bool local_irq_enabled(void);
+void irq_local_init(void);
+void irq_local_enable(void);
+irqflags_t irq_local_disable(void);
+void irq_local_restore(irqflags_t flags);
+bool irq_local_enabled(void);
 
-static inline bool local_irq_disabled(void) {
-  return !local_irq_enabled();
+static inline bool irq_local_disabled(void) {
+  return !irq_local_enabled();
 }
 
 #endif // !__ASSEMBLER__

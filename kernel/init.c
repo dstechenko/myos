@@ -73,9 +73,11 @@ static void init_loop_schedule(void) {
 }
 
 void init_start(void) {
+  irq_local_init();
+  irq_local_enable();
+
   if (cpu_is_primary()) {
     sections_init();
-    local_irq_init();
     print_init();
     page_init();
     task_main_init();
@@ -83,7 +85,6 @@ void init_start(void) {
     init_debug();
     init_start_user();
   }
-  local_irq_init();
-  local_irq_enable();
+
   init_loop_schedule();
 }

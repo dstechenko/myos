@@ -1,12 +1,10 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/task.h>
-
-#include <stddef.h>
-
 #include <asm/irq.h>
 #include <kernel/assert.h>
+#include <kernel/task.h>
+#include <kernel/types.h>
 
 #include "task-main.h"
 
@@ -38,9 +36,9 @@ void task_tick(void) {
   tasks_current->ticks--;
   if (tasks_current->ticks > 0 || tasks_current->preempt > 0)
     return;
-  local_irq_enable();
+  irq_local_enable();
   task_schedule();
-  local_irq_disable();
+  irq_local_disable();
 }
 
 struct task *task_pick(void) {

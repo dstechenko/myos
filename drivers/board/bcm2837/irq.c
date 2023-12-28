@@ -2,11 +2,10 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <drivers/irq.h>
-
 #include <drivers/mmio.h>
-#include <drivers/timer.h>
 
 #include "irq.h"
+#include "timer.h"
 
 void irq_ctrl_init(void) { mmio_write32(IRQ_ENABLE_1, IRQ_TABLE_SYSTEM_TIMER_1); }
 
