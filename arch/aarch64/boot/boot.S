@@ -105,7 +105,6 @@ boot_init_page_tables:
   // Configure translation control register (pages size etc).
   ldr x0, =(TCR_EL1_VALUE)
   msr tcr_el1, x0
-  isb
 
   // Set up memory attribute indirection register (additional attributes for translation).
   ldr x0, =(MAIR_VALUE)
@@ -131,7 +130,10 @@ boot_init_page_tables:
   // Enable MMU via system control register.
   ldr x0, =(SCTLR_EL1_MMU_VALUE)
   msr sctlr_el1, x0
-  isb
+
+  // Flush memory operations and instruction prefetch.
+  dsb ish
+  isb sy
 
 boot_jump_kernel:
   // Jump to the kernel entry point. This should not return.
