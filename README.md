@@ -1,12 +1,11 @@
 # myos
 
 TODOs(progress):
-- Add atomics, spinlocks, sleep/yield, mutexes, per_cpu
+- Expose jiffies in kernel
+- Add sleep/yield, mutexes, per_cpu
 - Add idle tasks, cleanup in init, set priority, set affinity, dynamic max size
-- Add barriers (io, compilers)
 - Add irq enabled/disabled/save/load
 - Add memory allocator
-- Expose jiffies in kernel
 - Add kernel/user testing framework
 - Cover existing core functionality by tests
 
