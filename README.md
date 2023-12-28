@@ -1,12 +1,13 @@
 # myos
 
 TODOs(progress):
-- Add sleep/yield, mutexes, per_cpu
-- Add idle tasks, cleanup in init, set priority, set affinity, dynamic max size
-- Add irq enabled/disabled/save/load
-- Add memory allocator
+- Add irq handlers on each core, configure irq priorities
 - Add kernel/user testing framework
-- Cover existing core functionality by tests
+- Add tests to existing modules
+
+- Add sleep/yield, mutexes
+- Add idle tasks, cleanup in init, set priority, set affinity, dynamic max size
+- Add memory allocator
 
 TODOs(backlog):
 - Make code/data pages separation
@@ -16,7 +17,6 @@ TODOs(backlog):
 - Refine syscall system with generated wrappers and arguments, syscall table
 - Add qemu bcm overlay
 - Driver config switch with no facade file - use ifdefs
-- Use local interrupt controller, use priorities
 - Extract ticks into global functionality
 - Add stack protector
 - Run all timers
