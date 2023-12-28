@@ -1,6 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
+#include <asm/atomic.h>
 #include <asm/delay.h>
 #include <asm/irq.h>
 #include <asm/memory-defs.h>
@@ -50,6 +51,13 @@ static void init_debug(void) {
   LOG_DEBUG("Random value sampled: %d", random_get(1, 100));
   LOG_DEBUG("Random value sampled: %d", random_get(1, 100));
   LOG_DEBUG("Random value sampled: %d", random_get(1, 100));
+  atomic32_t x = ATOMIC_INIT(42);
+  atomic32_inc(&x);
+  LOG_DEBUG("Atomic value: %d", x.value);
+  int32_t old = atomic32_cmp_swp(&x, 43, 40);
+  LOG_DEBUG("Atomic new value: %d, old value: %d", x.value, old);
+  old = atomic32_cmp_swp(&x, 41, 42);
+  LOG_DEBUG("Atomic new value: %d, old value: %d", x.value, old);
 }
 
 static void init_start_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL)); }

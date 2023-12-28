@@ -9,4 +9,6 @@
 
 #include <uapi/bool.h>
 
+#define TYPE(name, def) typedef struct { def value; } name
+
 #endif // !KERNEL_TYPES_H
