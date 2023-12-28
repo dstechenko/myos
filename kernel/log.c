@@ -23,7 +23,7 @@ static const char *log_level_to_string(const uint8_t level) {
   return "ERR";
 }
 
-static uint64_t log_timestamp(void) {
+static void log_timestamp(void) {
   uint64_t timestamp = timer_get_ticks() % 1000;
 
   if (timestamp < 10) {

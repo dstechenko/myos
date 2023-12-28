@@ -4,7 +4,7 @@
 #ifndef KERNEL_CPU_H
 #define KERNEL_CPU_H
 
-#include <uapi/bool.h>
+#include <kernel/types.h>
 
 bool cpu_is_primary(void);
 
