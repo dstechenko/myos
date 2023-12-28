@@ -7,7 +7,8 @@
 
 #include <stdint.h>
 
-#define CPU_SPIN_INDEX(index) *((uint64_t *)(CONFIG_BOOT_CPU##index##_SPIN_GATE)) = CONFIG_BOOT_LOAD_ADDRESS;
+#define CPU_SPIN_INDEX(index)                                                                      \
+  *((uint64_t *)(CONFIG_BOOT_CPU##index##_SPIN_GATE)) = CONFIG_BOOT_LOAD_ADDRESS;
 
 void cpu_init(void) {
   CPU_SPIN_INDEX(0);

@@ -13,8 +13,8 @@
 #define MEMORY_TYPE_NORMAL_FLAGS (BIT(2) | BIT(6))
 
 #define MAIR_TO_VALUE(flags, index) (flags << (8 * index))
-#define MAIR_VALUE                                                                                                     \
-  (MAIR_TO_VALUE(MEMORY_TYPE_DEVICE_FLAGS, MEMORY_TYPE_DEVICE) |                                                       \
+#define MAIR_VALUE                                                                                 \
+  (MAIR_TO_VALUE(MEMORY_TYPE_DEVICE_FLAGS, MEMORY_TYPE_DEVICE) |                                   \
    MAIR_TO_VALUE(MEMORY_TYPE_NORMAL_FLAGS, MEMORY_TYPE_NORMAL))
 
 #define MMU_TYPE_PAGE_TABLE (BIT(0) | BIT(1))
@@ -24,7 +24,8 @@
 #define MMU_ACCESS BIT(10)
 #define MMU_ACCESS_PERMISSION BIT(6)
 
-#define MMU_USER_FLAGS (MMU_TYPE_PAGE | (MEMORY_TYPE_NORMAL << 2) | MMU_ACCESS | MMU_ACCESS_PERMISSION)
+#define MMU_USER_FLAGS                                                                             \
+  (MMU_TYPE_PAGE | (MEMORY_TYPE_NORMAL << 2) | MMU_ACCESS | MMU_ACCESS_PERMISSION)
 #define MMU_KERNEL_FLAGS (MMU_TYPE_BLOCK | (MEMORY_TYPE_NORMAL << 2) | MMU_ACCESS)
 #define MMU_KERNEL_PAGES_FLAGS (MMU_TYPE_PAGE | (MEMORY_TYPE_NORMAL << 2) | MMU_ACCESS)
 #define MMU_DEVICE_FLAGS (MMU_TYPE_BLOCK | (MEMORY_TYPE_DEVICE << 2) | MMU_ACCESS)

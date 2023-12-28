@@ -27,7 +27,9 @@
 SECTIONS(section_kernel);
 #define PHYSICAL_KERNEL_MEMORY_END virt_to_phys(SECTIONS_END(section_kernel))
 
-static uintptr_t *phys_to_virt_array(const uintptr_t paddr) { return (uintptr_t *)phys_to_virt(paddr); }
+static uintptr_t *phys_to_virt_array(const uintptr_t paddr) {
+  return (uintptr_t *)phys_to_virt(paddr);
+}
 
 static struct page phys_to_virt_page(const uintptr_t paddr) {
   return (struct page){.paddr = paddr, .vaddr = phys_to_virt(paddr)};
@@ -138,7 +140,9 @@ void page_init_sections(void) {
   page_reserve_range(PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END);
 }
 
-static size_t get_table_index(size_t shift, uintptr_t vaddr) { return (vaddr >> shift) & (PAGES_PER_TABLE - 1); }
+static size_t get_table_index(size_t shift, uintptr_t vaddr) {
+  return (vaddr >> shift) & (PAGES_PER_TABLE - 1);
+}
 
 static uintptr_t map_table(uintptr_t *table, size_t shift, uintptr_t vaddr, bool *created) {
   uintptr_t ret;
@@ -188,7 +192,8 @@ void map_kernel_page(struct page page) {
   registers_set_kernel_page_table(registers_get_kernel_page_table());
 }
 
-static void map_kernel_range(const uintptr_t pgd, uintptr_t begin, const uintptr_t end, const uint64_t flags) {
+static void map_kernel_range(const uintptr_t pgd, uintptr_t begin, const uintptr_t end,
+                             const uint64_t flags) {
   while (begin < end) {
     map_kernel_page_into(pgd, phys_to_virt_page(begin), flags);
     begin += PAGE_SIZE;
@@ -202,8 +207,10 @@ void page_init_tables(void) {
   memzero(phys_to_virt_array(pgd), PAGE_SIZE);
 
   // TODO(dstechenko): map code/data separately with rules
-  map_kernel_range(pgd, PHYSICAL_MEMORY_START + PAGE_SIZE, PHYSICAL_DEVICE_MEMORY_START, MMU_KERNEL_PAGES_FLAGS);
-  map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END, MMU_DEVICE_PAGES_FLAGS);
+  map_kernel_range(pgd, PHYSICAL_MEMORY_START + PAGE_SIZE, PHYSICAL_DEVICE_MEMORY_START,
+                   MMU_KERNEL_PAGES_FLAGS);
+  map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END,
+                   MMU_DEVICE_PAGES_FLAGS);
   map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_END, PHYSICAL_MEMORY_END, MMU_KERNEL_PAGES_FLAGS);
 
   // registers_set_user_page_table(PTR_TO_ADR(NULL));

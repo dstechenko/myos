@@ -14,7 +14,9 @@
 
 #include <uapi/syscall.h>
 
-static uintptr_t syscall_alloc_shim(const size_t size) { return PTR_TO_ADR(alloc(size, ALLOC_USER)); }
+static uintptr_t syscall_alloc_shim(const size_t size) {
+  return PTR_TO_ADR(alloc(size, ALLOC_USER));
+}
 
 static int syscall_clone_shim(void) { return fork_task(PTR_TO_ADR(NULL), FORK_USER); }
 

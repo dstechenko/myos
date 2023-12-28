@@ -19,9 +19,9 @@
 #define SCTLR_EL1_D_CACHE_DISABLED NOBIT(2)
 #define SCTLR_EL1_MMU_ENABLED BIT(0)
 #define SCTLR_EL1_MMU_DISABLED NOBIT(0)
-#define SCTLR_EL1_VALUE                                                                                                \
-  (SCTLR_EL1_RESERVED | SCTLR_EL1_EE_LITTLE_ENDIAN | SCTLR_EL1_I_CACHE_DISABLED | SCTLR_EL1_D_CACHE_DISABLED |         \
-   SCTLR_EL1_MMU_DISABLED)
+#define SCTLR_EL1_VALUE                                                                            \
+  (SCTLR_EL1_RESERVED | SCTLR_EL1_EE_LITTLE_ENDIAN | SCTLR_EL1_I_CACHE_DISABLED |                  \
+   SCTLR_EL1_D_CACHE_DISABLED | SCTLR_EL1_MMU_DISABLED)
 #define SCTLR_EL1_MMU_VALUE (SCTLR_EL1_VALUE | SCTLR_EL1_MMU_ENABLED)
 
 /**
@@ -72,7 +72,8 @@
 #define TCR_EL1_T1SZ BIT(20)
 #define TCR_EL1_TG0_4K (NOBIT(14) | BIT(15))
 #define TCR_EL1_TG1_4K (NOBIT(30) | BIT(31))
-#define TCR_EL1_VALUE                                                                                                  \
-  (TCR_EL1_T0SZ | TCR_EL1_T1SZ | TCR_EL1_TG0_4K | TCR_EL1_TG1_4K | BIT(13) | BIT(12) | BIT(29) | BIT(28))
+#define TCR_EL1_VALUE                                                                              \
+  (TCR_EL1_T0SZ | TCR_EL1_T1SZ | TCR_EL1_TG0_4K | TCR_EL1_TG1_4K | BIT(13) | BIT(12) | BIT(29) |   \
+   BIT(28))
 
 #endif // !ARCH_AARCH64_REGISTERS_DEFS_H

@@ -31,7 +31,8 @@ static void kernel_task(void) {
   int err;
 
   ASSERT(SECTIONS_LENGTH(section_user));
-  err = task_move_to_user(SECTIONS_START(user), SECTIONS_START(section_user), SECTIONS_LENGTH(section_user));
+  err = task_move_to_user(SECTIONS_START(user), SECTIONS_START(section_user),
+                          SECTIONS_LENGTH(section_user));
   if (err) {
     LOG_ERROR("Failed to move to user: %d", err);
   }
