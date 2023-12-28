@@ -1,17 +1,17 @@
 # myos
 
 TODOs(progress):
+- Add atomics, spinlocks, mutexes, per_cpu and per_task variables
+- Add idle tasks, tasks cleanup
 - Add barriers (io, compilers)
 - Add irq enabled/disabled/save/load functions
-- Add atomics, spinlocks, mutexes, per_cpu and per_task variables
 - Add a simple allocation mechanism
-- Set up multiple cores
 - Expose jiffies in kernel
+- Add kernel/user testing framework
+- Cover existing core functionality by tests
 
 TODOs(backlog):
-- Add kernel/user testing framework
 - Make code/data pages separation
-- Cover existing core functionality by tests
 - Add file systems
 - Make kernel tasks exit by themselves and clean up
 - Separate fork into user/kernel implementations
