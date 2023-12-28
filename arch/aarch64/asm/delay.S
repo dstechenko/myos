@@ -5,7 +5,7 @@
 .globl delay_cycles
 
 delay_nop:
-  nop
+  ret
 
 delay_cycles:
   subs  x0, x0, #1

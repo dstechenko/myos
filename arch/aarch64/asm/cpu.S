@@ -4,4 +4,4 @@
 .globl cpu_yield
 
 cpu_yield:
-  yield
+  ret

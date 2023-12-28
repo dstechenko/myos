@@ -3,13 +3,12 @@
 
 #include <kernel/print.h>
 
-#include <stddef.h>
-#include <stdint.h>
-
 #include <kernel/assert.h>
 #include <kernel/config.h>
 #include <kernel/error.h>
 #include <kernel/math.h>
+#include <kernel/spinlock.h>
+#include <kernel/types.h>
 
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
 #include <drivers/uart.h>
@@ -20,6 +19,7 @@
 #define PRINT_BASE_DEC 10
 #define PRINT_BASE_HEX 16
 
+static spinlock_t print_lock;
 static void (*print_putc)(char) = NULL;
 static void (*print_puts)(const char *) = NULL;
 
@@ -147,11 +147,13 @@ void print(const char *format, ...) {
 }
 
 void print_args(const char *format, va_list *args) {
+  irqflags_t flags;
   const char *cursor;
 
   ASSERT(format);
   ASSERT(args);
 
+  flags = spin_lock_irq(&print_lock);
   for (cursor = format; *cursor != '\0'; cursor++) {
     if (*cursor == '%') {
       cursor++;
@@ -160,4 +162,5 @@ void print_args(const char *format, va_list *args) {
       print_putc(*cursor);
     }
   }
+  spin_unlock_irq(&print_lock, flags);
 }
