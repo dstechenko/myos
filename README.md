@@ -1,12 +1,13 @@
 # myos
 
 TODOs(progress):
+- Add tests to existing modules
+- Add lists and maps
+- Add memory allocator, speed up page allocator
 - Add locks to task module
 - Add idle tasks, cleanup in init, set priority, set affinity, dynamic max size
-- Add tests to existing modules
-- Add irq handlers on each core using local timers
 - Add sleep/yield, mutexes
-- Add memory allocator
+- Add irq handlers on each core using local timers
 
 TODOs(backlog):
 - Make code/data pages separation
