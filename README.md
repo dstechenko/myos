@@ -1,6 +1,7 @@
 # myos
 
 TODOs(progress):
+- Update toolchain to the newest version
 - Add tests to existing modules
 - Add lists and maps
 - Add memory allocator, speed up page allocator
