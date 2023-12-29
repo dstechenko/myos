@@ -1,11 +1,10 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/task.h>
-
 #include <kernel/allocator.h>
 #include <kernel/assert.h>
 #include <kernel/log.h>
+#include <kernel/task.h>
 
 static void task_schedule_loop(void) {
   task_preempt_disable();

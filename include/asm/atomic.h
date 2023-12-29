@@ -14,7 +14,7 @@ TYPE(atomic32_t, int32_t);
 TYPE(atomic64_t, int64_t);
 
 int32_t atomic32_get(const atomic32_t *val);
-void atomic32_set(atomic32_t *val, int32_t new);
+int32_t atomic32_set(atomic32_t *val, int32_t new);
 int32_t atomic32_add(atomic32_t *val, int32_t dif);
 int32_t atomic32_cmp_swp(atomic32_t *val, int32_t old, int32_t new);
 
@@ -38,7 +38,7 @@ static inline int32_t atomic32_dec(atomic32_t *val) {
 }
 
 int64_t atomic64_get(const atomic64_t *val);
-void atomic64_set(atomic64_t *val, int64_t new);
+int64_t atomic64_set(atomic64_t *val, int64_t new);
 int64_t atomic64_add(atomic64_t *val, int64_t dif);
 int64_t atomic64_cmp_swp(atomic64_t *val, int64_t old, int64_t new);
 

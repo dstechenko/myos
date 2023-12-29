@@ -1,9 +1,9 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-.globl abort
+.globl abort_and_wait
 
 // TODO(dstechenko): Should do this for all cores and print state
-abort:
+abort_and_wait:
   wfe
-  b  abort
+  b  abort_and_wait

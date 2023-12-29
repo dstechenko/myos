@@ -17,14 +17,16 @@ atomic32_get:
   ret
 
 atomic32_set:
+  ldr w2, [x0]
   stlr w1, [x0]
+  mov w0, w2
   ret
 
 atomic32_add:
   ldaxr w2, [x0]
-  add w2, w2, w1
-  stlxr w3, w2, [x0]
-  cbnz w3, atomic32_add
+  add w3, w2, w1
+  stlxr w4, w3, [x0]
+  cbnz w4, atomic32_add
   mov w0, w2
   ret
 
@@ -45,14 +47,16 @@ atomic64_get:
   ret
 
 atomic64_set:
+  ldr x2, [x0]
   stlr x1, [x0]
+  mov x0, x2
   ret
 
 atomic64_add:
   ldaxr x2, [x0]
-  add x2, x2, x1
-  stlxr w3, x2, [x0]
-  cbnz w3, atomic64_add
+  add x3, x2, x1
+  stlxr w4, x3, [x0]
+  cbnz w4, atomic64_add
   mov x0, x2
   ret
 

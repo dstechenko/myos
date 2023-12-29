@@ -5,7 +5,14 @@
 #define ASM_ABORT_H
 #ifndef __ASSEMBLER__
 
-void abort();
+#include <kernel/task.h>
+
+void abort_and_wait(void);
+
+static inline void abort(void) {
+  task_preempt_disable();
+  abort_and_wait();
+}
 
 #endif // !__ASSEMBLER__
 #endif // !ASM_ABORT_H

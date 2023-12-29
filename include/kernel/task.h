@@ -4,11 +4,9 @@
 #ifndef KERNEL_TASK_H
 #define KERNEL_TASK_H
 
-#include <stddef.h>
-#include <stdint.h>
-
 #include <kernel/config.h>
 #include <kernel/page.h>
+#include <kernel/types.h>
 
 struct proc_regs;
 struct task_context;

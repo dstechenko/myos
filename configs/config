@@ -13,6 +13,7 @@ SYSTEM_64BIT                          false
 SYSTEM_32BIT                          false
 SYSTEM_16BIT                          false
 
+KERNEL_TEST_ON_BOOT                   true
 KERNEL_SCHEDULER_TASKS                64
 KERNEL_SCHEDULER_STACK_SIZE           2048
 KERNEL_SCHEDULER_PRIORITY             1

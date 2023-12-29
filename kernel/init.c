@@ -21,8 +21,8 @@
 #include <kernel/print.h>
 #include <kernel/ptrs.h>
 #include <kernel/task.h>
-
-#include <uapi/bool.h>
+#include <kernel/test.h>
+#include <kernel/types.h>
 
 SECTIONS(section_user);
 SECTIONS(user);
@@ -49,17 +49,6 @@ static void init_debug(void) {
   LOG_DEBUG("  Host arch    - %s", BUILD_INFO_HOST_ARCH);
   sections_debug();
   page_debug(/* limit = */ 3);
-  LOG_DEBUG("Random value sampled: %d", random_get(1, 100));
-  LOG_DEBUG("Random value sampled: %d", random_get(1, 100));
-  LOG_DEBUG("Random value sampled: %d", random_get(1, 100));
-  atomic32_t x = ATOMIC_INIT(42);
-  atomic32_inc(&x);
-  LOG_DEBUG("Atomic value: %d", x.value);
-  int32_t old = atomic32_cmp_swp(&x, 43, 40);
-  LOG_DEBUG("Atomic new value: %d, old value: %d", x.value, old);
-  old = atomic32_cmp_swp(&x, 41, 42);
-  LOG_DEBUG("Atomic new value: %d, old value: %d", x.value, old);
-  LOG_DEBUG("Atomic new value: %d", atomic32_inc(&x));
 }
 
 static void init_start_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL)); }
@@ -87,6 +76,10 @@ void init_start(void) {
     init_debug();
     init_start_user();
   }
+
+#if CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
+  test_all();
+#endif // CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
 
   init_loop_schedule();
 }
