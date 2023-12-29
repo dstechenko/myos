@@ -59,6 +59,7 @@ static void init_debug(void) {
   LOG_DEBUG("Atomic new value: %d, old value: %d", x.value, old);
   old = atomic32_cmp_swp(&x, 41, 42);
   LOG_DEBUG("Atomic new value: %d, old value: %d", x.value, old);
+  LOG_DEBUG("Atomic new value: %d", atomic32_inc(&x));
 }
 
 static void init_start_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL)); }

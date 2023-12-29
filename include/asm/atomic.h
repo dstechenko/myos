@@ -15,7 +15,7 @@ TYPE(atomic64_t, int64_t);
 
 int32_t atomic32_get(const atomic32_t *val);
 void atomic32_set(atomic32_t *val, int32_t new);
-void atomic32_add(atomic32_t *val, int32_t dif);
+int32_t atomic32_add(atomic32_t *val, int32_t dif);
 int32_t atomic32_cmp_swp(atomic32_t *val, int32_t old, int32_t new);
 
 static inline int32_t atomic32_get_relaxed(const atomic32_t *val) {
@@ -25,21 +25,21 @@ static inline int32_t atomic32_get_relaxed(const atomic32_t *val) {
   return ref->value;
 }
 
-static inline void atomic32_sub(atomic32_t *val, int32_t dif) {
-  atomic32_add(val, -dif);
+static inline int32_t atomic32_sub(atomic32_t *val, int32_t dif) {
+  return atomic32_add(val, -dif);
 }
 
-static inline void atomic32_inc(atomic32_t *val) {
-  atomic32_add(val, 1);
+static inline int32_t atomic32_inc(atomic32_t *val) {
+  return atomic32_add(val, 1);
 }
 
-static inline void atomic32_dec(atomic32_t *val) {
-  atomic32_sub(val, 1);
+static inline int32_t atomic32_dec(atomic32_t *val) {
+  return atomic32_sub(val, 1);
 }
 
 int64_t atomic64_get(const atomic64_t *val);
 void atomic64_set(atomic64_t *val, int64_t new);
-void atomic64_add(atomic64_t *val, int64_t dif);
+int64_t atomic64_add(atomic64_t *val, int64_t dif);
 int64_t atomic64_cmp_swp(atomic64_t *val, int64_t old, int64_t new);
 
 static inline int64_t atomic64_get_relaxed(const atomic64_t *val) {
@@ -49,16 +49,16 @@ static inline int64_t atomic64_get_relaxed(const atomic64_t *val) {
   return ref->value;
 }
 
-static inline void atomic64_sub(atomic64_t *val, int64_t dif) {
-  atomic64_add(val, -dif);
+static inline int64_t atomic64_sub(atomic64_t *val, int64_t dif) {
+  return atomic64_add(val, -dif);
 }
 
-static inline void atomic64_inc(atomic64_t *val) {
-  atomic64_add(val, 1);
+static inline int64_t atomic64_inc(atomic64_t *val) {
+  return atomic64_add(val, 1);
 }
 
-static inline void atomic64_dec(atomic64_t *val) {
-  atomic64_sub(val, 1);
+static inline int64_t atomic64_dec(atomic64_t *val) {
+  return atomic64_sub(val, 1);
 }
 
 #endif // !__ASSEMBLER__

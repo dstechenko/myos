@@ -25,6 +25,7 @@ atomic32_add:
   add w2, w2, w1
   stlxr w3, w2, [x0]
   cbnz w3, atomic32_add
+  mov w0, w2
   ret
 
 atomic32_cmp_swp:
@@ -52,6 +53,7 @@ atomic64_add:
   add x2, x2, x1
   stlxr w3, x2, [x0]
   cbnz w3, atomic64_add
+  mov x0, x2
   ret
 
 atomic64_cmp_swp:
