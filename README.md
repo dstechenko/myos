@@ -1,11 +1,10 @@
 # myos
 
 TODOs(progress):
-- Add irq handlers on each core using local timers
-- Add kernel/user testing framework
-- Add tests to existing modules
 - Add locks to task module
 - Add idle tasks, cleanup in init, set priority, set affinity, dynamic max size
+- Add tests to existing modules
+- Add irq handlers on each core using local timers
 - Add sleep/yield, mutexes
 - Add memory allocator
 
