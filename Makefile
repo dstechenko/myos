@@ -44,7 +44,7 @@ VM  := qemu-system-$(TARGET_ARCH)
 
 AS_FLAGS  := -c -g -mgeneral-regs-only -MMD
 C_FLAGS   := -c -g -mgeneral-regs-only -ffreestanding -nostdlib -nostartfiles -Wall -Wextra -MMD
-DBG_FLAGS := -q -tui
+DBG_FLAGS := -q
 LD_FLAGS  := -g -ffreestanding -nostdlib -nostartfiles
 LD_LIBS   := -lgcc
 PP_FLAGS  := -E -P -x c -D__ASSEMBLER__
