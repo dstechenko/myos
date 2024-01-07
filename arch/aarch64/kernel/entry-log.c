@@ -1,8 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <stdint.h>
-
+#include <kernel/types.h>
 #include <kernel/log.h>
 
 static const char *const log_entry_invalid_type[] = {
@@ -15,6 +14,5 @@ static const char *const log_entry_invalid_type[] = {
 
 void entry_log_invalid_message(const uint8_t type, const uint64_t esr, const uint64_t elr,
                                const uint64_t far) {
-  LOG_ERROR("Entry type: %s, esr: %lx, elr: %lx, far: %lx", log_entry_invalid_type[type], esr, elr,
-            far);
+  LOG_ERROR("Entry type: %s, esr: %lx, elr: %lx, far: %lx", log_entry_invalid_type[type], esr, elr, far);
 }

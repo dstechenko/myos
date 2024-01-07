@@ -47,12 +47,12 @@ void log(const uint8_t level, const char *format, ...) {
   if (CONFIG_LOG_LEVEL < level)
     return;
 
-  flags = spin_lock_irq(&log_lock);
+  /* flags = spin_lock_irq(&log_lock); */
   log_timestamp();
   log_level(level);
   va_start(args, format);
   print_args(format, &args);
   va_end(args);
-  print("\n");
-  spin_unlock_irq(&log_lock, flags);
+  print("\n\r");
+  /* spin_unlock_irq(&log_lock, flags); */
 }

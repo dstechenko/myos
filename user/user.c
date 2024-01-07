@@ -7,12 +7,13 @@
 void user_task_a(void);
 void user_task_b(void);
 
+// TODO(dstecheko): use better entry point in linker
 void user_start(void) {
   int pid;
 
   pid = syscall_clone();
   if (pid < 0) {
-    syscall_write("Failed to clone user task a\n");
+    syscall_write("Failed to clone user task a\n\r");
     syscall_exit();
     return;
   }
@@ -25,14 +26,14 @@ void user_start(void) {
 
 void user_task_a(void) {
   while (true) {
-    syscall_write("* Tick from user task a\n");
-    syscall_delay(50000000);
+    syscall_write("* Tick from user task a\n\r");
+    syscall_delay(5000000);
   }
 }
 
 void user_task_b(void) {
   while (true) {
-    syscall_write("* Tick from user task b\n");
-    syscall_delay(50000000);
+    syscall_write("* Tick from user task b\n\r");
+    syscall_delay(5000000);
   }
 }

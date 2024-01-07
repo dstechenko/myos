@@ -58,6 +58,7 @@ static void log_page_entries(const uintptr_t table, size_t limit) {
       const bool is_table = GET_DESC_TABLE_BIT(cursor[i]);
       const uintptr_t addr = GET_DESC_ADDR_BITS(cursor[i]);
       const uint64_t flags = GET_DESC_LOW_ATTR_BITS(cursor[i]);
+
       LOG_DEBUG("    type=%s[%s] bits=%lx, addr=%lx, flags=%lx", is_table ? "table" : "block",
                 is_valid ? "valid" : "invalid", cursor[i], addr, flags);
       limit--;
@@ -207,13 +208,13 @@ void page_init_tables(void) {
   memzero(phys_to_virt_array(pgd), PAGE_SIZE);
 
   // TODO(dstechenko): map code/data separately with rules
-  map_kernel_range(pgd, PHYSICAL_MEMORY_START + PAGE_SIZE, PHYSICAL_DEVICE_MEMORY_START,
+  map_kernel_range(pgd, PHYSICAL_MEMORY_START, PHYSICAL_DEVICE_MEMORY_START,
                    MMU_KERNEL_PAGES_FLAGS);
   map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END,
                    MMU_DEVICE_PAGES_FLAGS);
   map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_END, PHYSICAL_MEMORY_END, MMU_KERNEL_PAGES_FLAGS);
 
-  // registers_set_user_page_table(PTR_TO_ADR(NULL));
+  // TODO(dstechenko): want to unset user here, but we need to init cpus
   registers_set_kernel_page_table(pgd);
 }
 

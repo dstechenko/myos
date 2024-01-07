@@ -6,16 +6,6 @@
 #include <asm/memory-defs.h>
 #include <asm/page-defs.h>
 
-/**
- * One PGD descriptor can cover 2^39 = 512GB.
- * One PUD descriptor can cover 2^30 = 1GB.
- * So we need (pages):
- * - 1 PGD page with 1 entry.
- * - 1 PUD page with 1 entry.
- * - 1 PMD page with most entries (each 2MB in block mode).
- */
-#define BOOT_PGD_SIZE (3 * PAGE_SIZE)
-
 #define VIRTUAL(label) AT(ADDR(label) - VIRTUAL_MEMORY_START)
 
 ENTRY(BOOT_ENTRY_POINT_LABEL)
@@ -25,19 +15,8 @@ SECTIONS
   section_boot (BOOT_LOAD_ADDRESS) : {
     section_boot_start = .;
     KEEP(*(.text.boot))
+    out/boot/boot*
     section_boot_end = .;
-  }
-
-  . = ALIGN(PAGE_SIZE);
-  section_pgd_boot :  {
-    section_pgd_boot_start = .;
-    . += BOOT_PGD_SIZE;
-    section_pgd_boot_end = .;
-  }
-  section_pgd_kernel : {
-    section_pgd_kernel_start = .;
-    . += BOOT_PGD_SIZE;
-    section_pgd_kernel_end = .;
   }
 
   . = ALIGN(PAGE_SIZE);
@@ -53,6 +32,7 @@ SECTIONS
   . = ALIGN(PAGE_SIZE);
   section_user : VIRTUAL(section_user) {
     section_user_start = .;
+    out/user/user* (.text)
     out/user* (.text)
     out/user* (.rodata)
     out/user* (.data)

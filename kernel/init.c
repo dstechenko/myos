@@ -8,8 +8,10 @@
 #include <asm/registers.h>
 #include <asm/sections.h>
 
+#include <drivers/cpu.h>
 #include <drivers/random.h>
 #include <drivers/subsystem.h>
+#include <drivers/uart.h>
 
 #include <kernel/assert.h>
 #include <kernel/build-info.h>
@@ -30,6 +32,8 @@ SECTIONS(user);
 static void kernel_task(void) {
   int err;
 
+  LOG_INFO("Forked kernel task!");
+
   ASSERT(SECTIONS_LENGTH(section_user));
   err = task_move_to_user(SECTIONS_START(user), SECTIONS_START(section_user),
                           SECTIONS_LENGTH(section_user));
@@ -48,15 +52,15 @@ static void init_debug(void) {
   LOG_DEBUG("  Target mode  - %s", BUILD_INFO_TARGET_MODE);
   LOG_DEBUG("  Host arch    - %s", BUILD_INFO_HOST_ARCH);
   sections_debug();
-  page_debug(/* limit = */ 3);
+  page_debug(/* limit = */ 1);
 }
 
 static void init_start_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL)); }
 
 static void init_loop_schedule(void) {
   while (true) {
-    delay_cycles(50000000);
-    print("* Tick from kernel init task on core %d\n", registers_get_core());
+    delay_cycles(5000000);
+    print("* Tick from kernel init task on core %d\n\r", registers_get_core());
     if (cpu_is_primary()) {
       task_schedule();
     }
@@ -74,11 +78,15 @@ void init_start(void) {
     task_main_init();
     subsystem_init();
     init_debug();
-    init_start_user();
+    /* init_start_user(); */
   }
 
 #if CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
-  test_all();
+  if (cpu_is_primary()) {
+    LOG_INFO("Testing...");
+    test_all();
+    LOG_INFO("Tested successfully!");
+  }
 #endif // CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
 
   init_loop_schedule();

@@ -1,12 +1,17 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
+#include <asm/registers-defs.h>
+
 .globl registers_get_priv
 .globl registers_get_core
 .globl registers_set_user_page_table
 .globl registers_get_user_page_table
 .globl registers_set_kernel_page_table
 .globl registers_get_kernel_page_table
+
+.globl registers_test
+// TODO(dstechenko): move this file to cpu
 
 registers_get_priv:
   // Read from the system register for exception levels.
@@ -17,6 +22,7 @@ registers_get_priv:
   lsr x0, x0, #2
   ret
 
+// TODO(dstechenko): only use the first two bits
 registers_get_core:
   // Read from the system register for multiprocessor affinity.
   mrs x0, mpidr_el1
@@ -24,27 +30,37 @@ registers_get_core:
   ret
 
 registers_set_user_page_table:
-  // Set lower page table pointer.
+  dsb sy
+  isb sy
   msr ttbr0_el1, x0
-  // Invalidate cached table entries right after.
-  tlbi vmalle1is
-  dsb ish
-  isb
+  tlbi vmalle1
+// TODO(dstechenko): add config for this
+  tlbi vmalle1
+  ic iallu
+  dsb sy
+  isb sy
   ret
 
 registers_get_user_page_table:
   mrs x0, ttbr0_el1
   ret
 
+// TODO(dstechenko): extract  tlb flush as a separate operation
+
 registers_set_kernel_page_table:
-  // Set lower page table pointer.
   msr ttbr1_el1, x0
-  // Invalidate cached table entries right after.
   tlbi vmalle1is
-  dsb ish
-  isb
+  dsb sy
+  isb sy
   ret
 
 registers_get_kernel_page_table:
   mrs x0, ttbr1_el1
+  ret
+
+registers_test:
+  mov x2, 0xD8
+  str x1, [x2, x0, LSL #3]
+  dsb sy
+  sev
   ret

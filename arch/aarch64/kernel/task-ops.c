@@ -1,8 +1,6 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/task.h>
-
 #include <asm/proc-regs.h>
 #include <asm/registers.h>
 
@@ -12,6 +10,11 @@
 #include <kernel/error.h>
 #include <kernel/memory-ops.h>
 #include <kernel/ptrs.h>
+#include <kernel/task.h>
+
+// DEBUG
+#include <kernel/log.h>
+#include <kernel/page.h>
 
 #include "page-context.h"
 #include "task-context.h"
@@ -30,14 +33,17 @@
 int task_init(struct task *task) {
   ASSERT(task);
 
+  ASSERT(sizeof(struct task_context));
   task->context = zalloc(sizeof(struct task_context), ALLOC_KERNEL);
   if (!task->context)
     return -ENOMEM;
 
+  ASSERT(sizeof(struct page_context));
   task->memory.context = zalloc(sizeof(struct page_context), ALLOC_KERNEL);
   if (!task->memory.context)
     return -ENOMEM;
 
+  ASSERT(TASK_STACK_SIZE);
   task->stack = zalloc(TASK_STACK_SIZE, ALLOC_KERNEL);
   if (!task->stack)
     return -ENOMEM;
@@ -63,6 +69,7 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   ASSERT(pc);
   current = task_get_current();
   ASSERT(current);
+  ASSERT(current->memory.context);
   current_regs = task_get_proc_regs(current);
   ASSERT(current_regs);
 
@@ -78,7 +85,6 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   current_regs->pc = (uint64_t)(2 * PAGE_SIZE);
   current_regs->ps = (uint64_t)PSR_MODE_EL0t;
 
-  ASSERT(current->memory.context);
   registers_set_user_page_table(current->memory.context->pgd);
 
   return 0;

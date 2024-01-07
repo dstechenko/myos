@@ -1,6 +1,7 @@
 # myos
 
 TODOs(progress):
+- Make MMU optional
 - Update toolchain to the newest version
 - Add tests to existing modules
 - Add lists and maps

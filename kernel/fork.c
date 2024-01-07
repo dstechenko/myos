@@ -1,10 +1,10 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/fork.h>
-
 #include <kernel/allocator.h>
+#include <kernel/assert.h>
 #include <kernel/error.h>
+#include <kernel/fork.h>
 #include <kernel/task.h>
 
 #define TASK_PREEMPT_DISABLED 1
@@ -14,6 +14,7 @@ int fork_task(const uintptr_t pc, const uint8_t flags) {
   struct task *task;
 
   task_preempt_disable();
+  ASSERT(sizeof(struct task));
   task = zalloc(sizeof(struct task), ALLOC_KERNEL);
   if (!task)
     return -ENOMEM;

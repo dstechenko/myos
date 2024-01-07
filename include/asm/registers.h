@@ -16,5 +16,8 @@ uintptr_t registers_get_user_page_table(void);
 void registers_set_kernel_page_table(uintptr_t table);
 uintptr_t registers_get_kernel_page_table(void);
 
+void registers_test(uint64_t core, uintptr_t start);
+void registers_enable_mmu(void);
+
 #endif // !__ASSEMBLER__
 #endif // !ASM_REGISTERS_H

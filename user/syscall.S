@@ -10,26 +10,26 @@
 .globl syscall_delay
 
 syscall_alloc:
-  mov w8, #SYSCALL_ALLOC_NUM
+  mov x16, #SYSCALL_ALLOC_NUM
   svc #0
   ret
 
 syscall_clone:
-  mov w8, #SYSCALL_CLONE_NUM
+  mov x16, #SYSCALL_CLONE_NUM
   svc #0
   ret
 
 syscall_exit:
-  mov w8, #SYSCALL_EXIT_NUM
+  mov x16, #SYSCALL_EXIT_NUM
   svc #0
   ret
 
 syscall_write:
-  mov w8, #SYSCALL_WRITE_NUM
+  mov x16, #SYSCALL_WRITE_NUM
   svc #0
   ret
 
 syscall_delay:
-  mov w8, #SYSCALL_DELAY_NUM
+  mov x16, #SYSCALL_DELAY_NUM
   svc #0
   ret

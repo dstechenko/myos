@@ -94,7 +94,7 @@ entry_kernel_from_boot:
   ldr x0, =init_start
   br x0
 
-  // Should no reach it, but if we do - halt.
+  // Should not reach it, but if we do - halt.
   bl entry_halt_core
 
 .align 11
@@ -178,11 +178,10 @@ entry_err_invalid_el0_32:
 entry_svc_el0:
   bl irq_local_enable
   adr x24, syscall_table
-  uxtw x25, w8
-  mov x26, (SYSCALL_MAX + 1)
-  cmp x25, x26
-  bhs entry_syscall_error
-  ldr x27, [x24, x25, lsl #3]
+  mov x25, SYSCALL_MAX
+  cmp x16, x25
+  bhi entry_syscall_error
+  ldr x27, [x24, x16, lsl #3]
   blr x27
 
 entry_syscall_return:

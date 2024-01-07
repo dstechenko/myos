@@ -12,36 +12,6 @@
 // Make _start global. Need this to get execution transferred from armstub8.
 .globl BOOT_ENTRY_POINT_LABEL
 
-.macro boot_create_page_global_directory table, vaddr, aux0, aux1
-  boot_create_page_table_entry \table, \vaddr, PGD_SHIFT, \aux0, \aux1
-  boot_create_page_table_entry \table, \vaddr, PUD_SHIFT, \aux0, \aux1
-.endm
-
-.macro boot_create_page_table_entry table, vaddr, shift, aux0, aux1
-  lsr \aux0, \vaddr, #\shift
-  and \aux0, \aux0, #PAGES_PER_TABLE - 1
-  add \aux1, \table, #PAGE_SIZE
-  orr \aux1, \aux1, #MMU_TYPE_PAGE_TABLE
-  str \aux1, [\table, \aux0, lsl #3]
-  add \table, \table, #PAGE_SIZE
-.endm
-
-.macro boot_create_page_block_mapping table, paddr, start, end, flags, aux0
-  lsr \start, \start, #SECTION_SHIFT
-  and \start, \start, #PAGES_PER_TABLE - 1
-  lsr \end, \end, #SECTION_SHIFT
-  and \end, \end, #PAGES_PER_TABLE - 1
-  lsr \paddr, \paddr, #SECTION_SHIFT
-  mov \aux0, #\flags
-  orr \paddr, \aux0, \paddr, lsl #SECTION_SHIFT
-9999:
-  str \paddr, [\table, \start, lsl #3]
-  add \start, \start, #1
-  add \paddr, \paddr, #SECTION_SIZE
-  cmp \start, \end
-  bls 9999b
-.endm
-
 BOOT_ENTRY_POINT_LABEL:
 boot_start:
   // Check our current exception level.
@@ -94,21 +64,13 @@ boot_init_stack:
   bl boot_create_page_tables
 
 boot_init_page_tables:
-  // Point identity boot level translation table base register.
-  ldr x0, =section_pgd_boot_start
-  msr ttbr0_el1, x0
-
-  // Point kernel level translation table base register.
-  ldr x0, =section_pgd_kernel_start
-  msr ttbr1_el1, x0
-
-  // Configure translation control register (pages size etc).
-  ldr x0, =(TCR_EL1_VALUE)
-  msr tcr_el1, x0
-
-  // Set up memory attribute indirection register (additional attributes for translation).
-  ldr x0, =(MAIR_VALUE)
-  msr mair_el1, x0
+  // Set page tables from the created variables
+  ldr x0, =boot_user_pgd
+  ldr x1, [x0]
+  msr ttbr0_el1, x1
+  ldr x0, =boot_kernel_pgd
+  ldr x1, [x0]
+  msr ttbr1_el1, x1
 
   // Grab the offset before we enable MMU and move to virtual.
   // Also move the stack pointer for the init task into virtual.
@@ -127,68 +89,14 @@ boot_init_page_tables:
   ldr x1, =section_kernel_entry_point;
   add x1, x1, x0
 
-  // Enable MMU via system control register.
-  ldr x0, =(SCTLR_EL1_MMU_VALUE)
+  // Enable MMU via system control register. No need to flush.
+  ldr x0, =TCR_EL1_VALUE
+  msr tcr_el1, x0
+  ldr x0, =MAIR_EL1_VALUE
+  msr mair_el1, x0
+  ldr x0, =SCTLR_EL1_MMU_ENABLED
   msr sctlr_el1, x0
-
-  // Flush memory operations and instruction prefetch.
-  dsb ish
-  isb sy
 
 boot_jump_kernel:
   // Jump to the kernel entry point. This should not return.
   br x1
-
-boot_memzero:
-  str xzr, [x0], #8
-  subs x1, x1, #8
-  bgt boot_memzero
-  ret
-
-boot_create_page_tables:
-  // Save link register to return after.
-  mov x29, x30
-
-  // Prepare boot pages before mapping (zero out).
-  ldr x0, =section_pgd_boot_start
-  ldr x1, =section_pgd_boot_end
-  sub x1, x1, x0
-  bl boot_memzero
-
-  // Create boot page global directory entries (identity).
-  ldr x0, =section_pgd_boot_start
-  ldr x1, =PHYSICAL_MEMORY_START
-  boot_create_page_global_directory x0, x1, x2, x3
-
-  // Map boot sections (identity).
-  ldr x1, =PHYSICAL_MEMORY_START
-  ldr x2, =PHYSICAL_MEMORY_START
-  ldr x3, =(PHYSICAL_DEVICE_MEMORY_START - SECTION_SIZE)
-  boot_create_page_block_mapping x0, x1, x2, x3, MMU_KERNEL_FLAGS, x4
-
-  // Prepare kernel pages before mapping (zero out).
-  ldr x0, =section_pgd_kernel_start
-  ldr x1, =section_pgd_kernel_end
-  sub x1, x1, x0
-  bl boot_memzero
-
-  // Create kernel/device page global directory entries (virtual).
-  ldr x0, =section_pgd_kernel_start
-  ldr x1, =VIRTUAL_MEMORY_START
-  boot_create_page_global_directory x0, x1, x2, x3
-
-  // Map kernel sections (virtual).
-  ldr x1, =PHYSICAL_MEMORY_START
-  ldr x2, =VIRTUAL_MEMORY_START
-  ldr x3, =(VIRTUAL_DEVICE_MEMORY_START - SECTION_SIZE)
-  boot_create_page_block_mapping x0, x1, x2, x3, MMU_KERNEL_FLAGS, x4
-
-  // Map device sections (virtual).
-  ldr x1, =PHYSICAL_DEVICE_MEMORY_START
-  ldr x2, =VIRTUAL_DEVICE_MEMORY_START
-  ldr x3, =VIRTUAL_DEVICE_MEMORY_END
-  boot_create_page_block_mapping x0, x1, x2, x3, MMU_DEVICE_FLAGS, x4
-
-  // Restore link register to jump back.
-  mov x30, x29
-  ret
