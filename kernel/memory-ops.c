@@ -1,9 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/memory-ops.h>
-
 #include <kernel/assert.h>
+#include <kernel/memory-ops.h>
 
 void *memcpy(void *dst, const void *src, const size_t cnt) {
   size_t tmp;

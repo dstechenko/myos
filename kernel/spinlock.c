@@ -3,7 +3,6 @@
 
 #include <asm/cpu.h>
 #include <asm/irq.h>
-
 #include <kernel/assert.h>
 #include <kernel/spinlock.h>
 

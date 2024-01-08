@@ -55,4 +55,4 @@
 
 void irq_ctrl_init(void);
 
-#endif // !DRIVERS_BOARD_BCM2837_IRQ_H
+#endif  // !DRIVERS_BOARD_BCM2837_IRQ_H

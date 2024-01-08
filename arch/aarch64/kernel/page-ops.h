@@ -4,11 +4,10 @@
 #ifndef ARCH_AARCH64_KERNEL_PAGE_OPS_H
 #define ARCH_AARCH64_KERNEL_PAGE_OPS_H
 
-#include <stddef.h>
-#include <stdint.h>
-
 #include <kernel/page.h>
 #include <kernel/task.h>
+#include <stddef.h>
+#include <stdint.h>
 
 void page_init_sections(void);
 void page_init_tables(void);
@@ -20,4 +19,4 @@ uintptr_t virt_to_phys(uintptr_t vaddr);
 void map_user_page(struct task *task, struct page page);
 void map_kernel_page(struct page page);
 
-#endif // !ARCH_AARCH64_KERNEL_PAGE_OPS_H
+#endif  // !ARCH_AARCH64_KERNEL_PAGE_OPS_H

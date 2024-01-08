@@ -26,4 +26,4 @@ struct task_context {
   uint64_t pc;
 };
 
-#endif // !ARCH_AARCH64_KERNEL_TASK_CONTEXT_H
+#endif  // !ARCH_AARCH64_KERNEL_TASK_CONTEXT_H

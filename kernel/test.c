@@ -2,13 +2,11 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <asm/atomic.h>
-
-#include <kernel/test.h>
-#include <kernel/types.h>
+#include <drivers/random.h>
 #include <kernel/assert.h>
 #include <kernel/log.h>
-
-#include <drivers/random.h>
+#include <kernel/test.h>
+#include <kernel/types.h>
 
 #define TEST_ASSERT(cond) ASSERT(cond)
 
@@ -133,8 +131,7 @@ void test_all(void) {
   test_user();
 }
 
-void test_drivers(void) {
-  /* test_drivers_random(); */
+void test_drivers(void) { /* test_drivers_random(); */
 }
 
 void test_kernel(void) {

@@ -15,4 +15,4 @@
 
 void random_init(void);
 
-#endif // !DRIVERS_BOARD_BCM2837_RANDOM_H
+#endif  // !DRIVERS_BOARD_BCM2837_RANDOM_H

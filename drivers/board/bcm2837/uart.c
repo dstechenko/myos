@@ -2,7 +2,6 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <drivers/uart.h>
-
 #include <kernel/config.h>
 #include <kernel/spinlock.h>
 #include <kernel/types.h>
@@ -11,16 +10,16 @@ static spinlock_t uart_lock;
 
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
 #include "uart-mini.h"
-#else // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
+#else  // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
 #include "uart-pl001.h"
-#endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
+#endif  // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
 
 void uart_init(void) {
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
   uart_mini_init();
-#else  // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
+#else   // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
   uart_pl001_init();
-#endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
+#endif  // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
 }
 
 char uart_getc(void) {
@@ -30,9 +29,9 @@ char uart_getc(void) {
   /* flags = spin_lock_irq(&uart_lock); */
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
   c = uart_mini_getc();
-#else  // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
+#else   // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
   c = uart_pl001_getc();
-#endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
+#endif  // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
   /* spin_unlock_irq(&uart_lock, flags); */
 
   return c;
@@ -41,9 +40,9 @@ char uart_getc(void) {
 static void uart_putc_unlocked(const char c) {
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
   uart_mini_putc(c);
-#else  // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
+#else   // !CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
   uart_pl001_putc(c);
-#endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
+#endif  // CONFIG_ENABLED(CONFIG_BCM2837_UART_USE_MINI)
 }
 
 void uart_putc(const char c) {

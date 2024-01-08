@@ -1,9 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/assert.h>
-
 #include <asm/abort.h>
+#include <kernel/assert.h>
 #include <kernel/print.h>
 
 void handle_abort(const char *file, const int line) {

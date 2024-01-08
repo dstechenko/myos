@@ -38,4 +38,4 @@
 void timer_init(void);
 void timer_handle(void);
 
-#endif // !DRIVERS_BOARD_BCM2837_TIMER_H
+#endif  // !DRIVERS_BOARD_BCM2837_TIMER_H

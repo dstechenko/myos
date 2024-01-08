@@ -1,18 +1,17 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/print.h>
-
 #include <kernel/assert.h>
 #include <kernel/config.h>
 #include <kernel/error.h>
 #include <kernel/math.h>
+#include <kernel/print.h>
 #include <kernel/spinlock.h>
 #include <kernel/types.h>
 
 #if CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
 #include <drivers/uart.h>
-#endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
+#endif  // CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
 
 #define PRINT_BUFFER_SIZE 30
 #define PRINT_BASE_OCT 8
@@ -47,28 +46,27 @@ static void print_format_digits(va_list *args, const char format) {
   ASSERT(format);
 
   switch (format) {
-  case 'd':
-    var_d = va_arg(*args, int);
-    if (var_d < 0)
-      print_putc('-');
-    print_convert(abs(var_d), PRINT_BASE_DEC);
-    break;
-  case 'u':
-    var_u = va_arg(*args, unsigned int);
-    print_convert(var_u, PRINT_BASE_DEC);
-    break;
-  case 'o':
-    var_u = va_arg(*args, unsigned int);
-    print_putc('0');
-    print_convert(var_u, PRINT_BASE_OCT);
-    break;
-  case 'x':
-    var_u = va_arg(*args, unsigned int);
-    print_puts("0x");
-    print_convert(var_u, PRINT_BASE_HEX);
-    break;
-  default:
-    ABORT();
+    case 'd':
+      var_d = va_arg(*args, int);
+      if (var_d < 0) print_putc('-');
+      print_convert(abs(var_d), PRINT_BASE_DEC);
+      break;
+    case 'u':
+      var_u = va_arg(*args, unsigned int);
+      print_convert(var_u, PRINT_BASE_DEC);
+      break;
+    case 'o':
+      var_u = va_arg(*args, unsigned int);
+      print_putc('0');
+      print_convert(var_u, PRINT_BASE_OCT);
+      break;
+    case 'x':
+      var_u = va_arg(*args, unsigned int);
+      print_puts("0x");
+      print_convert(var_u, PRINT_BASE_HEX);
+      break;
+    default:
+      ABORT();
   }
 }
 
@@ -80,28 +78,27 @@ static void print_format_long_digits(va_list *args, const char format) {
   ASSERT(format);
 
   switch (format) {
-  case 'd':
-    var_d = va_arg(*args, long int);
-    if (var_d < 0)
-      print_putc('-');
-    print_convert(abs(var_d), PRINT_BASE_DEC);
-    break;
-  case 'u':
-    var_u = va_arg(*args, long unsigned int);
-    print_convert(var_u, PRINT_BASE_DEC);
-    break;
-  case 'o':
-    var_u = va_arg(*args, long unsigned int);
-    print_putc('0');
-    print_convert(var_u, PRINT_BASE_OCT);
-    break;
-  case 'x':
-    var_u = va_arg(*args, long unsigned int);
-    print_puts("0x");
-    print_convert(var_u, PRINT_BASE_HEX);
-    break;
-  default:
-    ABORT();
+    case 'd':
+      var_d = va_arg(*args, long int);
+      if (var_d < 0) print_putc('-');
+      print_convert(abs(var_d), PRINT_BASE_DEC);
+      break;
+    case 'u':
+      var_u = va_arg(*args, long unsigned int);
+      print_convert(var_u, PRINT_BASE_DEC);
+      break;
+    case 'o':
+      var_u = va_arg(*args, long unsigned int);
+      print_putc('0');
+      print_convert(var_u, PRINT_BASE_OCT);
+      break;
+    case 'x':
+      var_u = va_arg(*args, long unsigned int);
+      print_puts("0x");
+      print_convert(var_u, PRINT_BASE_HEX);
+      break;
+    default:
+      ABORT();
   }
 }
 
@@ -110,18 +107,18 @@ static void print_format(va_list *args, const char **cursor) {
   ASSERT(cursor);
 
   switch (**cursor) {
-  case 'c':
-    print_putc((char)va_arg(*args, int));
-    break;
-  case 's':
-    print_puts(va_arg(*args, const char *));
-    break;
-  case 'l':
-    (*cursor)++;
-    print_format_long_digits(args, **cursor);
-    break;
-  default:
-    print_format_digits(args, **cursor);
+    case 'c':
+      print_putc((char)va_arg(*args, int));
+      break;
+    case 's':
+      print_puts(va_arg(*args, const char *));
+      break;
+    case 'l':
+      (*cursor)++;
+      print_format_long_digits(args, **cursor);
+      break;
+    default:
+      print_format_digits(args, **cursor);
   }
 }
 
@@ -132,7 +129,7 @@ int print_init(void) {
   uart_init();
   print_putc = uart_putc;
   print_puts = uart_puts;
-#endif // CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
+#endif  // CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
   return err;
 }
 

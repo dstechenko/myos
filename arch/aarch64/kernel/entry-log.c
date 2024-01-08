@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/types.h>
 #include <kernel/log.h>
+#include <kernel/types.h>
 
 static const char *const log_entry_invalid_type[] = {
     "SYN_INVALID_EL1t",   "IRQ_INVALID_EL1t",   "FIQ_INVALID_EL1t",   "ERR_INVALID_EL1t",

@@ -15,8 +15,7 @@ static void task_schedule_loop(void) {
 void task_context_switch(struct task *next) {
   struct task *prev = task_get_current();
 
-  if (prev == next)
-    return;
+  if (prev == next) return;
 
   ASSERT(prev);
   ASSERT(prev->context);

@@ -1,14 +1,13 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <drivers/random.h>
+#include "random.h"
 
 #include <asm/delay.h>
 #include <drivers/mmio.h>
+#include <drivers/random.h>
 #include <kernel/bits.h>
 #include <uapi/bool.h>
-
-#include "random.h"
 
 void random_init(void) {
   const uint32_t random_irq_masked = mmio_read32(RANDOM_IRQ_MASK) | BIT(0);

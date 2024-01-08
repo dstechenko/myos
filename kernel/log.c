@@ -1,26 +1,25 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
+#include <drivers/timer.h>
 #include <kernel/assert.h>
 #include <kernel/log.h>
 #include <kernel/print.h>
 #include <kernel/spinlock.h>
 #include <kernel/types.h>
 
-#include <drivers/timer.h>
-
 static spinlock_t log_lock;
 
 static const char *log_level_to_string(const uint8_t level) {
   switch (level) {
-  case ERROR:
-    return "ERR";
-  case INFO:
-    return "INF";
-  case DEBUG:
-    return "DBG";
-  default:
-    ABORT();
+    case ERROR:
+      return "ERR";
+    case INFO:
+      return "INF";
+    case DEBUG:
+      return "DBG";
+    default:
+      ABORT();
   }
   return "ERR";
 }
@@ -44,8 +43,7 @@ void log(const uint8_t level, const char *format, ...) {
   va_list args;
 
   ASSERT(format);
-  if (CONFIG_LOG_LEVEL < level)
-    return;
+  if (CONFIG_LOG_LEVEL < level) return;
 
   /* flags = spin_lock_irq(&log_lock); */
   log_timestamp();

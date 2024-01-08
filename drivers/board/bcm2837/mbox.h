@@ -38,4 +38,4 @@ typedef volatile unsigned int mbox_data_t;
 
 int mbox_send(unsigned char channel, const mbox_data_t *data);
 
-#endif // !DRIVERS_BOARD_BCM2837_MBOX_H
+#endif  // !DRIVERS_BOARD_BCM2837_MBOX_H

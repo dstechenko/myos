@@ -8,4 +8,4 @@ struct page_context {
   uintptr_t pgd;
 };
 
-#endif // !ARCH_AARCH64_KERNEL_PAGE_CONTEXT_H
+#endif  // !ARCH_AARCH64_KERNEL_PAGE_CONTEXT_H

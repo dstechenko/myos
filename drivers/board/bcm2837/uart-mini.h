@@ -8,4 +8,4 @@ void uart_mini_init(void);
 char uart_mini_getc(void);
 void uart_mini_putc(char c);
 
-#endif // !DRIVERS_BOARD_BCM2837_UART_MINI_H
+#endif  // !DRIVERS_BOARD_BCM2837_UART_MINI_H

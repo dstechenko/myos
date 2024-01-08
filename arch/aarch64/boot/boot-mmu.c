@@ -1,11 +1,10 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <asm/mmu-defs.h>
 #include <asm/memory-defs.h>
+#include <asm/mmu-defs.h>
 #include <asm/page-defs.h>
 #include <asm/sections.h>
-
 #include <kernel/types.h>
 
 static uintptr_t boot_page_index = PHYSICAL_DEVICE_MEMORY_START;

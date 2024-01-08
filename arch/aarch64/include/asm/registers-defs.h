@@ -22,10 +22,10 @@
 #define SCTLR_EL1_MMU_ENABLED BIT(0)
 #define SCTLR_EL1_MMU_DISABLED NOBIT(0)
 
-#define SCTLR_EL1_VALUE                                                                            \
-  (SCTLR_EL1_RESERVED | SCTLR_EL1_EE_LITTLE_ENDIAN | SCTLR_EL1_I_CACHE_DISABLED |                  \
+#define SCTLR_EL1_VALUE                                                           \
+  (SCTLR_EL1_RESERVED | SCTLR_EL1_EE_LITTLE_ENDIAN | SCTLR_EL1_I_CACHE_DISABLED | \
    SCTLR_EL1_D_CACHE_DISABLED | SCTLR_EL1_MMU_DISABLED)
-#define SCTLR_EL1_MMU_VALUE                                                                        \
+#define SCTLR_EL1_MMU_VALUE \
   (SCTLR_EL1_VALUE | SCTLR_EL1_MMU_ENABLED | SCTLR_EL1_I_CACHE_ENABLED | SCTLR_EL1_D_CACHE_ENABLED)
 
 /**
@@ -79,4 +79,4 @@
 #define HACK (BIT(13) | BIT(10) | BIT(8) | BIT(29) | BIT(26) | BIT(24))
 #define TCR_EL1_VALUE (TCR_EL1_T0SZ | TCR_EL1_T1SZ | TCR_EL1_TG0_4K | TCR_EL1_TG1_4K | HACK)
 
-#endif // !ARCH_AARCH64_REGISTERS_DEFS_H
+#endif  // !ARCH_AARCH64_REGISTERS_DEFS_H

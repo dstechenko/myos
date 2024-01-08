@@ -5,10 +5,9 @@
 #define ARCH_AARCH64_ASM_PROC_REGS_H
 #ifndef __ASSEMBLER__
 
-#include <stdint.h>
-
 #include <asm/entry-defs.h>
 #include <kernel/assert.h>
+#include <stdint.h>
 
 struct proc_regs {
   uint64_t regs[31];
@@ -19,5 +18,5 @@ struct proc_regs {
 
 STATIC_ASSERT(sizeof(struct proc_regs) == ENTRY_STACK_FRAME_SIZE, proc_regs_size);
 
-#endif // !__ASSEMBLER__
-#endif // !ARCH_AARCH64_ASM_PROC_REGS_H
+#endif  // !__ASSEMBLER__
+#endif  // !ARCH_AARCH64_ASM_PROC_REGS_H

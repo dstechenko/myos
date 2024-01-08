@@ -3,19 +3,17 @@
 
 #include "page-ops.h"
 
-#include <stddef.h>
-
 #include <asm/memory-defs.h>
 #include <asm/mmu-defs.h>
 #include <asm/page-defs.h>
 #include <asm/registers.h>
 #include <asm/sections.h>
-
 #include <kernel/assert.h>
 #include <kernel/bits.h>
 #include <kernel/log.h>
 #include <kernel/memory-ops.h>
 #include <kernel/ptrs.h>
+#include <stddef.h>
 
 #include "page-context.h"
 
@@ -27,9 +25,7 @@
 SECTIONS(section_kernel);
 #define PHYSICAL_KERNEL_MEMORY_END virt_to_phys(SECTIONS_END(section_kernel))
 
-static uintptr_t *phys_to_virt_array(const uintptr_t paddr) {
-  return (uintptr_t *)phys_to_virt(paddr);
-}
+static uintptr_t *phys_to_virt_array(const uintptr_t paddr) { return (uintptr_t *)phys_to_virt(paddr); }
 
 static struct page phys_to_virt_page(const uintptr_t paddr) {
   return (struct page){.paddr = paddr, .vaddr = phys_to_virt(paddr)};
@@ -76,8 +72,7 @@ static void log_page_entries(const uintptr_t table, size_t limit) {
 void log_page_global_directory(const uintptr_t pgd, const size_t limit) {
   uintptr_t *pud = phys_to_virt_array(pgd), *pmd, *pte;
 
-  if (!pgd)
-    return;
+  if (!pgd) return;
 
   LOG_DEBUG("  Page Global Directory (physical address %lx)", pgd);
   log_page_entries(phys_to_virt(pgd), limit);
@@ -208,10 +203,8 @@ void page_init_tables(void) {
   memzero(phys_to_virt_array(pgd), PAGE_SIZE);
 
   // TODO(dstechenko): map code/data separately with rules
-  map_kernel_range(pgd, PHYSICAL_MEMORY_START, PHYSICAL_DEVICE_MEMORY_START,
-                   MMU_KERNEL_PAGES_FLAGS);
-  map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END,
-                   MMU_DEVICE_PAGES_FLAGS);
+  map_kernel_range(pgd, PHYSICAL_MEMORY_START, PHYSICAL_DEVICE_MEMORY_START, MMU_KERNEL_PAGES_FLAGS);
+  map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END, MMU_DEVICE_PAGES_FLAGS);
   map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_END, PHYSICAL_MEMORY_END, MMU_KERNEL_PAGES_FLAGS);
 
   // TODO(dstechenko): want to unset user here, but we need to init cpus

@@ -3,7 +3,6 @@
 
 #include <asm/proc-regs.h>
 #include <asm/registers.h>
-
 #include <kernel/allocator.h>
 #include <kernel/assert.h>
 #include <kernel/config.h>
@@ -35,18 +34,15 @@ int task_init(struct task *task) {
 
   ASSERT(sizeof(struct task_context));
   task->context = zalloc(sizeof(struct task_context), ALLOC_KERNEL);
-  if (!task->context)
-    return -ENOMEM;
+  if (!task->context) return -ENOMEM;
 
   ASSERT(sizeof(struct page_context));
   task->memory.context = zalloc(sizeof(struct page_context), ALLOC_KERNEL);
-  if (!task->memory.context)
-    return -ENOMEM;
+  if (!task->memory.context) return -ENOMEM;
 
   ASSERT(TASK_STACK_SIZE);
   task->stack = zalloc(TASK_STACK_SIZE, ALLOC_KERNEL);
-  if (!task->stack)
-    return -ENOMEM;
+  if (!task->stack) return -ENOMEM;
 
   return 0;
 }

@@ -1,13 +1,12 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <drivers/timer.h>
+#include "timer.h"
 
 #include <drivers/mmio.h>
+#include <drivers/timer.h>
 #include <kernel/cpu.h>
 #include <kernel/task.h>
-
-#include "timer.h"
 
 static volatile uint64_t timer_ticks = 0;
 static volatile uint32_t timer_value = 0;

@@ -34,8 +34,7 @@ void task_dequeue(struct task *task) { ASSERT(task); }
 void task_tick(void) {
   ASSERT(tasks_current);
   tasks_current->ticks--;
-  if (tasks_current->ticks > 0 || tasks_current->preempt > 0)
-    return;
+  if (tasks_current->ticks > 0 || tasks_current->preempt > 0) return;
   irq_local_enable();
   task_schedule();
   irq_local_disable();
@@ -56,12 +55,10 @@ struct task *task_pick(void) {
         next = each;
       }
     }
-    if (ticks)
-      break;
+    if (ticks) break;
     for (id = 0; id < TASKS_TOTAL; id++) {
       each = tasks_all[id];
-      if (each && each->state == TASK_RUNNING)
-        each->ticks = (each->ticks >> 1) + each->priority;
+      if (each && each->state == TASK_RUNNING) each->ticks = (each->ticks >> 1) + each->priority;
     }
   }
 

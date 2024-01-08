@@ -2,7 +2,6 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <kernel/allocator.h>
-
 #include <kernel/assert.h>
 #include <kernel/memory-ops.h>
 #include <kernel/page.h>

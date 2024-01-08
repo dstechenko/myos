@@ -7,12 +7,10 @@
 #include <asm/memory-defs.h>
 #include <asm/registers.h>
 #include <asm/sections.h>
-
 #include <drivers/cpu.h>
 #include <drivers/random.h>
 #include <drivers/subsystem.h>
 #include <drivers/uart.h>
-
 #include <kernel/assert.h>
 #include <kernel/build-info.h>
 #include <kernel/config.h>
@@ -35,8 +33,7 @@ static void kernel_task(void) {
   LOG_INFO("Forked kernel task!");
 
   ASSERT(SECTIONS_LENGTH(section_user));
-  err = task_move_to_user(SECTIONS_START(user), SECTIONS_START(section_user),
-                          SECTIONS_LENGTH(section_user));
+  err = task_move_to_user(SECTIONS_START(user), SECTIONS_START(section_user), SECTIONS_LENGTH(section_user));
   if (err) {
     LOG_ERROR("Failed to move to user: %d", err);
   }
@@ -87,7 +84,7 @@ void init_start(void) {
     test_all();
     LOG_INFO("Tested successfully!");
   }
-#endif // CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
+#endif  // CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
 
   init_loop_schedule();
 }

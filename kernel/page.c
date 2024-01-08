@@ -1,19 +1,16 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/page.h>
-
-#include <stddef.h>
-
 #include <asm/memory-defs.h>
 #include <asm/page-defs.h>
-
 #include <kernel/assert.h>
 #include <kernel/config.h>
 #include <kernel/error.h>
 #include <kernel/memory-ops.h>
+#include <kernel/page.h>
 #include <kernel/ptrs.h>
 #include <kernel/task.h>
+#include <stddef.h>
 #include <uapi/bool.h>
 
 // TODO(dstechenko): do faster traversal
@@ -68,15 +65,13 @@ uintptr_t get_user_page(struct task *task, const uintptr_t vaddr) {
   ASSERT(task);
 
   paddr = get_page();
-  if (paddr)
-    map_user_page(task, (struct page){.vaddr = vaddr, .paddr = paddr});
+  if (paddr) map_user_page(task, (struct page){.vaddr = vaddr, .paddr = paddr});
 
   return paddr ? phys_to_virt(paddr) : paddr;
 }
 
 void put_page(const uintptr_t page) {
-  if (page)
-    pages[PAGE_TO_INDEX(page)].used = false;
+  if (page) pages[PAGE_TO_INDEX(page)].used = false;
 }
 
 int copy_user_pages(const struct task *src, struct task *dst) {
@@ -90,8 +85,7 @@ int copy_user_pages(const struct task *src, struct task *dst) {
 
   for (size_t i = 0; i < src_count; i++) {
     uintptr_t page = get_user_page(dst, src_pages[i].vaddr);
-    if (!page)
-      return -ENOMEM;
+    if (!page) return -ENOMEM;
     memcpy(ADR_TO_PTR(page), ADR_TO_PTR(src_pages[i].vaddr), PAGE_SIZE - 1);
   }
 

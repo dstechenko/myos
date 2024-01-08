@@ -1,16 +1,14 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/fork.h>
-
-#include <stddef.h>
-#include <stdint.h>
-
 #include <asm/proc-regs.h>
 #include <kernel/assert.h>
 #include <kernel/config.h>
+#include <kernel/fork.h>
 #include <kernel/page.h>
 #include <kernel/task.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #include "task-context.h"
 
@@ -23,8 +21,7 @@ int fork_task_context(struct task *forked, const uintptr_t pc, const uint8_t fla
   ASSERT(forked);
 
   err = task_init(forked);
-  if (err)
-    return err;
+  if (err) return err;
 
   forked_context = forked->context;
   ASSERT(forked_context);

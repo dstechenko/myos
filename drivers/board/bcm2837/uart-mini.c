@@ -3,12 +3,11 @@
 
 #include "uart-mini.h"
 
-#include <stdint.h>
-
 #include <asm/delay.h>
 #include <drivers/mmio.h>
 #include <kernel/bits.h>
 #include <kernel/config.h>
+#include <stdint.h>
 #include <uapi/bool.h>
 
 #include "aux.h"
