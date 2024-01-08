@@ -5,3 +5,4 @@ BasedOnStyle: Google
 ---
 Language: Cpp
 ColumnLimit: 110
+IncludeBlocks: Preserve

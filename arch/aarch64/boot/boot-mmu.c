@@ -5,6 +5,7 @@
 #include <asm/mmu-defs.h>
 #include <asm/page-defs.h>
 #include <asm/sections.h>
+
 #include <kernel/types.h>
 
 static uintptr_t boot_page_index = PHYSICAL_DEVICE_MEMORY_START;
@@ -69,18 +70,12 @@ static void boot_map_range(const uintptr_t pgd, uintptr_t begin, const uintptr_t
   }
 }
 
+// TODO(dstechenko): extract these and assert?
 void boot_create_page_tables(void) {
-  uintptr_t pgd;
+  boot_user_pgd = boot_get_next_page();
+  boot_map_range(boot_user_pgd, PHYSICAL_MEMORY_START, 10 * SECTION_SIZE, MMU_KERNEL_FLAGS);
 
-  // TODO(dstechenko): only map parts for boot, use flags
-
-  pgd = boot_get_next_page();
-  boot_map_range(pgd, PHYSICAL_MEMORY_START, 10 * SECTION_SIZE, MMU_KERNEL_FLAGS);
-  boot_user_pgd = pgd;
-
-  pgd = boot_get_next_page();
-  boot_map_range(pgd, PHYSICAL_MEMORY_START, PHYSICAL_DEVICE_MEMORY_START, MMU_KERNEL_FLAGS);
-  boot_map_range(pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END, MMU_DEVICE_FLAGS);
-  boot_map_range(pgd, PHYSICAL_DEVICE_MEMORY_END, PHYSICAL_MEMORY_END, MMU_KERNEL_FLAGS);
-  boot_kernel_pgd = pgd;
+  boot_kernel_pgd = boot_get_next_page();
+  boot_map_range(boot_kernel_pgd, PHYSICAL_MEMORY_START, 100 * SECTION_SIZE, MMU_KERNEL_FLAGS);
+  boot_map_range(boot_kernel_pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END, MMU_DEVICE_FLAGS);
 }
