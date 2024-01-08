@@ -6,7 +6,7 @@
 #include <asm/memory-defs.h>
 #include <asm/page-defs.h>
 
-#define VIRTUAL(label) AT(ADDR(label) - VIRTUAL_MEMORY_START)
+#define VIRTUAL(label) AT(ADDR(label) - VIRTUAL_MEMORY_OFFSET)
 
 ENTRY(BOOT_ENTRY_POINT_LABEL)
 
@@ -21,7 +21,7 @@ SECTIONS
 
   . = ALIGN(PAGE_SIZE);
   section_kernel_entry_point = .;
-  . += VIRTUAL_MEMORY_START;
+  . += VIRTUAL_MEMORY_OFFSET;
 
   section_kernel_entry : VIRTUAL(section_kernel_entry) {
     section_kernel_entry_start = .;

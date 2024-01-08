@@ -74,7 +74,7 @@ boot_init_page_tables:
 
   // Grab the offset before we enable MMU and move to virtual.
   // Also move the stack pointer for the init task into virtual.
-  ldr x0, =VIRTUAL_MEMORY_START
+  ldr x0, =VIRTUAL_MEMORY_OFFSET
   ldr x1, =boot_start
   add x1, x1, x0
   mov sp, x1

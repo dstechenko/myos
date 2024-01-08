@@ -110,19 +110,13 @@ void log_page_global_directory(const uintptr_t pgd, const size_t limit) {
 
 void page_debug(const size_t limit) {
   LOG_DEBUG("Memory configurations:");
+  LOG_DEBUG("  Boot load address            - %lx", BOOT_LOAD_ADDRESS);
   LOG_DEBUG("  Physical memory start        - %lx", PHYSICAL_MEMORY_START);
   LOG_DEBUG("  Physical memory end:         - %lx", PHYSICAL_MEMORY_END);
   LOG_DEBUG("  Physical memory size:        - %lx", PHYSICAL_MEMORY_SIZE);
   LOG_DEBUG("  Physical device memory start - %lx", PHYSICAL_DEVICE_MEMORY_START);
   LOG_DEBUG("  Physical device memory end   - %lx", PHYSICAL_DEVICE_MEMORY_END);
   LOG_DEBUG("  Physical device memory size  - %lx", PHYSICAL_DEVICE_MEMORY_SIZE);
-  LOG_DEBUG("  Virtual memory start         - %lx", VIRTUAL_MEMORY_START);
-  LOG_DEBUG("  Virtual memory end           - %lx", VIRTUAL_MEMORY_END);
-  LOG_DEBUG("  Virtual memory size          - %lx", VIRTUAL_MEMORY_SIZE);
-  LOG_DEBUG("  Virtual device memory start  - %lx", VIRTUAL_DEVICE_MEMORY_START);
-  LOG_DEBUG("  Virtual device memory end    - %lx", VIRTUAL_DEVICE_MEMORY_END);
-  LOG_DEBUG("  Virtual device memory size   - %lx", VIRTUAL_DEVICE_MEMORY_SIZE);
-  LOG_DEBUG("  Boot load address            - %lx", BOOT_LOAD_ADDRESS);
   LOG_DEBUG("User pages:");
   log_page_global_directory(registers_get_user_page_table(), limit);
   LOG_DEBUG("Kernel pages:");
@@ -248,6 +242,6 @@ void map_user_page(struct task *task, struct page page) {
   memory->user_pages[memory->user_pages_count++] = page;
 }
 
-uintptr_t phys_to_virt(const uintptr_t paddr) { return paddr + VIRTUAL_MEMORY_START; }
+uintptr_t phys_to_virt(const uintptr_t paddr) { return paddr + VIRTUAL_MEMORY_OFFSET; }
 
-uintptr_t virt_to_phys(const uintptr_t vaddr) { return vaddr - VIRTUAL_MEMORY_START; }
+uintptr_t virt_to_phys(const uintptr_t vaddr) { return vaddr - VIRTUAL_MEMORY_OFFSET; }
