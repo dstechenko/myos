@@ -23,6 +23,7 @@ atomic32_set:
   ret
 
 atomic32_add:
+  clrex
   ldaxr w2, [x0]
   add w3, w2, w1
   stlxr w4, w3, [x0]

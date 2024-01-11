@@ -57,7 +57,7 @@ static void init_start_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FO
 static void init_loop_schedule(void) {
   while (true) {
     delay_cycles(5000000);
-    print("* Tick from kernel init task on core %d\n\r", registers_get_core());
+    /* print("* Tick from kernel init task on core %d\n\r", registers_get_core()); */
     if (cpu_is_primary()) {
       task_schedule();
     }
@@ -71,8 +71,8 @@ void init_start(void) {
   if (cpu_is_primary()) {
     sections_init();
     print_init();
-    page_init();
-    task_main_init();
+    /* page_init(); */
+    /* task_main_init(); */
     subsystem_init();
     init_debug();
     /* init_start_user(); */

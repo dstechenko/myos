@@ -70,12 +70,13 @@ static void boot_map_range(const uintptr_t pgd, uintptr_t begin, const uintptr_t
   }
 }
 
-// TODO(dstechenko): extract these and assert?
+// TODO(dstechenko): extract these and assert? only map needed regions to boot?
 void boot_create_page_tables(void) {
   boot_user_pgd = boot_get_next_page();
   boot_map_range(boot_user_pgd, PHYSICAL_MEMORY_START, 10 * SECTION_SIZE, MMU_KERNEL_FLAGS);
 
   boot_kernel_pgd = boot_get_next_page();
-  boot_map_range(boot_kernel_pgd, PHYSICAL_MEMORY_START, 100 * SECTION_SIZE, MMU_KERNEL_FLAGS);
+  boot_map_range(boot_kernel_pgd, PHYSICAL_MEMORY_START, PHYSICAL_DEVICE_MEMORY_START, MMU_KERNEL_FLAGS);
   boot_map_range(boot_kernel_pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END, MMU_DEVICE_FLAGS);
+
 }

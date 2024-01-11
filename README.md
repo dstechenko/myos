@@ -1,10 +1,11 @@
 # myos
 
 TODOs(progress):
-- Make MMU optional
+- Refactor all the modules
+- Add logs to each init step, init logs asap
+- Make MMU optional, make SMP optional
 - Update toolchain to the newest version
-- Add tests to existing modules
-- Add lists and maps
+- Add lists and other structs
 - Add memory allocator, speed up page allocator
 - Add locks to task module
 - Add idle tasks, cleanup in init, set priority, set affinity, dynamic max size
