@@ -7,6 +7,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <asm/types.h>
+
 #include <uapi/bool.h>
 
 #define TYPE(name, def) typedef struct { def value; } name
