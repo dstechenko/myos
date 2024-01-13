@@ -9,9 +9,10 @@
 #include <kernel/spinlock.h>
 #include <kernel/types.h>
 
-#if CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
+// TODO(dstechenko): need to reverse the registration
+#if CONFIG_ENABLED(CONFIG_BCM2711_UART_ON)
 #include <drivers/uart.h>
-#endif  // CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
+#endif  // CONFIG_ENABLED(CONFIG_BCM2711_UART_ON)
 
 #define PRINT_BUFFER_SIZE 30
 #define PRINT_BASE_OCT 8
@@ -124,12 +125,12 @@ static void print_format(va_list *args, const char **cursor) {
 
 int print_init(void) {
   int err = -EINVAL;
-#if CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
+#if CONFIG_ENABLED(CONFIG_BCM2711_UART_ON)
   err = 0;
   uart_init();
   print_putc = uart_putc;
   print_puts = uart_puts;
-#endif  // CONFIG_ENABLED(CONFIG_BCM2837_UART_ON)
+#endif  // CONFIG_ENABLED(CONFIG_BCM2711_UART_ON)
   return err;
 }
 

@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef DRIVERS_BOARD_BCM2837_IRQ_H
-#define DRIVERS_BOARD_BCM2837_IRQ_H
+#ifndef DRIVERS_BOARD_BCM2711_IRQ_H
+#define DRIVERS_BOARD_BCM2711_IRQ_H
 
 #include <kernel/bits.h>
 
@@ -55,4 +55,4 @@
 
 void irq_ctrl_init(void);
 
-#endif  // !DRIVERS_BOARD_BCM2837_IRQ_H
+#endif  // !DRIVERS_BOARD_BCM2711_IRQ_H

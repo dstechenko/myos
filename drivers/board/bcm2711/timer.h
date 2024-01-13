@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef DRIVERS_BOARD_BCM2837_TIMER_H
-#define DRIVERS_BOARD_BCM2837_TIMER_H
+#ifndef DRIVERS_BOARD_BCM2711_TIMER_H
+#define DRIVERS_BOARD_BCM2711_TIMER_H
 
 #include <kernel/bits.h>
 
@@ -38,4 +38,4 @@
 void timer_init(void);
 void timer_handle(void);
 
-#endif  // !DRIVERS_BOARD_BCM2837_TIMER_H
+#endif  // !DRIVERS_BOARD_BCM2711_TIMER_H

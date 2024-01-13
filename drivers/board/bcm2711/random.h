@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef DRIVERS_BOARD_BCM2837_RANDOM_H
-#define DRIVERS_BOARD_BCM2837_RANDOM_H
+#ifndef DRIVERS_BOARD_BCM2711_RANDOM_H
+#define DRIVERS_BOARD_BCM2711_RANDOM_H
 
 #define RANDOM_BASE 0x00104000
 #define RANDOM_CTRL RANDOM_BASE
@@ -15,4 +15,4 @@
 
 void random_init(void);
 
-#endif  // !DRIVERS_BOARD_BCM2837_RANDOM_H
+#endif  // !DRIVERS_BOARD_BCM2711_RANDOM_H

@@ -1,10 +1,12 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
+# TODO(dstechenko): extract build params into a separate file
+
 TARGET_ARCH  ?= aarch64
 export TARGET_ARCH
 
-TARGET_BOARD ?= bcm2837
+TARGET_BOARD ?= bcm2711
 export TARGET_BOARD
 
 TARGET_MODE  ?= debug
@@ -19,12 +21,10 @@ KERNEL_DIR  := kernel
 USER_DIR    := user
 TOOLS_DIR   := tools
 
-SRC_DIRS := $(ARCH_DIR) $(CONFIGS_DIR) $(DRIVERS_DIR) $(INC_DIRS) $(KERNEL_DIR) $(USER_DIR)
-
-ARCH_DIR := $(ARCH_DIR)/$(TARGET_ARCH)
-BOOT_DIR := $(ARCH_DIR)/boot
-
-GEN_DIR  := $(OUT_DIR)/gen
+ARCH_DIR    := $(ARCH_DIR)/$(TARGET_ARCH)
+BOOT_DIR    := $(ARCH_DIR)/boot
+GEN_DIR     := $(OUT_DIR)/gen
+SRC_DIRS    := $(ARCH_DIR) $(CONFIGS_DIR) $(DRIVERS_DIR) $(INC_DIRS) $(KERNEL_DIR) $(USER_DIR)
 
 CONFIGS_ARCH_DIR  := $(ARCH_DIR)/configs
 CONFIGS_BOARD_DIR := $(CONFIGS_DIR)/board/$(TARGET_BOARD)

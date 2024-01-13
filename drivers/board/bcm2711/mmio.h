@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef DRIVERS_BOARD_BCM2837_MMIO_H
-#define DRIVERS_BOARD_BCM2837_MMIO_H
+#ifndef DRIVERS_BOARD_BCM2711_MMIO_H
+#define DRIVERS_BOARD_BCM2711_MMIO_H
 
 #include <asm/memory-defs.h>
 
@@ -14,4 +14,4 @@
 
 #define MMIO_BASE (0xFE000000 + 0xFFFF000000000000)
 
-#endif  // !DRIVERS_BOARD_BCM2837_MMIO_H
+#endif  // !DRIVERS_BOARD_BCM2711_MMIO_H

@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef DRIVERS_BOARD_BCM2837_MBOX_H
-#define DRIVERS_BOARD_BCM2837_MBOX_H
+#ifndef DRIVERS_BOARD_BCM2711_MBOX_H
+#define DRIVERS_BOARD_BCM2711_MBOX_H
 
 #include <kernel/layout.h>
 
@@ -38,4 +38,4 @@ typedef volatile unsigned int mbox_data_t;
 
 int mbox_send(unsigned char channel, const mbox_data_t *data);
 
-#endif  // !DRIVERS_BOARD_BCM2837_MBOX_H
+#endif  // !DRIVERS_BOARD_BCM2711_MBOX_H

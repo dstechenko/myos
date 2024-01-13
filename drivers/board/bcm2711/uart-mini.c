@@ -74,7 +74,7 @@ void uart_mini_init(void) {
   // Set RTS line to be always high.
   mmio_write32(AUX_MU_MCR_REG, 0);
   // Calculated: baudrate = system_clock_freq / (8 * (baudrate_reg + 1)).
-  reg = (CONFIG_BCM2837_SYSTEM_CLOCK_FREQ / (8 * CONFIG_BCM2837_UART_BAUDRATE)) - 1;
+  reg = (CONFIG_BCM2711_SYSTEM_CLOCK_FREQ / (8 * CONFIG_BCM2711_UART_BAUDRATE)) - 1;
   mmio_write32(AUX_MU_BAUD_REG, reg);
   // Finally, enable receiver/transmitter.
   mmio_write32(AUX_MU_CNTL_REG, 3);
