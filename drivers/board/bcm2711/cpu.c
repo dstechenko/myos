@@ -14,7 +14,7 @@ void cpu_init(void) {
   /* CPU_SPIN_INDEX(2); */
   /* CPU_SPIN_INDEX(3); */
   /* asm volatile("dsb sy" : : : "memory"); */
-  registers_test(1, CONFIG_BOOT_LOAD_ADDRESS);
+  /* registers_test(1, CONFIG_BOOT_LOAD_ADDRESS); */
   /* registers_test(2, CONFIG_BOOT_LOAD_ADDRESS); */
   /* registers_test(3, CONFIG_BOOT_LOAD_ADDRESS); */
 }

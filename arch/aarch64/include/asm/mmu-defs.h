@@ -6,10 +6,10 @@
 
 #include <kernel/bits.h>
 
-#define MEMORY_TYPE_DEVICE 0x0
+#define MEMORY_TYPE_DEVICE 0x1
 #define MEMORY_TYPE_DEVICE_FLAGS 0x0
 
-#define MEMORY_TYPE_NORMAL 0x1
+#define MEMORY_TYPE_NORMAL 0x0
 #define MEMORY_TYPE_NORMAL_FLAGS 0xFF
 
 #define MAIR_TO_VALUE(flags, index) (flags << (8 * index))
@@ -23,7 +23,7 @@
 
 #define MMU_ACCESS BIT(10)
 #define MMU_ACCESS_PERMISSION BIT(6)
-#define MMU_SHAREABLE (BIT(9) | BIT(8))
+#define MMU_SHAREABLE (BIT(8) | BIT(9))
 
 #define MMU_USER_FLAGS \
   (MMU_TYPE_PAGE | (MEMORY_TYPE_NORMAL << 2) | MMU_ACCESS | MMU_ACCESS_PERMISSION | MMU_SHAREABLE)

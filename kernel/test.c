@@ -10,8 +10,6 @@
 #include <kernel/test.h>
 #include <kernel/types.h>
 
-#include <kernel/log.h>
-
 #define TEST_ASSERT(cond) ASSERT(cond)
 
 SECTIONS(section_kernel);
@@ -22,19 +20,15 @@ static void test_kernel_atomic32(void) {
 
   TEST_ASSERT(atomic32_get(&obj) == 1);
 
-  LOG_INFO("ATOMIC SET START");
   tmp = atomic32_set(&obj, 2);
   TEST_ASSERT(atomic32_get(&obj) == 2);
   TEST_ASSERT(atomic32_get_relaxed(&obj) == 2);
   TEST_ASSERT(tmp == 1);
-  LOG_INFO("ATOMIC SET END");
 
-  LOG_INFO("ATOMIC INC START");
   tmp = atomic32_inc(&obj);
   TEST_ASSERT(atomic32_get(&obj) == 3);
   TEST_ASSERT(atomic32_get_relaxed(&obj) == 3);
   TEST_ASSERT(tmp == 2);
-  LOG_INFO("ATOMIC INC END");
 
   tmp = atomic32_dec(&obj);
   TEST_ASSERT(atomic32_get(&obj) == 2);

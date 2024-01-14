@@ -94,7 +94,7 @@ boot_init_page_tables:
   msr tcr_el1, x0
   ldr x0, =MAIR_EL1_VALUE
   msr mair_el1, x0
-  ldr x0, =SCTLR_EL1_MMU_ENABLED
+  ldr x0, =SCTLR_EL1_MMU_VALUE
   msr sctlr_el1, x0
 
 boot_jump_kernel:

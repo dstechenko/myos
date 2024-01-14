@@ -151,7 +151,7 @@ void print_args(const char *format, va_list *args) {
   ASSERT(format);
   ASSERT(args);
 
-  /* flags = spin_lock_irq(&print_lock); */
+  flags = spin_lock_irq(&print_lock);
   for (cursor = format; *cursor != '\0'; cursor++) {
     if (*cursor == '%') {
       cursor++;
@@ -160,5 +160,5 @@ void print_args(const char *format, va_list *args) {
       print_putc(*cursor);
     }
   }
-  /* spin_unlock_irq(&print_lock, flags); */
+  spin_unlock_irq(&print_lock, flags);
 }

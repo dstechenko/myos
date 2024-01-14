@@ -11,7 +11,9 @@
 .globl registers_get_kernel_page_table
 
 .globl registers_test
+
 // TODO(dstechenko): move this file to cpu
+// TODO(dstechenko): add config for this
 
 registers_get_priv:
   // Read from the system register for exception levels.
@@ -31,14 +33,12 @@ registers_get_core:
 
 registers_set_user_page_table:
   dsb sy
-  isb sy
   msr ttbr0_el1, x0
-  tlbi vmalle1
-// TODO(dstechenko): add config for this
-  tlbi vmalle1
+  isb
+  tlbi vmalle1is
   ic iallu
   dsb sy
-  isb sy
+  isb
   ret
 
 registers_get_user_page_table:
@@ -48,11 +48,14 @@ registers_get_user_page_table:
 // TODO(dstechenko): extract  tlb flush as a separate operation
 
 registers_set_kernel_page_table:
+  dsb sy
   msr ttbr1_el1, x0
+  isb
   tlbi vmalle1is
   dsb sy
-  isb sy
+  isb
   ret
+
 
 registers_get_kernel_page_table:
   mrs x0, ttbr1_el1

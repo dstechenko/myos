@@ -1,6 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
+#include <asm/atomic.h>
 #include <asm/delay.h>
 #include <asm/irq.h>
 #include <asm/registers.h>

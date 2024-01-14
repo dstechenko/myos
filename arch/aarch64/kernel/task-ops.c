@@ -82,6 +82,9 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   current_regs->ps = (uint64_t)PSR_MODE_EL0t;
 
   registers_set_user_page_table(current->memory.context->pgd);
+  LOG_INFO("0x2000 = %lx", *((uint64_t *)0x2000));
+  LOG_INFO("0x2000 = %lx", *((uint64_t *)0x2000));
+  LOG_INFO("0x2000 = %lx", *((uint64_t *)0x2000));
 
   return 0;
 }

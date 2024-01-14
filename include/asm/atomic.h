@@ -61,5 +61,10 @@ static inline int64_t atomic64_dec(atomic64_t *val) {
   return atomic64_sub(val, 1);
 }
 
+uint64_t atomic_test_set(uint64_t *ptr);
+uint64_t atomic_test_get_sctlr(void);
+uint64_t atomic_test_get_tcr(void);
+uint64_t atomic_test_get_mair(void);
+
 #endif // !__ASSEMBLER__
 #endif // !ASM_ATOMIC_H
