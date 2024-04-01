@@ -151,10 +151,11 @@ dump-all: build-all
 	$(OD) $(OD_FLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
 
 boot-copy: build-all
-	cp $(KERNEL_IMG) /run/media/$(USER)/bootfs/kernel8.img
+	cp $(KERNEL_IMG) /Volumes/bootfs/kernel8.img
+	diskutil eject bootfs
 
 serial:
-	picocom -b 115200 /dev/ttyUSB0
+	picocom -b 115200 /dev/tty.usbserial-*
 
 todo:
 	grep --recursive --exclude-dir=$(OUT_DIR) --regexp="TODO($(USER)): " || echo "No user TODOs found!"
