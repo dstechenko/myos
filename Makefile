@@ -32,7 +32,7 @@ CONFIGS_BOARD_DIR := $(CONFIGS_DIR)/board/$(TARGET_BOARD)
 KERNEL_ELF := $(OUT_DIR)/kernel.elf
 KERNEL_IMG := $(OUT_DIR)/kernel.img
 
-TOOLCHAIN := $(TOOLS_DIR)/cc/bin/$(TARGET_ARCH)-elf
+TOOLCHAIN := $(TOOLS_DIR)/cc/bin/$(TARGET_ARCH)-none-elf
 
 AS  := $(TOOLCHAIN)-gcc
 CC  := $(TOOLCHAIN)-gcc
@@ -135,12 +135,6 @@ format:
 
 format-diff:
 	git diff -U0 --no-color | clang-format-diff -i -p1 -style=file
-
-install-deps:
-	$(TOOLS_DIR)/install_deps.sh
-
-install-cc:
-	$(TOOLS_DIR)/install_cc.sh
 
 boot-vm: build-all
 	$(VM) $(VM_FLAGS) -kernel $(KERNEL_IMG)
