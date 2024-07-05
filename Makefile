@@ -36,7 +36,7 @@ TOOLCHAIN := $(TOOLS_DIR)/cc/bin/$(TARGET_ARCH)-none-elf
 
 AS  := $(TOOLCHAIN)-gcc
 CC  := $(TOOLCHAIN)-gcc
-DBG := gdb
+DBG := $(TOOLCHAIN)-gdb
 LD  := $(TOOLCHAIN)-gcc
 OD  := $(TOOLCHAIN)-objdump
 OC  := $(TOOLCHAIN)-objcopy
