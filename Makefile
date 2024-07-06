@@ -40,7 +40,6 @@ DBG := $(TOOLCHAIN)-gdb
 LD  := $(TOOLCHAIN)-gcc
 OD  := $(TOOLCHAIN)-objdump
 OC  := $(TOOLCHAIN)-objcopy
-VM  := qemu-system-$(TARGET_ARCH)
 
 AS_FLAGS  := -c -g -mgeneral-regs-only -MMD
 C_FLAGS   := -c -g -mgeneral-regs-only -ffreestanding -nostdlib -nostartfiles -Wall -Wextra -MMD
@@ -48,7 +47,6 @@ DBG_FLAGS := -q -tui
 LD_FLAGS  := -g -ffreestanding -nostdlib -nostartfiles
 LD_LIBS   := -lgcc
 PP_FLAGS  := -E -P -x c -D__ASSEMBLER__
-VM_FLAGS  := -M raspi3b -serial null -serial stdio
 OD_FLAGS  := -s -d
 
 KERNEL_DIRS := $(KERNEL_DIR) $(ARCH_DIR) $(DRIVERS_DIR) $(USER_DIR)
@@ -136,26 +134,22 @@ format:
 format-diff:
 	git diff -U0 --no-color | clang-format-diff -i -p1 -style=file
 
-boot-vm: build-all
-	$(VM) $(VM_FLAGS) -kernel $(KERNEL_IMG)
-
-debug-boot-vm: build-all
-	$(VM) $(VM_FLAGS) -s -S -kernel $(KERNEL_IMG) &
+debug-boot:
 	$(DBG) $(DBG_FLAGS) -x $(TOOLS_DIR)/startup_boot.gdb
 
-debug-kernel-vm: build-all
-	$(VM) $(VM_FLAGS) -s -S -kernel $(KERNEL_IMG) &
+debug-kernel:
 	$(DBG) $(DBG_FLAGS) -x $(TOOLS_DIR)/startup_kernel.gdb
 
 dump-all: build-all
 	$(OD) $(OD_FLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
 
 boot-copy: build-all
+	diskutil mountDisk bootfs
 	cp $(KERNEL_IMG) /Volumes/bootfs/kernel8.img
-	diskutil eject bootfs
+	diskutil unmountDisk bootfs
 
 serial:
-	picocom -b 115200 /dev/tty.usbserial-*
+	picocom -b 115200 /dev/tty.usbserial-A9028XIR
 
 todo:
 	grep --recursive --exclude-dir=$(OUT_DIR) --regexp="TODO($(USER)): " || echo "No user TODOs found!"
