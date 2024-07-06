@@ -115,6 +115,9 @@ build-target: $(KERNEL_OBJS) $(LD_FILE)
 	$(LD) $(LD_FLAGS) -T $(LD_FILE) -o $(KERNEL_ELF) $(KERNEL_OBJS) $(LDLIBS)
 	$(OC) $(KERNEL_ELF) -O binary $(KERNEL_IMG)
 
+clean:
+	rm -rf $(OUT_DIR)
+
 build-gen: $(KERNEL_CONF) $(KERNEL_BUILD_INFO)
 
 build-pre: build-gen
@@ -123,10 +126,7 @@ build-main: build-pre build-target
 
 build-post: build-main
 
-build-all: build-post
-
-clean:
-	rm -rf $(OUT_DIR)
+build-all: clean build-post
 
 format:
 	find $(SRC_DIRS) -name *.c -or -name *.h | xargs clang-format -i --style=file

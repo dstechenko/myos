@@ -1,6 +1,7 @@
 # myos
 
 TODOs(progress):
+- Rename non-debug mode into explicit eng/prod mode
 - Refactor all the modules
 - Add logs to each init step, init logs asap
 - Make MMU optional, make SMP optional

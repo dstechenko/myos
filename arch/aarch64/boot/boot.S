@@ -14,6 +14,17 @@
 
 BOOT_ENTRY_POINT_LABEL:
 boot_start:
+
+#if CONFIG_ENABLED(CONFIG_DEBUG)
+boot_debug_trap:
+  // Trap here until debugger is connected if debug is enabled.
+  ldr x0, =1
+boot_debug_trap_loop:
+  nop
+  cbnz x0, boot_debug_trap_loop
+#endif
+
+boot_init:
   // Check our current exception level.
   // Depending on the boot loader we could be in EL2 or EL3.
   mrs x0, currentel
@@ -59,7 +70,6 @@ boot_init_stack:
 
   // Skip page table creation for non-primary core.
   cbnz x0, boot_init_page_tables
-
   // Set up initial kernel/device pages.
   bl boot_create_page_tables
 
