@@ -12,6 +12,9 @@ export TARGET_BOARD
 TARGET_MODE  ?= debug
 export TARGET_MODE
 
+TARGET_IF ?= ftdi/ft232h
+export TARGET_IF
+
 ARCH_DIR    := arch
 CONFIGS_DIR := configs
 DRIVERS_DIR := drivers
@@ -25,6 +28,7 @@ ARCH_DIR    := $(ARCH_DIR)/$(TARGET_ARCH)
 BOOT_DIR    := $(ARCH_DIR)/boot
 GEN_DIR     := $(OUT_DIR)/gen
 SRC_DIRS    := $(ARCH_DIR) $(CONFIGS_DIR) $(DRIVERS_DIR) $(INC_DIRS) $(KERNEL_DIR) $(USER_DIR)
+OCD_DIR     := /opt/homebrew/share/openocd/scripts
 
 CONFIGS_ARCH_DIR  := $(ARCH_DIR)/configs
 CONFIGS_BOARD_DIR := $(CONFIGS_DIR)/board/$(TARGET_BOARD)
@@ -40,6 +44,7 @@ DBG := $(TOOLCHAIN)-gdb
 LD  := $(TOOLCHAIN)-gcc
 OD  := $(TOOLCHAIN)-objdump
 OC  := $(TOOLCHAIN)-objcopy
+OCD := openocd
 
 AS_FLAGS  := -c -g -mgeneral-regs-only -MMD
 C_FLAGS   := -c -g -mgeneral-regs-only -ffreestanding -nostdlib -nostartfiles -Wall -Wextra -MMD
@@ -75,8 +80,8 @@ endif
 KERNEL_CONF_FILES := $(KERNEL_CONF_FILES) $(KERNEL_CONF_MODE_FILES)
 
 .PHONY: clean build-gen build-all build-pre build-post build-main
-.PHONY: format install_deps install_cc dump-all
-.PHONY: boot-vm boot-copy debug-vm serial
+.PHONY: format format-diff todo boot-copy
+.PHONY: debug-boot debug-kernel serial dump-all
 
 $(KERNEL_CONF):
 	mkdir -p $(@D)
@@ -139,6 +144,9 @@ debug-boot:
 
 debug-kernel:
 	$(DBG) $(DBG_FLAGS) -x $(TOOLS_DIR)/startup_kernel.gdb
+
+debug-open:
+	$(OCD) -f $(OCD_DIR)/interface/$(TARGET_IF).cfg -f $(OCD_DIR)/target/$(TARGET_BOARD).cfg
 
 dump-all: build-all
 	$(OD) $(OD_FLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
