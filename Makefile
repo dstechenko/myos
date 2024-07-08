@@ -148,6 +148,9 @@ debug-kernel:
 debug-open:
 	$(OCD) -f $(OCD_DIR)/interface/$(TARGET_IF).cfg -f $(OCD_DIR)/target/$(TARGET_BOARD).cfg
 
+debug-cli:
+	telnet 127.0.0.1 4444
+
 dump-all: build-all
 	$(OD) $(OD_FLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
 
