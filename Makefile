@@ -28,7 +28,7 @@ ARCH_DIR    := $(ARCH_DIR)/$(TARGET_ARCH)
 BOOT_DIR    := $(ARCH_DIR)/boot
 GEN_DIR     := $(OUT_DIR)/gen
 SRC_DIRS    := $(ARCH_DIR) $(CONFIGS_DIR) $(DRIVERS_DIR) $(INC_DIRS) $(KERNEL_DIR) $(USER_DIR)
-OCD_DIR     := /opt/homebrew/share/openocd/scripts
+OCD_DIR     := $(TOOLS_DIR)/openocd/scripts
 
 CONFIGS_ARCH_DIR  := $(ARCH_DIR)/configs
 CONFIGS_BOARD_DIR := $(CONFIGS_DIR)/board/$(TARGET_BOARD)
