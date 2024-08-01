@@ -7,5 +7,6 @@
 #include <kernel/types.h>
 
 uint64_t timer_get_ticks(void);
+void timer_debug(void);
 
 #endif // !DRIVERS_TIMER_H

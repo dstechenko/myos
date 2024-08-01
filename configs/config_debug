@@ -2,4 +2,5 @@
 # License: http://www.gnu.org/licenses/gpl.html
 
 DEBUG                   true
+DEBUG_TRAP              true
 LOG_LEVEL               2

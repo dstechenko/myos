@@ -133,6 +133,9 @@ build-post: build-main
 
 build-all: clean build-post
 
+dump-all: build-all
+	$(OD) $(OD_FLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
+
 format:
 	find $(SRC_DIRS) -name *.c -or -name *.h | xargs clang-format -i --style=file
 
@@ -151,10 +154,7 @@ debug-open:
 debug-cli:
 	telnet 127.0.0.1 4444
 
-dump-all: build-all
-	$(OD) $(OD_FLAGS) $(KERNEL_ELF) > $(KERNEL_ELF).dump
-
-boot-copy: build-all
+boot-copy: dump-all
 	diskutil mountDisk bootfs
 	cp $(KERNEL_IMG) /Volumes/bootfs/kernel8.img
 	diskutil unmountDisk bootfs

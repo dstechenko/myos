@@ -15,7 +15,7 @@
 BOOT_ENTRY_POINT_LABEL:
 boot_start:
 
-#if CONFIG_ENABLED(CONFIG_DEBUG)
+#if CONFIG_ENABLED(CONFIG_DEBUG_TRAP)
 boot_debug_trap:
   // Trap here until debugger is connected if debug is enabled.
   ldr x0, =1

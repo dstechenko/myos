@@ -19,5 +19,8 @@ uintptr_t registers_get_kernel_page_table(void);
 void registers_test(uint64_t core, uintptr_t start);
 void registers_enable_mmu(void);
 
+void cache_invalidate(uintptr_t va);
+void cache_barrier(void);
+
 #endif // !__ASSEMBLER__
 #endif // !ASM_REGISTERS_H

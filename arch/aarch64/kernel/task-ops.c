@@ -57,11 +57,19 @@ struct proc_regs *task_get_proc_regs(struct task *task) {
   return (struct proc_regs *)(stack - sizeof(struct proc_regs));
 }
 
+static void clear_page(uintptr_t va) {
+  for (uintptr_t ptr = va; ptr < va + PAGE_SIZE; ptr++) {
+    cache_invalidate(ptr);
+  }
+  cache_barrier();
+}
+
 int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t size) {
   struct task *current;
   struct proc_regs *current_regs;
-  uintptr_t text_page;
+  uintptr_t page;
 
+  // TOOD(dstechenko): check pc within text/size
   ASSERT(pc);
   current = task_get_current();
   ASSERT(current);
@@ -70,21 +78,20 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   ASSERT(current_regs);
 
   // TODO(dstechenko): make these pages data
-  get_user_page(current, 1 * PAGE_SIZE);
+  page = get_user_page(current, 1 * PAGE_SIZE);
   current->user_stack = (void *)PAGE_SIZE;
+  clear_page(page);
 
   // TODO(dstechenko): make these pages executable
-  text_page = get_user_page(current, 2 * PAGE_SIZE);
-  memcpy(ADR_TO_PTR(text_page), ADR_TO_PTR(text), size);
+  page = get_user_page(current, 2 * PAGE_SIZE);
+  memcpy(ADR_TO_PTR(page), ADR_TO_PTR(text), size);
+  clear_page(page);
 
   current_regs->sp = (uint64_t)current->user_stack + TASK_STACK_SIZE;
   current_regs->pc = (uint64_t)(2 * PAGE_SIZE);
   current_regs->ps = (uint64_t)PSR_MODE_EL0t;
 
   registers_set_user_page_table(current->memory.context->pgd);
-  LOG_INFO("0x2000 = %lx", *((uint64_t *)0x2000));
-  LOG_INFO("0x2000 = %lx", *((uint64_t *)0x2000));
-  LOG_INFO("0x2000 = %lx", *((uint64_t *)0x2000));
 
   return 0;
 }

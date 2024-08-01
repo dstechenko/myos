@@ -10,10 +10,12 @@
 .globl registers_set_kernel_page_table
 .globl registers_get_kernel_page_table
 
-.globl registers_test
+.globl cache_invalidate
+.globl cache_barrier
 
 // TODO(dstechenko): move this file to cpu
 // TODO(dstechenko): add config for this
+// TODO(dstechenko): extract  tlb flush as a separate operation
 
 registers_get_priv:
   // Read from the system register for exception levels.
@@ -34,36 +36,37 @@ registers_get_core:
 registers_set_user_page_table:
   dsb sy
   msr ttbr0_el1, x0
-  isb
+  isb sy
   tlbi vmalle1is
   ic iallu
   dsb sy
-  isb
+  isb sy
   ret
 
 registers_get_user_page_table:
   mrs x0, ttbr0_el1
   ret
 
-// TODO(dstechenko): extract  tlb flush as a separate operation
-
 registers_set_kernel_page_table:
   dsb sy
   msr ttbr1_el1, x0
-  isb
+  isb sy
   tlbi vmalle1is
+  ic iallu
   dsb sy
-  isb
+  isb sy
   ret
-
 
 registers_get_kernel_page_table:
   mrs x0, ttbr1_el1
   ret
 
-registers_test:
-  mov x2, 0xD8
-  str x1, [x2, x0, LSL #3]
+cache_invalidate:
+  dc cvau, x0
+  ic ivau, x0
+  ret
+
+cache_barrier:
   dsb sy
-  sev
+  isb sy
   ret

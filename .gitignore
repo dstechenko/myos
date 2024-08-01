@@ -1,6 +1,8 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
+
 out/*
 tools/cc/*
 .gdb_history
+.DS_Store

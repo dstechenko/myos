@@ -8,7 +8,7 @@ PHYSICAL_DEVICE_MEMORY_END    0
 
 DEBUG                                 false
 LOG_LEVEL                             1
-SYSTEM_TIMER_FREQ                     10000
+SYSTEM_TIMER_FREQ                     1000000
 
 SYSTEM_64BIT                          false
 SYSTEM_32BIT                          false

@@ -14,6 +14,8 @@
 
 SECTIONS(section_kernel);
 
+// TODO(dstechenko): add random test
+
 static void test_kernel_atomic32(void) {
   int32_t tmp;
   static atomic32_t obj = ATOMIC_INIT(1);

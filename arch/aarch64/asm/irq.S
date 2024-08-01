@@ -5,7 +5,8 @@
 .globl irq_local_enable
 .globl irq_local_disable
 .globl irq_local_restore
-.globl irq_local_enabled
+.globl irq_local_get
+.globl irq_local_get_daif
 
 irq_local_init:
   adr	x0, entry_ex_vector
@@ -26,7 +27,11 @@ irq_local_restore:
   msr daif, x0
   ret
 
-irq_local_enabled:
+irq_local_get:
   mrs x0, daif
-  eor x0, x0, #2
+  and x0, x0, 0x80
+  ret
+
+irq_local_get_daif:
+  mrs x0, daif
   ret

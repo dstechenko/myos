@@ -8,6 +8,7 @@
 
 #define CPU_SPIN_INDEX(index) *((uint64_t *)(CONFIG_BOOT_CPU##index##_SPIN_GATE)) = CONFIG_BOOT_LOAD_ADDRESS;
 
+// TODO(dstechenk): fix smp
 void cpu_init(void) {
   /* CPU_SPIN_INDEX(0); */
   /* CPU_SPIN_INDEX(1); */
