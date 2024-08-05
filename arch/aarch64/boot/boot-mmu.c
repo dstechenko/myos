@@ -78,5 +78,4 @@ void boot_create_page_tables(void) {
   boot_kernel_pgd = boot_get_next_page();
   boot_map_range(boot_kernel_pgd, PHYSICAL_MEMORY_START, PHYSICAL_DEVICE_MEMORY_START, MMU_KERNEL_FLAGS);
   boot_map_range(boot_kernel_pgd, PHYSICAL_DEVICE_MEMORY_START, PHYSICAL_DEVICE_MEMORY_END, MMU_DEVICE_FLAGS);
-
 }

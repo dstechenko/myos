@@ -23,8 +23,6 @@
 #include <kernel/test.h>
 #include <kernel/types.h>
 
-#include <drivers/timer.h>
-
 SECTIONS(section_user);
 SECTIONS(user);
 
@@ -58,7 +56,6 @@ static void init_start_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FO
 static void init_loop_schedule(void) {
   while (true) {
     delay_cycles(5000000);
-    /* print("* Tick from kernel init task on core %d\n\r", registers_get_core()); */
     if (cpu_is_primary()) {
       task_schedule();
     }
@@ -86,8 +83,6 @@ void init_start(void) {
     LOG_INFO("Tested successfully!");
   }
 #endif  // CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
-
-  LOG_DEBUG("IRQ enabled: %s", irq_local_enabled() ? "true" : "false");
 
   init_loop_schedule();
 }
