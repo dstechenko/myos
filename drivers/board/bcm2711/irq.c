@@ -8,6 +8,9 @@
 
 #include "timer.h"
 
+// TODO(dstechenko): clean this up
+#include <kernel/log.h>
+
 /* #define MMIO_BASE 0 */
 
 /* void mmio_write32(const uint64_t reg, const uint32_t data) { */
@@ -50,10 +53,6 @@ void irq_handle(void) {
   while (irq) {
     if (irq & IRQ_TABLE_SYSTEM_TIMER_1) {
       irq &= ~IRQ_TABLE_SYSTEM_TIMER_1;
-      timer_handle();
-    }
-    if (irq & IRQ_TABLE_SYSTEM_TIMER_3) {
-      irq &= ~IRQ_TABLE_SYSTEM_TIMER_3;
       timer_handle();
     }
   }

@@ -33,8 +33,10 @@ void task_dequeue(struct task *task) { ASSERT(task); }
 
 void task_tick(void) {
   ASSERT(tasks_current);
-  tasks_current->ticks--;
-  if (tasks_current->ticks > 0 || tasks_current->preempt > 0) return;
+  if (tasks_current->ticks)
+    tasks_current->ticks--;
+  if (tasks_current->ticks || tasks_current->preempt)
+    return;
   irq_local_enable();
   task_schedule();
   irq_local_disable();
