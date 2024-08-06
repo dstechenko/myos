@@ -7,10 +7,17 @@
 
 #include <kernel/types.h>
 
+enum cpu_mode {
+  CPU_MODE_UNKNOWN,
+  CPU_MODE_KERNEL,
+  CPU_MODE_USER,
+};
+
 void cpu_yield(void);
 
-uint32_t cpu_get_priv(void);
+enum cpu_mode cpu_get_mode(void);
 uint32_t cpu_get_core(void);
+bool cpu_is_primary(void);
 
 void cpu_set_user_pt(uintptr_t pt);
 uintptr_t cpu_get_user_pt(void);

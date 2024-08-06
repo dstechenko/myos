@@ -2,9 +2,9 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <asm/atomic.h>
+#include <asm/cpu.h>
 #include <asm/delay.h>
 #include <asm/irq.h>
-#include <asm/registers.h>
 #include <asm/sections.h>
 
 #include <drivers/subsystem.h>
@@ -56,9 +56,7 @@ static void init_start_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FO
 static void init_loop_schedule(void) {
   while (true) {
     delay_cycles(5000000);
-    if (cpu_is_primary()) {
-      task_schedule();
-    }
+    task_schedule();
   }
 }
 

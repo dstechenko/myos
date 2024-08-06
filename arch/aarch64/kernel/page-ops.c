@@ -3,17 +3,18 @@
 
 #include "page-ops.h"
 
+#include <asm/cpu.h>
 #include <asm/memory-defs.h>
 #include <asm/mmu-defs.h>
 #include <asm/page-defs.h>
-#include <asm/registers.h>
 #include <asm/sections.h>
+
 #include <kernel/assert.h>
 #include <kernel/bits.h>
 #include <kernel/log.h>
 #include <kernel/memory-ops.h>
 #include <kernel/ptrs.h>
-#include <stddef.h>
+#include <kernel/types.h>
 
 #include "page-context.h"
 
@@ -118,9 +119,9 @@ void page_debug(const size_t limit) {
   LOG_DEBUG("  Physical device memory end   - %lx", PHYSICAL_DEVICE_MEMORY_END);
   LOG_DEBUG("  Physical device memory size  - %lx", PHYSICAL_DEVICE_MEMORY_SIZE);
   LOG_DEBUG("User pages:");
-  log_page_global_directory(registers_page_get_user_table(), limit);
+  log_page_global_directory(cpu_get_user_pt(), limit);
   LOG_DEBUG("Kernel pages:");
-  log_page_global_directory(registers_page_get_kernel_table(), limit);
+  log_page_global_directory(cpu_get_kernel_pt(), limit);
 }
 
 void page_init_sections(void) {
@@ -178,8 +179,9 @@ static void page_map_kernel_into(uintptr_t pgd, struct page page, const uint64_t
 }
 
 void page_map_kernel(struct page page) {
-  page_map_kernel_into(registers_page_get_kernel_table(), page, MMU_KERNEL_PAGES_FLAGS);
-  registers_set_kernel_page_table(registers_page_get_kernel_table());
+  page_map_kernel_into(cpu_get_kernel_pt(), page, MMU_KERNEL_PAGES_FLAGS);
+  // TODO(dstechenko): just flash tlbs here instead
+  cpu_set_kernel_pt(cpu_get_kernel_pt());
 }
 
 static void map_kernel_range(const uintptr_t pgd, uintptr_t begin, const uintptr_t end,
@@ -202,7 +204,7 @@ void page_init_tables(void) {
   map_kernel_range(pgd, PHYSICAL_DEVICE_MEMORY_END, PHYSICAL_MEMORY_END, MMU_KERNEL_PAGES_FLAGS);
 
   // TODO(dstechenko): want to unset user here, but we need to init cpus
-  registers_set_kernel_page_table(pgd);
+  cpu_set_kernel_pt(pgd);
 }
 
 void page_map_user(struct task *task, struct page page) {

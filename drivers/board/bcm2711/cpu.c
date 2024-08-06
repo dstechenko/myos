@@ -1,8 +1,10 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <asm/registers.h>
+#include <asm/cpu.h>
+
 #include <drivers/cpu.h>
+
 #include <kernel/config.h>
 #include <kernel/types.h>
 

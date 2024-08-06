@@ -13,9 +13,10 @@ static uintptr_t boot_page_index = PHYSICAL_DEVICE_MEMORY_START;
 uintptr_t boot_user_pgd;
 uintptr_t boot_kernel_pgd;
 
-static void boot_memzero(uint8_t *dst, size_t cnt) {
+static void boot_memzero(uintptr_t dst, size_t cnt) {
+  uint8_t *buf = (uint8_t *)dst;
   while (cnt > 0) {
-    dst[--cnt] = 0;
+    buf[--cnt] = 0;
   }
 }
 
@@ -33,7 +34,8 @@ static size_t boot_get_table_index(const size_t shift, const uintptr_t addr) {
   return (addr >> shift) & (PAGES_PER_TABLE - 1);
 }
 
-static uintptr_t boot_map_table(uintptr_t *table, const size_t shift, const uintptr_t addr) {
+static uintptr_t boot_map_table(uintptr_t dir, const size_t shift, const uintptr_t addr) {
+  uintptr_t *table = (uintptr_t *)dir;
   uintptr_t page;
   size_t index;
 
@@ -47,7 +49,8 @@ static uintptr_t boot_map_table(uintptr_t *table, const size_t shift, const uint
   }
 }
 
-static void boot_map_block(uintptr_t *table, const uintptr_t addr, const uint64_t flags) {
+static void boot_map_block(uintptr_t dir, const uintptr_t addr, const uint64_t flags) {
+  uintptr_t *table = (uintptr_t *)dir;
   size_t index;
 
   index = boot_get_table_index(SECTION_SHIFT, addr);
@@ -55,7 +58,7 @@ static void boot_map_block(uintptr_t *table, const uintptr_t addr, const uint64_
 }
 
 static void boot_map_page(const uintptr_t pgd, const uintptr_t addr, const uint64_t flags) {
-  uintptr_t pud, pmd, pte;
+  uintptr_t pud, pmd;
 
   pud = boot_map_table(pgd, PGD_SHIFT, addr);
   pmd = boot_map_table(pud, PUD_SHIFT, addr);

@@ -1,18 +1,14 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-.globl registers_get_priv
-.globl registers_get_core
-.globl registers_set_user_page_table
-.globl registers_page_get_user_table
-.globl registers_set_kernel_page_table
-.globl registers_page_get_kernel_table
+.globl cpu_get_level
+.globl cpu_get_core
+.globl cpu_set_user_pt
+.globl cpu_get_user_pt
+.globl cpu_set_kernel_pt
+.globl cpu_get_kernel_pt
 
-// TODO(dstechenko): move this file to cpu
-// TODO(dstechenko): add config for this
-// TODO(dstechenko): extract  tlb flush as a separate operation
-
-registers_get_priv:
+cpu_get_level:
   // Read from the system register for exception levels.
   // EL0 least priv, EL3 the most.
   mrs x0, currentel
@@ -21,14 +17,13 @@ registers_get_priv:
   lsr x0, x0, #2
   ret
 
-// TODO(dstechenko): only use the first two bits
-registers_get_core:
+cpu_get_core:
   // Read from the system register for multiprocessor affinity.
   mrs x0, mpidr_el1
   and x0, x0, #0xFF
   ret
 
-registers_set_user_page_table:
+cpu_set_user_pt:
   dsb sy
   msr ttbr0_el1, x0
   isb sy
@@ -38,11 +33,11 @@ registers_set_user_page_table:
   isb sy
   ret
 
-registers_page_get_user_table:
+cpu_get_user_pt:
   mrs x0, ttbr0_el1
   ret
 
-registers_set_kernel_page_table:
+cpu_set_kernel_pt:
   dsb sy
   msr ttbr1_el1, x0
   isb sy
@@ -52,6 +47,6 @@ registers_set_kernel_page_table:
   isb sy
   ret
 
-registers_page_get_kernel_table:
+cpu_get_kernel_pt:
   mrs x0, ttbr1_el1
   ret

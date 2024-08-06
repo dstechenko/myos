@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
+#include <asm/cpu.h>
 #include <asm/proc-regs.h>
-#include <asm/registers.h>
 
 #include <kernel/allocator.h>
 #include <kernel/assert.h>
@@ -81,7 +81,7 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   current_regs->pc = (uint64_t)(2 * PAGE_SIZE);
   current_regs->ps = (uint64_t)PSR_MODE_EL0t;
 
-  registers_set_user_page_table(current->memory.context->pgd);
+  cpu_set_user_pt(current->memory.context->pgd);
 
   return 0;
 }
