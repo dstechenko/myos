@@ -5,6 +5,8 @@
 .globl irq_local_enable
 .globl irq_local_disable
 .globl irq_local_restore
+
+// TODO(dstechenko): refactor here
 .globl irq_local_get
 .globl irq_local_get_daif
 

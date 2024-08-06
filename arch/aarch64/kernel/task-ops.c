@@ -3,6 +3,7 @@
 
 #include <asm/proc-regs.h>
 #include <asm/registers.h>
+
 #include <kernel/allocator.h>
 #include <kernel/assert.h>
 #include <kernel/config.h>
@@ -10,10 +11,6 @@
 #include <kernel/memory-ops.h>
 #include <kernel/ptrs.h>
 #include <kernel/task.h>
-
-// DEBUG
-#include <kernel/log.h>
-#include <kernel/page.h>
 
 #include "page-context.h"
 #include "task-context.h"
@@ -57,13 +54,6 @@ struct proc_regs *task_get_proc_regs(struct task *task) {
   return (struct proc_regs *)(stack - sizeof(struct proc_regs));
 }
 
-static void clear_page(uintptr_t va) {
-  for (uintptr_t ptr = va; ptr < va + PAGE_SIZE; ptr++) {
-    cache_invalidate(ptr);
-  }
-  cache_barrier();
-}
-
 int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t size) {
   struct task *current;
   struct proc_regs *current_regs;
@@ -80,12 +70,12 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   // TODO(dstechenko): make these pages data
   page = get_user_page(current, 1 * PAGE_SIZE);
   current->user_stack = (void *)PAGE_SIZE;
-  clear_page(page);
+  clear_page_cache(page);
 
   // TODO(dstechenko): make these pages executable
   page = get_user_page(current, 2 * PAGE_SIZE);
   memcpy(ADR_TO_PTR(page), ADR_TO_PTR(text), size);
-  clear_page(page);
+  clear_page_cache(page);
 
   current_regs->sp = (uint64_t)current->user_stack + TASK_STACK_SIZE;
   current_regs->pc = (uint64_t)(2 * PAGE_SIZE);

@@ -20,7 +20,6 @@ int32_t atomic32_cmp_swp(atomic32_t *val, int32_t old, int32_t new);
 
 static inline int32_t atomic32_get_relaxed(const atomic32_t *val) {
   const volatile atomic32_t *ref = val;
-
   ASSERT(ref);
   return ref->value;
 }
@@ -44,7 +43,6 @@ int64_t atomic64_cmp_swp(atomic64_t *val, int64_t old, int64_t new);
 
 static inline int64_t atomic64_get_relaxed(const atomic64_t *val) {
   const volatile atomic64_t *ref = val;
-
   ASSERT(ref);
   return ref->value;
 }

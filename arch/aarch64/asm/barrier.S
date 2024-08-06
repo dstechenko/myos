@@ -1,18 +1,18 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-.globl barrier_data_memory
+.globl barrier_data_mem
 .globl barrier_data_sync
-.globl barrier_instruction_sync
+.globl barrier_inst_sync
 
-barrier_data_memory:
+barrier_data_mem:
   dmb ish
   ret
 
 barrier_data_sync:
-  dsb ish
+  dsb sy
   ret
 
-barrier_instruction_sync:
+barrier_inst_sync:
   isb sy
   ret

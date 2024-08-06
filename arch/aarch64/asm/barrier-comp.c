@@ -3,4 +3,4 @@
 
 #include <asm/barrier.h>
 
-void barrier_compiler(void) { asm volatile("" ::: "memory"); }
+void barrier_comp(void) { asm volatile("" ::: "memory"); }

@@ -1,8 +1,11 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
+#include <asm/barrier.h>
+#include <asm/cache.h>
 #include <asm/memory-defs.h>
 #include <asm/page-defs.h>
+
 #include <kernel/assert.h>
 #include <kernel/config.h>
 #include <kernel/error.h>
@@ -10,7 +13,7 @@
 #include <kernel/page.h>
 #include <kernel/ptrs.h>
 #include <kernel/task.h>
-#include <stddef.h>
+
 #include <uapi/bool.h>
 
 // TODO(dstechenko): do faster traversal
@@ -58,16 +61,28 @@ uintptr_t get_kernel_page(void) {
   return paddr ? phys_to_virt(paddr) : paddr;
 }
 
+void clear_page_cache(uintptr_t va) {
+  for (uintptr_t ptr = va; ptr < va + PAGE_SIZE; ptr++) {
+    cache_inv_data(ptr);
+    cache_inv_inst(ptr);
+  }
+  barrier_data_sync();
+  barrier_inst_sync();
+}
+
 // TODO(dstecheko): use pages, use last available vaddr for task?
 uintptr_t get_user_page(struct task *task, const uintptr_t vaddr) {
-  uintptr_t paddr;
+  uintptr_t paddr, page;
 
   ASSERT(task);
 
   paddr = get_page();
   if (paddr) map_user_page(task, (struct page){.vaddr = vaddr, .paddr = paddr});
 
-  return paddr ? phys_to_virt(paddr) : paddr;
+  page = paddr ? phys_to_virt(paddr) : paddr;
+  if (page) clear_page_cache(page);
+
+  return page;
 }
 
 void put_page(const uintptr_t page) {

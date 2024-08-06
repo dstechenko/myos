@@ -1,17 +1,12 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <asm/registers-defs.h>
-
 .globl registers_get_priv
 .globl registers_get_core
 .globl registers_set_user_page_table
 .globl registers_get_user_page_table
 .globl registers_set_kernel_page_table
 .globl registers_get_kernel_page_table
-
-.globl cache_invalidate
-.globl cache_barrier
 
 // TODO(dstechenko): move this file to cpu
 // TODO(dstechenko): add config for this
@@ -59,14 +54,4 @@ registers_set_kernel_page_table:
 
 registers_get_kernel_page_table:
   mrs x0, ttbr1_el1
-  ret
-
-cache_invalidate:
-  dc cvau, x0
-  ic ivau, x0
-  ret
-
-cache_barrier:
-  dsb sy
-  isb sy
   ret
