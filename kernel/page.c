@@ -42,7 +42,7 @@ void page_reserve_range(uintptr_t begin, const uintptr_t end) {
   }
 }
 
-uintptr_t get_page(void) {
+uintptr_t page_get(void) {
   size_t i;
 
   // TODO(dstechenko): add proper zero pages
@@ -55,13 +55,13 @@ uintptr_t get_page(void) {
   return PTR_TO_ADR(NULL);
 }
 
-uintptr_t get_kernel_page(void) {
-  uintptr_t paddr = get_page();
+uintptr_t page_get_kernel(void) {
+  uintptr_t paddr = page_get();
 
   return paddr ? phys_to_virt(paddr) : paddr;
 }
 
-void clear_page_cache(uintptr_t va) {
+void page_clear_cache(uintptr_t va) {
   for (uintptr_t ptr = va; ptr < va + PAGE_SIZE; ptr++) {
     cache_inv_data(ptr);
     cache_inv_inst(ptr);
@@ -71,25 +71,25 @@ void clear_page_cache(uintptr_t va) {
 }
 
 // TODO(dstecheko): use pages, use last available vaddr for task?
-uintptr_t get_user_page(struct task *task, const uintptr_t vaddr) {
+uintptr_t page_get_user(struct task *task, const uintptr_t vaddr) {
   uintptr_t paddr, page;
 
   ASSERT(task);
 
-  paddr = get_page();
-  if (paddr) map_user_page(task, (struct page){.vaddr = vaddr, .paddr = paddr});
+  paddr = page_get();
+  if (paddr) page_map_user(task, (struct page){.vaddr = vaddr, .paddr = paddr});
 
   page = paddr ? phys_to_virt(paddr) : paddr;
-  if (page) clear_page_cache(page);
+  if (page) page_clear_cache(page);
 
   return page;
 }
 
-void put_page(const uintptr_t page) {
+void page_put(const uintptr_t page) {
   if (page) pages[PAGE_TO_INDEX(page)].used = false;
 }
 
-int copy_user_pages(const struct task *src, struct task *dst) {
+int page_copy_user_all(const struct task *src, struct task *dst) {
   size_t src_count;
   const struct page *src_pages;
 
@@ -99,7 +99,7 @@ int copy_user_pages(const struct task *src, struct task *dst) {
   src_pages = src->memory.user_pages;
 
   for (size_t i = 0; i < src_count; i++) {
-    uintptr_t page = get_user_page(dst, src_pages[i].vaddr);
+    uintptr_t page = page_get_user(dst, src_pages[i].vaddr);
     if (!page) return -ENOMEM;
     memcpy(ADR_TO_PTR(page), ADR_TO_PTR(src_pages[i].vaddr), PAGE_SIZE - 1);
   }

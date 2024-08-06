@@ -139,6 +139,9 @@ dump-all: build-all
 format:
 	find $(SRC_DIRS) -name *.c -or -name *.h | xargs clang-format -i --style=file
 
+replace:
+	 grep -rl "$(GREP_PATTERN)" --exclude-dir={out,docs,tools} | xargs -I{} sed -i "" -e "$(SED_PATTERN)" {}
+
 format-diff:
 	git diff -U0 --no-color | clang-format-diff -i -p1 -style=file
 

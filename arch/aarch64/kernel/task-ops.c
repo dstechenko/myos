@@ -30,15 +30,15 @@ int task_init(struct task *task) {
   ASSERT(task);
 
   ASSERT(sizeof(struct task_context));
-  task->context = zalloc(sizeof(struct task_context), ALLOC_KERNEL);
+  task->context = alloc_zero(sizeof(struct task_context), ALLOC_KERNEL);
   if (!task->context) return -ENOMEM;
 
   ASSERT(sizeof(struct page_context));
-  task->memory.context = zalloc(sizeof(struct page_context), ALLOC_KERNEL);
+  task->memory.context = alloc_zero(sizeof(struct page_context), ALLOC_KERNEL);
   if (!task->memory.context) return -ENOMEM;
 
   ASSERT(TASK_STACK_SIZE);
-  task->stack = zalloc(TASK_STACK_SIZE, ALLOC_KERNEL);
+  task->stack = alloc_zero(TASK_STACK_SIZE, ALLOC_KERNEL);
   if (!task->stack) return -ENOMEM;
 
   return 0;
@@ -68,14 +68,14 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   ASSERT(current_regs);
 
   // TODO(dstechenko): make these pages data
-  page = get_user_page(current, 1 * PAGE_SIZE);
+  page = page_get_user(current, 1 * PAGE_SIZE);
   current->user_stack = (void *)PAGE_SIZE;
-  clear_page_cache(page);
+  page_clear_cache(page);
 
   // TODO(dstechenko): make these pages executable
-  page = get_user_page(current, 2 * PAGE_SIZE);
+  page = page_get_user(current, 2 * PAGE_SIZE);
   memcpy(ADR_TO_PTR(page), ADR_TO_PTR(text), size);
-  clear_page_cache(page);
+  page_clear_cache(page);
 
   current_regs->sp = (uint64_t)current->user_stack + TASK_STACK_SIZE;
   current_regs->pc = (uint64_t)(2 * PAGE_SIZE);

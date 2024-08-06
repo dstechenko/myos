@@ -14,6 +14,7 @@ TODOs(progress):
 - Add irq handlers on each core using local timers
 
 TODOs(backlog):
+- Build armstubs and package config out of the build files
 - Make code/data pages separation
 - Add file systems
 - Separate fork into user/kernel implementations

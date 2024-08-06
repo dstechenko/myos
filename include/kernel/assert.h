@@ -5,10 +5,11 @@
 #define KERNEL_ASSERT_H
 
 #include <kernel/config.h>
+#include <kernel/types.h>
 
 #if CONFIG_ENABLED(CONFIG_DEBUG)
-#define ABORT() handle_abort(__FILE__, __LINE__)
-#define ASSERT(cond) handle_assert(cond, #cond, __FILE__, __LINE__)
+#define ABORT() abort_handle(__FILE__, __LINE__)
+#define ASSERT(cond) assert_handle(cond, #cond, __FILE__, __LINE__)
 #else // !CONFIG_ENABLED(CONFIG_DEBUG)
 #define ABORT() do {} while (false)
 #define ASSERT(cond) do {} while (false)
@@ -16,7 +17,7 @@
 
 #define STATIC_ASSERT(cond, name) typedef char static_assert_##name[(cond) ? 1 : -1]
 
-void handle_abort(const char *file, int line);
-void handle_assert(bool cond, const char *ctx, const char *file, int line);
+void abort_handle(const char *file, int line);
+void assert_handle(bool cond, const char *ctx, const char *file, int line);
 
 #endif // !KERNEL_ASSERT_H

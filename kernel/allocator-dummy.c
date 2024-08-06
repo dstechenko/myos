@@ -16,13 +16,13 @@ void *alloc(const size_t size, const uint8_t flags) {
 
   if (flags & ALLOC_USER) {
     // TODO: do proper alloc for users
-    return (void *)get_kernel_page();
+    return (void *)page_get_kernel();
   } else {
-    return (void *)get_kernel_page();
+    return (void *)page_get_kernel();
   }
 }
 
-void *zalloc(const size_t size, const uint8_t flags) {
+void *alloc_zero(const size_t size, const uint8_t flags) {
   void *obj = alloc(size, flags);
 
   if (obj)
@@ -32,4 +32,4 @@ void *zalloc(const size_t size, const uint8_t flags) {
   return obj;
 }
 
-void free(const void *obj) { put_page(PTR_TO_ADR(obj)); }
+void alloc_free(const void *obj) { page_put(PTR_TO_ADR(obj)); }

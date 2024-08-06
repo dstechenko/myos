@@ -5,14 +5,14 @@
 #include <kernel/assert.h>
 #include <kernel/print.h>
 
-void handle_abort(const char *file, const int line) {
+void abort_handle(const char *file, const int line) {
   print("\nAborting the execution at %s:%d!\n", file, line);
   abort();
 }
 
-void handle_assert(const bool cond, const char *ctx, const char *file, const int line) {
+void assert_handle(const bool cond, const char *ctx, const char *file, const int line) {
   if (!cond) {
     print("\nFailed assert on: %s!\n", ctx);
-    handle_abort(file, line);
+    abort_handle(file, line);
   }
 }

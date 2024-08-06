@@ -38,7 +38,7 @@ int fork_task_context(struct task *forked, const uintptr_t pc, const uint8_t fla
     ASSERT(current_regs);
     *forked_regs = *current_regs;
     forked_regs->regs[0] = 0;
-    copy_user_pages(current, forked);
+    page_copy_user_all(current, forked);
   }
 
   forked_context->pc = (uint64_t)entry_fork_return;

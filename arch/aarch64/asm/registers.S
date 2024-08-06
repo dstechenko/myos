@@ -4,9 +4,9 @@
 .globl registers_get_priv
 .globl registers_get_core
 .globl registers_set_user_page_table
-.globl registers_get_user_page_table
+.globl registers_page_get_user_table
 .globl registers_set_kernel_page_table
-.globl registers_get_kernel_page_table
+.globl registers_page_get_kernel_table
 
 // TODO(dstechenko): move this file to cpu
 // TODO(dstechenko): add config for this
@@ -38,7 +38,7 @@ registers_set_user_page_table:
   isb sy
   ret
 
-registers_get_user_page_table:
+registers_page_get_user_table:
   mrs x0, ttbr0_el1
   ret
 
@@ -52,6 +52,6 @@ registers_set_kernel_page_table:
   isb sy
   ret
 
-registers_get_kernel_page_table:
+registers_page_get_kernel_table:
   mrs x0, ttbr1_el1
   ret

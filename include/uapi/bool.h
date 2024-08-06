@@ -11,4 +11,6 @@
 typedef _Bool bool;
 #endif // !__ASSEMBLER__
 
+// TODO(dstechenko): move out of user api?
+
 #endif // !UAPI_BOOL_H

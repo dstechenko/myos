@@ -4,8 +4,7 @@
 #ifndef KERNEL_MEMORY_OPS_H
 #define KERNEL_MEMORY_OPS_H
 
-#include <stddef.h>
-#include <stdint.h>
+#include <kernel/types.h>
 
 void *memcpy(void *dst, const void *src, size_t cnt);
 void *memset(void *dst, uint8_t val, size_t cnt);
