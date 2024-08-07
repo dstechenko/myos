@@ -15,7 +15,7 @@ void *alloc(const size_t size, const uint8_t flags) {
   ASSERT(size <= PAGE_SIZE);
 
   if (flags & ALLOC_USER) {
-    // TODO: do proper alloc for users
+    // TODO(dstechenko): do proper alloc for users
     return (void *)page_get_kernel();
   } else {
     return (void *)page_get_kernel();
@@ -26,7 +26,7 @@ void *alloc_zero(const size_t size, const uint8_t flags) {
   void *obj = alloc(size, flags);
 
   if (obj)
-    // TODO: user zero pages instead of writing
+    // TODO(dstechenko): user zero pages instead of writing
     memzero(obj, size);
 
   return obj;

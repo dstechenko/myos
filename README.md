@@ -1,6 +1,6 @@
 # myos
 
-TODOs:
+Progress:
 - Run multiple timers - configured
 - Add irq handlers on each core using local timers
 - Add locks to task module

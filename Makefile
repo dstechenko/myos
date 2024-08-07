@@ -13,6 +13,7 @@ INC_DIR     := include
 KERNEL_DIR  := kernel
 USER_DIR    := user
 TOOLS_DIR   := tools
+DOCS_DIR    := docs
 
 ARCH_DIR    := $(ARCH_DIR)/$(TARGET_ARCH)
 BOOT_DIR    := $(ARCH_DIR)/boot
@@ -60,6 +61,7 @@ INC_DIRS := $(INC_DIR) $(GEN_DIR)/include $(ARCH_DIR)/include
 INC_FLAGS := $(INC_DIRS:%=-I%)
 
 LD_FILE := $(OUT_DIR)/boot/link.ld
+GREP_IGNORE := {$(OUT_DIR),$(TOOLS_DIR),$(DOCS_DIR)}
 
 ifeq ($(TARGET_MODE),)
 KERNEL_CONF_MODE_FILES :=
@@ -130,7 +132,7 @@ format:
 	find $(SRC_DIRS) -name *.c -or -name *.h | xargs clang-format -i --style=file
 
 replace:
-	 grep -rl "$(GREP_PATTERN)" --exclude-dir={out,docs,tools} | xargs -I{} sed -i "" -e "$(SED_PATTERN)" {}
+	 grep -rl "$(GREP_PATTERN)" --exclude-dir=$(GREP_IGNORE) | xargs -I{} sed -i "" -e "$(SED_PATTERN)" {}
 
 format-diff:
 	git diff -U0 --no-color | clang-format-diff -i -p1 -style=file
@@ -156,4 +158,4 @@ serial:
 	picocom -b 115200 /dev/tty.usbserial-A9028XIR
 
 todo:
-	grep --recursive --exclude-dir=$(OUT_DIR) --regexp="TODO($(USER)): " || echo "No user TODOs found!"
+	grep --recursive --exclude-dir=$(GREP_IGNORE) --regexp="TODO($(USER))" || echo "No user TODOs found!"

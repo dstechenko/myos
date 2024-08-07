@@ -9,7 +9,6 @@
 #include <kernel/spinlock.h>
 #include <kernel/types.h>
 
-// TODO(dstechenko): need to reverse the registration
 #if CONFIG_ENABLED(CONFIG_BCM2711_UART_ON)
 #include <drivers/uart.h>
 #endif  // CONFIG_ENABLED(CONFIG_BCM2711_UART_ON)
