@@ -4,11 +4,8 @@
 .globl irq_local_init
 .globl irq_local_enable
 .globl irq_local_disable
+.globl irq_local_disabled
 .globl irq_local_restore
-
-// TODO(dstechenko): refactor here
-.globl irq_local_get
-.globl irq_local_get_daif
 
 irq_local_init:
   adr	x0, entry_ex_vector
@@ -25,15 +22,12 @@ irq_local_disable:
   msr	daifset, #2
   ret
 
-irq_local_restore:
-  msr daif, x0
-  ret
-
-irq_local_get:
+irq_local_disabled:
   mrs x0, daif
   and x0, x0, 0x80
+  lsr x0, x0, #7
   ret
 
-irq_local_get_daif:
-  mrs x0, daif
+irq_local_restore:
+  msr daif, x0
   ret

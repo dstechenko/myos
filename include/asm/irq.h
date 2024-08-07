@@ -13,15 +13,10 @@ void irq_local_init(void);
 void irq_local_enable(void);
 irqflags_t irq_local_disable(void);
 void irq_local_restore(irqflags_t flags);
-uint64_t irq_local_get(void);
-uint64_t irq_local_get_daif(void);
+bool irq_local_disabled(void);
 
 static inline bool irq_local_enabled(void) {
-  return !irq_local_get();
-}
-
-static inline bool irq_local_disabled(void) {
-  return !irq_local_enabled();
+  return !irq_local_disabled();
 }
 
 #endif // !__ASSEMBLER__

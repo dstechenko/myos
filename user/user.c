@@ -27,13 +27,13 @@ void user_start(void) {
 void user_task_a(void) {
   while (true) {
     syscall_write("* Tick from user task a\n\r");
-    syscall_delay(50000000);
+    syscall_delay(500000000);
   }
 }
 
 void user_task_b(void) {
   while (true) {
     syscall_write("* Tick from user task b\n\r");
-    syscall_delay(50000000);
+    syscall_delay(500000000);
   }
 }

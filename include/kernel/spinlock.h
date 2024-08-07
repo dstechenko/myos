@@ -11,6 +11,10 @@
 
 TYPE(spinlock_t, atomic32_t);
 
+#define SPIN_LOCK_INIT(name) \
+  spinlock_t name = {.value = false};
+
+void spin_lock_init(spinlock_t *lock);
 irqflags_t spin_lock_irq(spinlock_t *lock);
 void spin_unlock_irq(spinlock_t *lock, irqflags_t flags);
 

@@ -19,7 +19,8 @@
 #define PRINT_BASE_DEC 10
 #define PRINT_BASE_HEX 16
 
-static spinlock_t print_lock;
+static SPIN_LOCK_INIT(lock);
+
 static void (*print_putc)(char) = NULL;
 static void (*print_puts)(const char *) = NULL;
 
@@ -108,6 +109,9 @@ static void print_format(va_list *args, const char **cursor) {
   ASSERT(cursor);
 
   switch (**cursor) {
+    case 'b':
+      print_puts(va_arg(*args, int) ? "true" : "false");
+      break;
     case 'c':
       print_putc((char)va_arg(*args, int));
       break;
@@ -151,7 +155,7 @@ void print_args(const char *format, va_list *args) {
   ASSERT(format);
   ASSERT(args);
 
-  /* flags = spin_lock_irq(&print_lock); */
+  flags = spin_lock_irq(&lock);
   for (cursor = format; *cursor != '\0'; cursor++) {
     if (*cursor == '%') {
       cursor++;
@@ -160,5 +164,5 @@ void print_args(const char *format, va_list *args) {
       print_putc(*cursor);
     }
   }
-  /* spin_unlock_irq(&print_lock, flags); */
+  spin_unlock_irq(&lock, flags);
 }

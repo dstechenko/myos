@@ -2,13 +2,14 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <drivers/timer.h>
+
 #include <kernel/assert.h>
 #include <kernel/log.h>
 #include <kernel/print.h>
 #include <kernel/spinlock.h>
 #include <kernel/types.h>
 
-static spinlock_t log_lock;
+static SPIN_LOCK_INIT(lock);
 
 static const char *log_level_to_string(const uint8_t level) {
   switch (level) {
@@ -45,12 +46,12 @@ void log(const uint8_t level, const char *format, ...) {
   ASSERT(format);
   if (CONFIG_LOG_LEVEL < level) return;
 
-  /* flags = spin_lock_irq(&log_lock); */
+  flags = spin_lock_irq(&lock);
   log_timestamp();
   log_level(level);
   va_start(args, format);
   print_args(format, &args);
   va_end(args);
   print("\n\r");
-  /* spin_unlock_irq(&log_lock, flags); */
+  spin_unlock_irq(&lock, flags);
 }
