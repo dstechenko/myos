@@ -6,6 +6,7 @@
 #ifndef __ASSEMBLER__
 
 #include <kernel/types.h>
+#include <kernel/config.h>
 
 enum cpu_mode {
   CPU_MODE_UNKNOWN,
@@ -24,6 +25,9 @@ uintptr_t cpu_get_user_pt(void);
 
 void cpu_set_kernel_pt(uintptr_t pt);
 uintptr_t cpu_get_kernel_pt(void);
+
+#define for_each_cpu(name) \
+  for (size_t name = 0; name < CONFIG_BOOT_CPU_COUNT; name++)
 
 #endif // !__ASSEMBLER__
 #endif // !ASM_CPU_H

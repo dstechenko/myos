@@ -74,7 +74,7 @@ boot_init_stack:
   bl boot_create_page_tables
 
 boot_init_page_tables:
-  // Set page tables from the created variables
+  // Set page tables from the created variables.
   ldr x0, =boot_user_pgd
   ldr x1, [x0]
   msr ttbr0_el1, x1
@@ -96,6 +96,7 @@ boot_init_page_tables:
   mul x3, x3, x4
   sub sp, sp, x3
 
+  // Calculate kernel label with MMU enabled.
   ldr x1, =section_kernel_entry_point;
   add x1, x1, x0
 

@@ -3,18 +3,25 @@
 
 #include "cpu.h"
 
+#include <asm/barrier.h>
+#include <asm/cache.h>
 #include <asm/cpu.h>
 
+#include <kernel/assert.h>
 #include <kernel/config.h>
+#include <kernel/page.h>
 #include <kernel/types.h>
 
-#define CPU_SPIN_INDEX(index) *((uint64_t *)(CONFIG_BOOT_CPU##index##_SPIN_GATE)) = CONFIG_BOOT_LOAD_ADDRESS;
+static uintptr_t cpu_spin_table[] = {CONFIG_BOOT_CPU_SPIN_TABLE};
 
 void cpu_init(void) {
-  // TODO(dstechenk): fix smp
-  /* CPU_SPIN_INDEX(0); */
-  /* CPU_SPIN_INDEX(1); */
-  /* CPU_SPIN_INDEX(2); */
-  /* CPU_SPIN_INDEX(3); */
-  /* asm volatile("dsb sy" : : : "memory"); */
+  ASSERT(sizeof(cpu_spin_table) / sizeof(uintptr_t) == CONFIG_BOOT_CPU_COUNT);
+
+  for_each_cpu(index) {
+    const uintptr_t release_addr = phys_to_virt(cpu_spin_table[index]);
+    *((uintptr_t *)release_addr) = CONFIG_BOOT_LOAD_ADDRESS;
+    cache_inv_data(release_addr);
+  }
+
+  barrier_event();
 }

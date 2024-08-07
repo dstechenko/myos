@@ -3,6 +3,7 @@
 
 #include <asm/entry-defs.h>
 #include <asm/registers-defs.h>
+
 #include <uapi/syscall.h>
 
 // To keep this in the first portion of the kernel virtual memory.
@@ -91,11 +92,11 @@
 
 entry_kernel_from_boot:
   // Now should be safe to init the kernel in virtual space.
-  ldr x0, =init_start
-  br x0
+  ldr x1, =init_start
+  blr x1
 
   // Should not reach it, but if we do - halt.
-  bl entry_halt_core
+  b entry_halt_core
 
 .align 11
 entry_ex_vector:

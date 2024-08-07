@@ -1,16 +1,16 @@
 # myos
 
 TODOs:
-- Add cpu registers breakdown doc strings and accessors
-- Add irq handlers on each core using local timers
 - Run multiple timers - configured
+- Add irq handlers on each core using local timers
+- Add locks to task module
+- Add cpu registers breakdown doc strings and accessors
 - Make MMU setup optional
 - Make SMP setup optional
 - Add linked lists
 - Add lookup tables
 - Add memory allocator
 - Speed up page allocator
-- Add locks to task module
 - Add task sleep/yield/mutex
 - Build armstubs/config out of the project files
 - Make code/data pages separation

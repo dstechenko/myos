@@ -54,6 +54,6 @@
 #define IRQ_TABLE_SYSTEM_TIMER_2 BIT(2)
 #define IRQ_TABLE_SYSTEM_TIMER_3 BIT(3)
 
-void irq_ctrl_init(void);
+void irq_init(void);
 
 #endif  // !DRIVERS_BOARD_BCM2711_IRQ_H

@@ -6,7 +6,7 @@
 .globl cache_inv_tlbs
 
 cache_inv_data:
-  dc cvau, x0
+  dc civac, x0
   ret
 
 cache_inv_inst:

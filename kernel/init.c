@@ -50,13 +50,17 @@ static void init_report(void) {
     LOG_DEBUG("  Target mode  - %s", BUILD_INFO_TARGET_MODE);
     LOG_DEBUG("  Host arch    - %s", BUILD_INFO_HOST_ARCH);
     sections_debug();
+  } else {
+    delay_cycles(1000000000);
   }
   LOG_INFO("Kernel init OK [core %d]", cpu_get_core());
 }
 
 void init_loop_forever(void) {
   while (true) {
-    task_schedule();
+    if (cpu_is_primary()) {
+      task_schedule();
+    }
   }
 }
 

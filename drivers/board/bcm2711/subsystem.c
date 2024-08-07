@@ -9,6 +9,6 @@
 
 void subsystem_init(void) {
   timer_init();
-  irq_ctrl_init();
+  irq_init();
   cpu_init();
 }

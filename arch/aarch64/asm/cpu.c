@@ -22,4 +22,4 @@ enum cpu_mode cpu_get_mode(void) {
   }
 }
 
-bool cpu_is_primary(void) { return cpu_get_core() == CONFIG_BOOT_PRIMARY_CPU_INDEX; }
+bool cpu_is_primary(void) { return cpu_get_core() == CONFIG_BOOT_CPU_PRIMARY_INDEX; }

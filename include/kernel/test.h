@@ -4,7 +4,7 @@
 #ifndef KERNEL_TEST_H
 #define KERNEL_TEST_H
 
-void test_all(void);
+void test_init(void);
 void test_drivers(void);
 void test_kernel(void);
 void test_user(void);

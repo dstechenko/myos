@@ -4,6 +4,7 @@
 .globl barrier_data_mem
 .globl barrier_data_sync
 .globl barrier_inst_sync
+.globl barrier_event
 
 barrier_data_mem:
   dmb ish
@@ -15,4 +16,8 @@ barrier_data_sync:
 
 barrier_inst_sync:
   isb sy
+  ret
+
+barrier_event:
+  sev
   ret
