@@ -8,7 +8,10 @@
 
 #include "timer.h"
 
-void irq_init(void) { mmio_write32(IRQ_ENABLE_0, IRQ_TABLE_SYSTEM_TIMER_1); }
+void irq_init(void) {
+  // TODO(dstechenko): make it work with multiple cores
+  mmio_write32(IRQ_ENABLE_0, IRQ_TABLE_SYSTEM_TIMER_1);
+}
 
 void irq_handle(void) {
   uint32_t irq = mmio_read32(IRQ_PENDING_0);

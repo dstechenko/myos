@@ -7,10 +7,7 @@
 #include <drivers/timer.h>
 
 #include <kernel/config.h>
-#include <kernel/cpu.h>
 #include <kernel/task.h>
-
-// TODO(dstechenko): make it work with multiple cores
 
 // Actual system timer ticks CONFIG_BCM2711_SYSTEM_TIMER_FREQ times per second.
 // We use CONFIG_SYSTEM_TIMER_FREQ to set how many times per second timer update

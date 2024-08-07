@@ -7,8 +7,8 @@ Progress:
 - Add cpu registers breakdown doc strings and accessors
 - Make MMU setup optional
 - Make SMP setup optional
-- Add linked lists
-- Add lookup tables
+- Add linked lists (listhead)
+- Add lookup tables (idr)
 - Add memory allocator
 - Speed up page allocator
 - Add task sleep/yield/mutex
