@@ -12,7 +12,6 @@
  * bus address range starting at 0x7E000000.
  */
 
-// TODO(dstechenko): remove the hardcodes
-#define MMIO_BASE (0xFE000000 + 0xFFFF000000000000)
+#define MMIO_BASE PHYSICAL_PERIPHERAL_MEMORY_START
 
 #endif  // !DRIVERS_BOARD_BCM2711_MMIO_H

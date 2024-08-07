@@ -13,8 +13,7 @@
 #include <kernel/page.h>
 #include <kernel/ptrs.h>
 #include <kernel/task.h>
-
-#include <uapi/bool.h>
+#include <kernel/types.h>
 
 // TODO(dstechenko): do faster traversal
 // TODO(dstechenko): add handle mem abort to map pages
@@ -62,7 +61,7 @@ uintptr_t page_get_kernel(void) {
 }
 
 void page_clear_cache(uintptr_t va) {
-  for (uintptr_t ptr = va; ptr < va + PAGE_SIZE; ptr++) {
+  for (uintptr_t ptr = va; ptr < va + PAGE_SIZE; ptr += CONFIG_CACHE_LINE) {
     cache_inv_data(ptr);
     cache_inv_inst(ptr);
   }
