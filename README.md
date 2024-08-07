@@ -1,21 +1,25 @@
 # myos
 
 TODOs:
-- Add logs to each init step, init logs asap
-- Make MMU optional, make SMP optional
-- Add lists and other structs
-- Add memory allocator, speed up page allocator
-- Add locks to task module
-- Add idle tasks, cleanup in init, set priority, set affinity, dynamic max size
-- Add sleep/yield, mutexes
+- Add cpu registers breakdown doc strings and accessors
 - Add irq handlers on each core using local timers
-- Build armstubs and package config out of the build files
+- Run multiple timers - configured
+- Add debug logs to each init step (init... OK)
+- Make MMU setup optional
+- Make SMP setup optional
+- Add linked lists
+- Add lookup tables
+- Add memory allocator
+- Speed up page allocator
+- Add locks to task module
+- Add task sleep/yield/mutex
+- Build armstubs/config out of the project files
 - Make code/data pages separation
 - Add UART irqs to handle inputs
 - Add stack protector
-- Run all timers
-- Add cpu registers breakdown doc strings
-- Make crash reporter much better
+- Migrate to GIC
+- Implement IPIs
+- Make crash reporter (using IPI)
 - Dump kernel crash state into a carved out section
 
 Notes:

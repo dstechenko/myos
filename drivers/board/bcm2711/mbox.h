@@ -32,6 +32,18 @@
 #define MBOX_TAG_SET_CLKRATE 0x38002
 #define MBOX_TAG_LAST 0
 
+#define MBOX_BASE 0x0000B880
+#define MBOX_RESPONSE 0x80000000
+#define MBOX_FULL 0x80000000
+#define MBOX_EMPTY 0x40000000
+
+#define MBOX_READ (MBOX_BASE + 0x00)
+#define MBOX_POLL (MBOX_BASE + 0x10)
+#define MBOX_SENDER (MBOX_BASE + 0x14)
+#define MBOX_STATUS (MBOX_BASE + 0x18)
+#define MBOX_CONFIG (MBOX_BASE + 0x1C)
+#define MBOX_WRITE (MBOX_BASE + 0x20)
+
 typedef volatile unsigned int mbox_data_t;
 
 #define DEFINE_MBOX(name) mbox_data_t ALIGNED(16) name[36]

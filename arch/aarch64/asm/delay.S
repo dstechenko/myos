@@ -1,10 +1,10 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-.globl delay_nop
+.globl delay_noop
 .globl delay_cycles
 
-delay_nop:
+delay_noop:
   ret
 
 delay_cycles:

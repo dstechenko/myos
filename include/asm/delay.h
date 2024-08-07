@@ -5,9 +5,9 @@
 #define ASM_DELAY_H
 #ifndef __ASSEMBLER__
 
-#include <stdint.h>
+#include <kernel/types.h>
 
-void delay_nop(void);
+void delay_noop(void);
 void delay_cycles(uint64_t cycles);
 void delay_sec(uint64_t sec);
 void delay_msec(uint64_t msec);

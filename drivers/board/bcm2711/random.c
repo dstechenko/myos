@@ -4,10 +4,12 @@
 #include "random.h"
 
 #include <asm/delay.h>
+
 #include <drivers/mmio.h>
 #include <drivers/random.h>
+
 #include <kernel/bits.h>
-#include <uapi/bool.h>
+#include <kernel/types.h>
 
 void random_init(void) {
   const uint32_t random_irq_masked = mmio_read32(RANDOM_IRQ_MASK) | BIT(0);
@@ -27,7 +29,7 @@ static uint32_t random_get_data(const uint32_t min, const uint32_t max) {
 uint32_t random_get(const uint32_t min, const uint32_t max) {
   // Need to wait for entropy: bits 24-31 store the number of words ready.
   while (!random_is_ready()) {
-    delay_nop();
+    delay_noop();
   }
   return random_get_data(min, max);
 }

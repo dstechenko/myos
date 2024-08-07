@@ -2,6 +2,7 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <asm/cpu.h>
+#include <asm/delay.h>
 #include <asm/irq.h>
 
 #include <kernel/assert.h>
@@ -23,7 +24,7 @@ irqflags_t spin_lock_irq(spinlock_t *lock) {
       break;
     }
     while (atomic32_get_relaxed(&lock->value)) {
-      // TODO(dstechenko): do some yield/noop logic here
+      delay_noop();
     }
   }
 

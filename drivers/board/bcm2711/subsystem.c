@@ -12,6 +12,5 @@ void subsystem_init(void) {
   timer_init();
   irq_ctrl_init();
   random_init();
-  // TODO(dstecheko): add smp mode config, extract
   cpu_init();
 }
