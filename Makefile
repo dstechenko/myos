@@ -1,19 +1,9 @@
+#!make
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
-# TODO(dstechenko): extract build params into a separate file
-
-TARGET_ARCH  ?= aarch64
-export TARGET_ARCH
-
-TARGET_BOARD ?= bcm2711
-export TARGET_BOARD
-
-TARGET_MODE  ?= debug
-export TARGET_MODE
-
-TARGET_IF ?= ftdi/ft232h
-export TARGET_IF
+BUILD_CONFIG ?= Makefile.default.config
+include $(BUILD_CONFIG)
 
 ARCH_DIR    := arch
 CONFIGS_DIR := configs
