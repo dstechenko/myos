@@ -7,14 +7,14 @@
 #include <asm/sections.h>
 
 #include <kernel/assert.h>
+#include <kernel/config.h>
+#include <kernel/log.h>
 #include <kernel/test.h>
 #include <kernel/types.h>
 
 #define TEST_ASSERT(cond) ASSERT(cond)
 
 SECTIONS(section_kernel);
-
-// TODO(dstechenko): add random test
 
 static void test_kernel_atomic32(void) {
   int32_t tmp;
@@ -100,10 +100,13 @@ static void test_kernel_atomic64(void) {
   TEST_ASSERT(tmp == 5);
 }
 
-void test_all(void) {
+void test_init(void) {
+#if CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
   test_drivers();
   test_kernel();
   test_user();
+  LOG_DEBUG("Tested successfully!");
+#endif  // CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
 }
 
 void test_drivers(void) {}

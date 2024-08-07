@@ -4,6 +4,4 @@
 #ifndef DRIVERS_CPU_H
 #define DRIVERS_CPU_H
 
-void cpu_init(void);
-
 #endif // !DRIVERS_CPU_H

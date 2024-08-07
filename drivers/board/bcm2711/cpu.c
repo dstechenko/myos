@@ -1,9 +1,9 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <asm/cpu.h>
+#include "cpu.h"
 
-#include <drivers/cpu.h>
+#include <asm/cpu.h>
 
 #include <kernel/config.h>
 #include <kernel/types.h>
@@ -17,7 +17,4 @@ void cpu_init(void) {
   /* CPU_SPIN_INDEX(2); */
   /* CPU_SPIN_INDEX(3); */
   /* asm volatile("dsb sy" : : : "memory"); */
-  /* registers_test(1, CONFIG_BOOT_LOAD_ADDRESS); */
-  /* registers_test(2, CONFIG_BOOT_LOAD_ADDRESS); */
-  /* registers_test(3, CONFIG_BOOT_LOAD_ADDRESS); */
 }

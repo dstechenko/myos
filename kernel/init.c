@@ -8,7 +8,6 @@
 #include <asm/sections.h>
 
 #include <drivers/subsystem.h>
-#include <drivers/uart.h>
 
 #include <kernel/assert.h>
 #include <kernel/build-info.h>
@@ -51,11 +50,11 @@ static void init_debug(void) {
   page_debug(/* limit = */ 1);
 }
 
-static void init_start_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL)); }
+static void init_user(void) { ASSERT(fork_task(REF_TO_ADR(kernel_task), FORK_KERNEL)); }
 
-static void init_loop_schedule(void) {
+static void init_finish(void) {
+  LOG_DEBUG("Init finished on core #%d", cpu_get_core());
   while (true) {
-    delay_cycles(5000000);
     task_schedule();
   }
 }
@@ -71,16 +70,9 @@ void init_start(void) {
     task_main_init();
     subsystem_init();
     init_debug();
-    init_start_user();
+    init_user();
+    test_init();
   }
 
-#if CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
-  if (cpu_is_primary()) {
-    LOG_INFO("Testing...");
-    test_all();
-    LOG_INFO("Tested successfully!");
-  }
-#endif  // CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
-
-  init_loop_schedule();
+  init_finish();
 }
