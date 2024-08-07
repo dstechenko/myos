@@ -2,13 +2,12 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <asm/atomic.h>
-#include <asm/memory-defs.h>
-#include <asm/page-defs.h>
 #include <asm/sections.h>
 
 #include <kernel/assert.h>
 #include <kernel/config.h>
 #include <kernel/log.h>
+#include <kernel/ptrs.h>
 #include <kernel/test.h>
 #include <kernel/types.h>
 
@@ -100,6 +99,27 @@ static void test_kernel_atomic64(void) {
   TEST_ASSERT(tmp == 5);
 }
 
+struct inner {};
+
+struct outer {
+  struct inner inner;
+};
+
+static void test_kernel_container_of(void) {
+  struct outer outer;
+  ASSERT(&outer == container_of(&outer.inner, struct outer, inner));
+}
+
+static void test_drivers(void) {}
+
+static void test_kernel(void) {
+  test_kernel_atomic32();
+  test_kernel_atomic64();
+  test_kernel_container_of();
+}
+
+static void test_user(void) {}
+
 void test_init(void) {
 #if CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
   test_drivers();
@@ -108,12 +128,3 @@ void test_init(void) {
   LOG_DEBUG("Kernel tests OK");
 #endif  // CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
 }
-
-void test_drivers(void) {}
-
-void test_kernel(void) {
-  test_kernel_atomic32();
-  test_kernel_atomic64();
-}
-
-void test_user(void) {}

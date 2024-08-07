@@ -10,4 +10,9 @@
 #define REF_TO_ADR(ref) PTR_TO_ADR(&ref)
 #define ADR_TO_PTR(adr) ((void *)adr)
 
+#define container_of(ptr, type, member) ({            \
+  const typeof(((type *)NULL)->member) *__mptr = ptr; \
+  (type *)((uint8_t *)__mptr - offsetof(type, member));  \
+})
+
 #endif // !KERNEL_PTRS_H

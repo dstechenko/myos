@@ -1,13 +1,12 @@
 # myos
 
 Progress:
-- Run multiple timers - configured
-- Add irq handlers on each core using local timers
-- Add locks to task module
+- Add linked lists (listhead)
 - Add cpu registers breakdown doc strings and accessors
+- Add irq handlers on each core using local timers
+- Add SMP capability to task module (locks, per cpu queues)
 - Make MMU setup optional
 - Make SMP setup optional
-- Add linked lists (listhead)
 - Add lookup tables (idr)
 - Add memory allocator
 - Speed up page allocator
