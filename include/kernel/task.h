@@ -44,7 +44,7 @@ int task_init(struct task *task);
 void task_cpu_switch(struct task_context *prev, struct task_context *next);
 struct proc_regs *task_get_proc_regs(struct task *task);
 
-int task_main_init(void);
+int task_init_main(void);
 int task_enqueue(struct task *task);
 void task_dequeue(struct task *task);
 void task_tick(void);

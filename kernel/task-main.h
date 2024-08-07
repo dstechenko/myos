@@ -6,7 +6,7 @@
 
 #include <kernel/config.h>
 #include <kernel/task.h>
-#include <stddef.h>
+#include <kernel/types.h>
 
 #define INIT_TASK_MAIN(task)                                     \
   {                                                              \

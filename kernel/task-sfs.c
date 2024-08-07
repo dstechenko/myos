@@ -2,6 +2,7 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <asm/irq.h>
+
 #include <kernel/assert.h>
 #include <kernel/task.h>
 #include <kernel/types.h>
@@ -16,7 +17,7 @@ static struct task tasks_main = INIT_TASK_MAIN(tasks_main);
 static struct task *tasks_current = &tasks_main;
 static struct task *tasks_all[TASKS_TOTAL] = {NULL};
 
-int task_main_init(void) {
+int task_init_main(void) {
   tasks_all[0] = &tasks_main;
   return task_init(&tasks_main);
 }

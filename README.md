@@ -4,7 +4,6 @@ TODOs:
 - Add cpu registers breakdown doc strings and accessors
 - Add irq handlers on each core using local timers
 - Run multiple timers - configured
-- Add debug logs to each init step (init... OK)
 - Make MMU setup optional
 - Make SMP setup optional
 - Add linked lists

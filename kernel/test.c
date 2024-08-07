@@ -105,7 +105,7 @@ void test_init(void) {
   test_drivers();
   test_kernel();
   test_user();
-  LOG_DEBUG("Tested successfully!");
+  LOG_DEBUG("Kernel tests OK");
 #endif  // CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
 }
 

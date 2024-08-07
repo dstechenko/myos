@@ -1,14 +1,16 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <uapi/types.h>
 #include <uapi/syscall.h>
+#include <uapi/types.h>
 
 void user_task_a(void);
 void user_task_b(void);
 
 void user_start(void) {
   int pid = 0;
+
+  syscall_delay(1000000000);
 
   pid = syscall_clone();
   if (pid < 0) {
