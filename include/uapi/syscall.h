@@ -5,8 +5,8 @@
 #define UAPI_SYSCALL_H
 
 #ifndef __ASSEMBLER__
-#include <stddef.h>
-#include <stdint.h>
+
+#include <uapi/types.h>
 
 uintptr_t syscall_alloc(size_t size);
 int syscall_clone(void);

@@ -4,12 +4,9 @@
 #ifndef KERNEL_TYPES_H
 #define KERNEL_TYPES_H
 
-#include <stddef.h>
-#include <stdint.h>
-
 #include <asm/types.h>
 
-#include <uapi/bool.h>
+#include <uapi/types.h>
 
 #define TYPE(name, def) typedef struct { def value; } name
 #define ALIAS(name, def) typedef def name

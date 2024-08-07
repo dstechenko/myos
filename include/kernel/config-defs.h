@@ -4,7 +4,7 @@
 #ifndef KERNEL_CONFIG_DEFS_H
 #define KERNEL_CONFIG_DEFS_H
 
-#include <uapi/bool.h>
+#include <uapi/types.h>
 
 #define CONFIG_SET(config, value) (config == value)
 #define CONFIG_ENABLED(config) (CONFIG_SET(config, true))

@@ -21,6 +21,7 @@ TODOs:
 - Implement IPIs
 - Make crash reporter (using IPI)
 - Dump kernel crash state into a carved out section
+- Add user binary loading format
 
 Notes:
 - UART pinout gpio#3 gnd, gpio#4 txd, gpio#5 rxd
