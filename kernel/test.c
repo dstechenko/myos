@@ -6,6 +6,7 @@
 
 #include <kernel/assert.h>
 #include <kernel/config.h>
+#include <kernel/list.h>
 #include <kernel/log.h>
 #include <kernel/ptrs.h>
 #include <kernel/test.h>
@@ -107,7 +108,88 @@ struct outer {
 
 static void test_kernel_container_of(void) {
   struct outer outer;
-  ASSERT(&outer == container_of(&outer.inner, struct outer, inner));
+  TEST_ASSERT(&outer == container_of(&outer.inner, struct outer, inner));
+}
+
+static void test_kernel_list(void) {
+  struct list_head *contents[4] = {};
+  struct list_head list, elem1, elem2, elem3, elem4;
+  struct list_head *list_ptr = &list;
+  size_t index;
+
+  list_head_init(&list);
+  TEST_ASSERT(list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 0);
+
+  list_add_tail(&list, &elem1);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 1);
+
+  list_add_tail(&list, &elem2);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 2);
+
+  list_add_tail(&list, &elem3);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 3);
+
+  list_del(&elem1);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 2);
+
+  list_del(&elem1);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 2);
+
+  list_del(&elem2);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 1);
+
+  list_del(&elem3);
+  TEST_ASSERT(list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 0);
+
+  list_add_head(&list, &elem1);
+  list_add_head(&list, &elem2);
+  list_add_head(&list, &elem3);
+  list_add_head(&list, &elem4);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 4);
+  index = 0;
+  LIST_FOR_EACH(list_ptr, elem) { contents[index++] = elem; }
+  TEST_ASSERT(contents[0] == &elem4);
+  TEST_ASSERT(contents[1] == &elem3);
+  TEST_ASSERT(contents[2] == &elem2);
+  TEST_ASSERT(contents[3] == &elem1);
+  TEST_ASSERT(list_head(&list) == &elem4);
+  TEST_ASSERT(list_tail(&list) == &elem1);
+  list_del(&elem1);
+  list_del(&elem2);
+  list_del(&elem3);
+  list_del(&elem4);
+  TEST_ASSERT(list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 0);
+
+  list_add_tail(&list, &elem1);
+  list_add_tail(&list, &elem2);
+  list_add_tail(&list, &elem3);
+  list_add_tail(&list, &elem4);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 4);
+  index = 0;
+  LIST_FOR_EACH(list_ptr, elem) { contents[index++] = elem; }
+  TEST_ASSERT(contents[0] == &elem1);
+  TEST_ASSERT(contents[1] == &elem2);
+  TEST_ASSERT(contents[2] == &elem3);
+  TEST_ASSERT(contents[3] == &elem4);
+  TEST_ASSERT(list_head(&list) == &elem1);
+  TEST_ASSERT(list_tail(&list) == &elem4);
+  list_del(&elem1);
+  list_del(&elem2);
+  list_del(&elem3);
+  list_del(&elem4);
+  TEST_ASSERT(list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 0);
 }
 
 static void test_drivers(void) {}
@@ -116,6 +198,7 @@ static void test_kernel(void) {
   test_kernel_atomic32();
   test_kernel_atomic64();
   test_kernel_container_of();
+  test_kernel_list();
 }
 
 static void test_user(void) {}
