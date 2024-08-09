@@ -51,6 +51,9 @@ void uart_putc(const char c) {
 
   flags = spin_lock_irq(&lock);
   uart_putc_unlocked(c);
+  if (c == '\n') {
+    uart_putc_unlocked('\r');
+  }
   spin_unlock_irq(&lock, flags);
 }
 

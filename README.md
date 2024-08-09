@@ -1,7 +1,7 @@
 # myos
 
 Progress:
-- Add cpu registers breakdown doc strings and accessors
+- Make kernel fail on NULL access
 - Make SMP setup optional
 - Add SMP capability to task module (locks, per cpu queues)
 - Add irq handlers on each core using local timers

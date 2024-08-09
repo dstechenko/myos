@@ -5,9 +5,7 @@
 #define ARCH_AARCH64_ASM_MMU_H
 #ifndef __ASSEMBLER__
 
-#include <stdint.h>
-
-void handle_data_abort(uint64_t far, uint64_t esr);
+void mmu_handle_da(void);
 
 #endif  // !__ASSEMBLER__
 #endif  // !ARCH_AARCH64_ASM_MMU_H

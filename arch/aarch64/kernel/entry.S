@@ -86,7 +86,7 @@
   mrs	x1, esr_el1
   mrs	x2, elr_el1
   mrs x3, far_el1
-  bl entry_log_invalid_message
+  bl entry_handle_invalid_ex
   b entry_halt_core
 .endm
 
@@ -194,7 +194,7 @@ entry_da_el0:
   bl irq_local_enable
   mrs x0, far_el1
   mrs x1, esr_el1
-  bl handle_data_abort
+  bl mmu_handle_da
   cmp x0, #0
   beq entry_da_el0_out
   entry_handle_invalid ENTRY_ERROR_DATA_ABORT, 0

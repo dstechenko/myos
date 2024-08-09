@@ -2,6 +2,7 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <asm/cpu.h>
+#include <asm/registers.h>
 
 #include <kernel/config.h>
 #include <kernel/task.h>

@@ -10,8 +10,6 @@ void user_task_b(void);
 void user_start(void) {
   int pid = 0;
 
-  syscall_delay(1000000000);
-
   pid = syscall_clone();
   if (pid < 0) {
     syscall_write("Failed to clone user task a\n\r");
