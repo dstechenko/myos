@@ -1,13 +1,11 @@
 # myos
 
 Progress:
-- Add linked lists (listhead)
 - Add cpu registers breakdown doc strings and accessors
-- Add irq handlers on each core using local timers
-- Add SMP capability to task module (locks, per cpu queues)
-- Make MMU setup optional
 - Make SMP setup optional
-- Add lookup tables (idr)
+- Add SMP capability to task module (locks, per cpu queues)
+- Add irq handlers on each core using local timers
+- Make MMU setup optional
 - Add memory allocator
 - Speed up page allocator
 - Add task sleep/yield/mutex
@@ -20,6 +18,7 @@ Progress:
 - Make crash reporter (using IPI)
 - Dump kernel crash state into a carved out section
 - Add user binary loading format
+- Add lookup tables (idr, bit-mapped arrays)
 
 Notes:
 - UART pinout gpio#3 gnd, gpio#4 txd, gpio#5 rxd

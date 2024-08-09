@@ -133,19 +133,27 @@ static void test_kernel_list(void) {
   TEST_ASSERT(!list_empty(&list));
   TEST_ASSERT(list_len(&list) == 3);
 
-  list_del(&elem1);
+  list_add_tail(&list, &elem4);
   TEST_ASSERT(!list_empty(&list));
-  TEST_ASSERT(list_len(&list) == 2);
+  TEST_ASSERT(list_len(&list) == 4);
 
   list_del(&elem1);
   TEST_ASSERT(!list_empty(&list));
-  TEST_ASSERT(list_len(&list) == 2);
+  TEST_ASSERT(list_len(&list) == 3);
+
+  list_del(&elem1);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 3);
 
   list_del(&elem2);
   TEST_ASSERT(!list_empty(&list));
-  TEST_ASSERT(list_len(&list) == 1);
+  TEST_ASSERT(list_len(&list) == 2);
 
   list_del(&elem3);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 1);
+
+  list_del(&elem4);
   TEST_ASSERT(list_empty(&list));
   TEST_ASSERT(list_len(&list) == 0);
 
@@ -192,6 +200,101 @@ static void test_kernel_list(void) {
   TEST_ASSERT(list_len(&list) == 0);
 }
 
+struct entry {
+  struct list_head node;
+};
+
+static void test_kernel_entry_list(void) {
+  struct entry *contents[4] = {};
+  struct entry entry1, entry2, entry3, entry4;
+  struct entry *entry;
+  struct list_head list;
+  struct list_head *list_ptr = &list;
+  size_t index;
+
+  list_head_init(&list);
+  TEST_ASSERT(list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 0);
+
+  list_add_tail(&list, &entry1.node);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 1);
+
+  list_add_tail(&list, &entry2.node);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 2);
+
+  list_add_tail(&list, &entry3.node);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 3);
+
+  list_add_tail(&list, &entry4.node);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 4);
+
+  list_del(&entry1.node);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 3);
+
+  list_del(&entry1.node);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 3);
+
+  list_del(&entry2.node);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 2);
+
+  list_del(&entry3.node);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 1);
+
+  list_del(&entry4.node);
+  TEST_ASSERT(list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 0);
+
+  list_add_head(&list, &entry1.node);
+  list_add_head(&list, &entry2.node);
+  list_add_head(&list, &entry3.node);
+  list_add_head(&list, &entry4.node);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 4);
+  index = 0;
+  LIST_FOR_EACH_ENTRY(list_ptr, entry, node) { contents[index++] = entry; }
+  TEST_ASSERT(contents[0] == &entry4);
+  TEST_ASSERT(contents[1] == &entry3);
+  TEST_ASSERT(contents[2] == &entry2);
+  TEST_ASSERT(contents[3] == &entry1);
+  TEST_ASSERT(LIST_HEAD_ENTRY(&list, struct entry, node) == &entry4);
+  TEST_ASSERT(LIST_TAIL_ENTRY(&list, struct entry, node) == &entry1);
+  list_del(&entry1.node);
+  list_del(&entry2.node);
+  list_del(&entry3.node);
+  list_del(&entry4.node);
+  TEST_ASSERT(list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 0);
+
+  list_add_tail(&list, &entry1.node);
+  list_add_tail(&list, &entry2.node);
+  list_add_tail(&list, &entry3.node);
+  list_add_tail(&list, &entry4.node);
+  TEST_ASSERT(!list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 4);
+  index = 0;
+  LIST_FOR_EACH_ENTRY(list_ptr, entry, node) { contents[index++] = entry; }
+  TEST_ASSERT(contents[0] == &entry1);
+  TEST_ASSERT(contents[1] == &entry2);
+  TEST_ASSERT(contents[2] == &entry3);
+  TEST_ASSERT(contents[3] == &entry4);
+  TEST_ASSERT(LIST_HEAD_ENTRY(&list, struct entry, node) == &entry1);
+  TEST_ASSERT(LIST_TAIL_ENTRY(&list, struct entry, node) == &entry4);
+  list_del(&entry1.node);
+  list_del(&entry2.node);
+  list_del(&entry3.node);
+  list_del(&entry4.node);
+  TEST_ASSERT(list_empty(&list));
+  TEST_ASSERT(list_len(&list) == 0);
+}
+
 static void test_drivers(void) {}
 
 static void test_kernel(void) {
@@ -199,6 +302,7 @@ static void test_kernel(void) {
   test_kernel_atomic64();
   test_kernel_container_of();
   test_kernel_list();
+  test_kernel_entry_list();
 }
 
 static void test_user(void) {}

@@ -64,3 +64,7 @@ struct list_head *list_tail(struct list_head *list) {
   ASSERT(!list_empty(list));
   return list->prev;
 }
+
+bool list_is_head(struct list_head *list, struct list_head *node) { return node == list_head(list); }
+
+bool list_is_tail(struct list_head *list, struct list_head *node) { return node == list_tail(list); }
