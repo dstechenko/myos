@@ -21,7 +21,7 @@
 #define MASK_LOW_WORD(dw) ((dw)&0x0000FFFF)
 #define MASK_HIGH_WORD(dw) ((dw)&0xFFFF0000)
 
-#define SELECT_BIT(v, i) ((v & BIT(i)) >> i)
-#define SELECT_BITS(v, i, b) ((v & b) >> i)
+#define SELECT_BIT(v, i) (((v) & BIT(i)) >> (i))
+#define SELECT_BITS(v, i, b) (((v) & (b)) >> (i))
 
 #endif // !KERNEL_BITS_H

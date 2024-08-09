@@ -28,8 +28,6 @@ SECTIONS(user);
 static void kernel_task(void) {
   int err;
 
-  *((uint64_t *)NULL) = 1;
-
   ASSERT(SECTIONS_LENGTH(section_user));
   err = task_move_to_user(SECTIONS_START(user), SECTIONS_START(section_user), SECTIONS_LENGTH(section_user));
   if (err) {

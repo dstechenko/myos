@@ -33,7 +33,7 @@ void entry_handle_invalid_ex(const uint8_t type) {
       "\n",
       /* Type = */ entry_invalid_types[type],
       /* Core = */ cpu_get_core(),
-      /* Level = */ REGISTERS_PSTATE_EL(registers_get_pstate_el()),
+      /* Level = */ cpu_get_level(),
       /* ESR = */ registers_get_esr_el1(),
       /* ELR = */ registers_get_elr_el1(),
       /* FAR = */ registers_get_far_el1(),

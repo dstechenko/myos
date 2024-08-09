@@ -17,6 +17,7 @@ enum cpu_mode {
 void cpu_yield(void);
 
 enum cpu_mode cpu_get_mode(void);
+uint32_t cpu_get_level(void);
 uint32_t cpu_get_core(void);
 bool cpu_is_primary(void);
 

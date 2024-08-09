@@ -43,6 +43,6 @@ bool list_is_tail(struct list_head *list, struct list_head *node);
 
 #define LIST_FOR_EACH_ENTRY(list, entry, member) \
   for (struct list_head *elem = list->next; elem != list; elem = elem->next) \
-    if (entry = LIST_ENTRY(elem, typeof(*entry), member))
+    if ((entry = LIST_ENTRY(elem, typeof(*entry), member)))
 
 #endif // !KERNEL_LIST_H

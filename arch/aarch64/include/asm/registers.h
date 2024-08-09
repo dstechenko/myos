@@ -62,7 +62,18 @@
  *   Exception link register, saves the preferred return address when taking an exception to level X.
  * FAR_ELx:
  *   Fault address register, saves the faulting virtual address for all synchronous instruction or data
- * aborts, PC alignment faults and Watchpoint exceptions that are taken to level X.
+ *   aborts, PC alignment faults and Watchpoint exceptions that are taken to level X.
+ * MPIDR_ELx:
+ *   Multiprocessor affinity register, in a multiprocessor system, provides an additional
+ *   PE identification mechanism for scheduling purposes.
+ * TTBR0_EL1:
+ *   Translation table base register 0, holds the base address of the translation table for the
+ *   initial lookup for stage 1 of the translation of an address from the lower VA range in the
+ *   level 1&0 translation regime, and other information for this translation regime.
+ * TTBR0_EL1:
+ *   Translation table base register 1, holds the base address of the translation table for the
+ *   initial lookup for stage 1 of the translation of an address from the lower VA range in the
+ *   level 1&0 translation regime, and other information for this translation regime.
  */
 
 #define REGISTERS_PSTATE_N(state) SELECT_BIT(state, 31)
@@ -87,13 +98,7 @@ uint32_t registers_get_pstate_spsel(void);
 void registers_set_pstate_spsel(uint32_t spsel);
 
 #define REGISTERS_PSTATE_PAN(state) SELECT_BIT(state, 22)
-uint32_t registers_get_pstate_pan(void);
-void registers_set_pstate_pan(uint32_t pan);
-
 #define REGISTERS_PSTATE_UAO(state) SELECT_BIT(state, 23)
-uint32_t registers_get_pstate_uao(void);
-void registers_set_pstate_uao(uint32_t uao);
-
 uint32_t registers_get_spsr_el1(void);
 void registers_set_spsr_el1(uint32_t spsr);
 
@@ -105,5 +110,14 @@ void registers_set_elr_el1(uint64_t elr);
 
 uint64_t registers_get_far_el1(void);
 void registers_set_far_el1(uint64_t far);
+
+#define REGISTERS_MPIDR_AFF0(mpidr) MASK_LOW_BYTE(mpidr)
+uint64_t registers_get_mpidr_el1(void);
+
+uint64_t registers_get_ttbr0_el1(void);
+void registers_set_ttbr0_el1(uint64_t ttbr);
+
+uint64_t registers_get_ttbr1_el1(void);
+void registers_set_ttbr1_el1(uint64_t ttbr);
 
 #endif  // !ARCH_AARCH64_ASM_REGISTERS_H
