@@ -74,31 +74,41 @@
  *   Translation table base register 1, holds the base address of the translation table for the
  *   initial lookup for stage 1 of the translation of an address from the lower VA range in the
  *   level 1&0 translation regime, and other information for this translation regime.
+ * VBAR_EL1:
+ *   Vector base address register, holds the vector base address for any exception that is taken to level 1.
  */
 
-#define REGISTERS_PSTATE_N(state) SELECT_BIT(state, 31)
-#define REGISTERS_PSTATE_Z(state) SELECT_BIT(state, 30)
-#define REGISTERS_PSTATE_C(state) SELECT_BIT(state, 29)
-#define REGISTERS_PSTATE_V(state) SELECT_BIT(state, 28)
+#define REGISTERS_PSTATE_SELECT_N(state) SELECT_BIT(state, 31)
+#define REGISTERS_PSTATE_SELECT_Z(state) SELECT_BIT(state, 30)
+#define REGISTERS_PSTATE_SELECT_C(state) SELECT_BIT(state, 29)
+#define REGISTERS_PSTATE_SELECT_V(state) SELECT_BIT(state, 28)
 uint32_t registers_get_pstate_nzcv(void);
 void registers_set_pstate_nzcv(uint32_t nzcv);
 
-#define REGISTERS_PSTATE_D(state) SELECT_BIT(state, 9)
-#define REGISTERS_PSTATE_A(state) SELECT_BIT(state, 8)
-#define REGISTERS_PSTATE_I(state) SELECT_BIT(state, 7)
-#define REGISTERS_PSTATE_F(state) SELECT_BIT(state, 6)
+#define REGISTERS_PSTATE_SELECT_D(state) SELECT_BIT(state, 9)
+#define REGISTERS_PSTATE_SELECT_A(state) SELECT_BIT(state, 8)
+#define REGISTERS_PSTATE_SELECT_I(state) SELECT_BIT(state, 7)
+#define REGISTERS_PSTATE_SELECT_F(state) SELECT_BIT(state, 6)
+#define REGISTERS_PSTATE_ENABLE_D(state) ENABLE_BIT(state, 9)
+#define REGISTERS_PSTATE_ENABLE_A(state) ENABLE_BIT(state, 8)
+#define REGISTERS_PSTATE_ENABLE_I(state) ENABLE_BIT(state, 7)
+#define REGISTERS_PSTATE_ENABLE_F(state) ENABLE_BIT(state, 6)
+#define REGISTERS_PSTATE_DISABLE_D(state) DISABLE_BIT(state, 9)
+#define REGISTERS_PSTATE_DISABLE_A(state) DISABLE_BIT(state, 8)
+#define REGISTERS_PSTATE_DISABLE_I(state) DISABLE_BIT(state, 7)
+#define REGISTERS_PSTATE_DISABLE_F(state) DISABLE_BIT(state, 6)
 uint32_t registers_get_pstate_daif(void);
 void registers_set_pstate_daif(uint32_t daif);
 
-#define REGISTERS_PSTATE_EL(state) SELECT_BITS(state, 2, BIT(3) | BIT(2))
+#define REGISTERS_PSTATE_SELECT_EL(state) SELECT_BITS(state, 2, BIT(3) | BIT(2))
 uint32_t registers_get_pstate_el(void);
 
-#define REGISTERS_PSTATE_SPSEL(state) SELECT_BIT(state, 0)
+#define REGISTERS_PSTATE_SELECT_SPSEL(state) SELECT_BIT(state, 0)
 uint32_t registers_get_pstate_spsel(void);
 void registers_set_pstate_spsel(uint32_t spsel);
 
-#define REGISTERS_PSTATE_PAN(state) SELECT_BIT(state, 22)
-#define REGISTERS_PSTATE_UAO(state) SELECT_BIT(state, 23)
+#define REGISTERS_PSTATE_SELECT_PAN(state) SELECT_BIT(state, 22)
+#define REGISTERS_PSTATE_SELECT_UAO(state) SELECT_BIT(state, 23)
 uint32_t registers_get_spsr_el1(void);
 void registers_set_spsr_el1(uint32_t spsr);
 
@@ -111,7 +121,7 @@ void registers_set_elr_el1(uint64_t elr);
 uint64_t registers_get_far_el1(void);
 void registers_set_far_el1(uint64_t far);
 
-#define REGISTERS_MPIDR_AFF0(mpidr) MASK_LOW_BYTE(mpidr)
+#define REGISTERS_MPIDR_SELECT_AFF0(mpidr) MASK_LOW_BYTE(mpidr)
 uint64_t registers_get_mpidr_el1(void);
 
 uint64_t registers_get_ttbr0_el1(void);
@@ -119,5 +129,8 @@ void registers_set_ttbr0_el1(uint64_t ttbr);
 
 uint64_t registers_get_ttbr1_el1(void);
 void registers_set_ttbr1_el1(uint64_t ttbr);
+
+uint64_t registers_get_vbar_el1(void);
+void registers_set_vbar_el1(uint64_t vbar);
 
 #endif  // !ARCH_AARCH64_ASM_REGISTERS_H

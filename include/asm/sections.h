@@ -5,7 +5,7 @@
 #define ASM_SECTIONS_DEFS_H
 #ifndef __ASSEMBLER__
 
-#include <stdint.h>
+#include <kernel/types.h>
 
 #define SECTIONS_LABEL(name) \
   void name(void);

@@ -102,3 +102,13 @@ registers_set_ttbr1_el1:
   msr ttbr1_el1, x0
   ret
 EXPORT(registers_set_ttbr1_el1);
+
+registers_get_vbar_el1:
+  mrs x0, vbar_el1
+  ret
+EXPORT(registers_get_vbar_el1);
+
+registers_set_vbar_el1:
+  msr vbar_el1, x0
+  ret
+EXPORT(registers_set_vbar_el1);
