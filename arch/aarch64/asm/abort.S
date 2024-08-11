@@ -3,7 +3,6 @@
 
 #include <asm/export.h>
 
-// TODO(dstechenko): Should do this for all cores and print state
 abort_and_wait:
   wfe
   b  abort_and_wait

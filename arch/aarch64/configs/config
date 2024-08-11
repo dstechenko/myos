@@ -1,8 +1,8 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
-PAGE_SHIFT 12
-TABLE_SHIFT 9
+PAGE_SHIFT   12
+TABLE_SHIFT  9
 SYSTEM_64BIT true
 
 VIRTUAL_MEMORY_OFFSET 0xFFFF000000000000
