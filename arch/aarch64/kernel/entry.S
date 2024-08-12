@@ -1,6 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
+#include <asm/export.h>
 #include <asm/entry-defs.h>
 #include <asm/registers-defs.h>
 
@@ -8,9 +9,6 @@
 
 // To keep this in the first portion of the kernel virtual memory.
 .section ".text.entry"
-
-.globl entry_ex_vector
-.globl entry_fork_return
 
 .macro entry_save_regs level
   sub	sp, sp, #ENTRY_STACK_FRAME_SIZE
@@ -119,6 +117,7 @@ entry_ex_vector:
   entry_ex entry_irq_invalid_el0_32
   entry_ex entry_fiq_invalid_el0_32
   entry_ex entry_err_invalid_el0_32
+EXPORT(entry_ex_vector);
 
 entry_irq_el1:
   entry_kernel_in 1
@@ -210,6 +209,7 @@ entry_fork_return:
   bl task_schedule_tail
   cbz x19, entry_user_return
   blr x19
+EXPORT(entry_fork_return);
 
 entry_user_return:
   bl irq_local_disable

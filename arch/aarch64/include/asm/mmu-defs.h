@@ -6,6 +6,8 @@
 
 #include <kernel/bits.h>
 
+// TODO(dstechenko): add comments here
+
 #define MEMORY_TYPE_DEVICE 0x1
 #define MEMORY_TYPE_DEVICE_FLAGS 0x0
 

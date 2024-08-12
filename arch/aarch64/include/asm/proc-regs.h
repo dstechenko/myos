@@ -6,8 +6,11 @@
 #ifndef __ASSEMBLER__
 
 #include <asm/entry-defs.h>
+
 #include <kernel/assert.h>
-#include <stdint.h>
+#include <kernel/types.h>
+
+// TODO(dstechenko): add comments here
 
 struct proc_regs {
   uint64_t regs[31];

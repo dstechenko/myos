@@ -8,6 +8,9 @@
 
 #include "mmu-defs.h"
 
+// TODO(dstechenko): add comments here
+// TODO(dstechenko): refactor
+
 /**
  * SCTLR_EL1, System Control Register (EL1).
  * See: Page 2654 of ARMv8-Architecture-Reference-Manual.

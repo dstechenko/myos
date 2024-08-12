@@ -1,7 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-.globl task_cpu_switch
+#include <asm/export.h>
 
 task_cpu_switch:
   mov x2, sp
@@ -21,3 +21,4 @@ task_cpu_switch:
   ldr x30, [x1]
   mov sp, x2
   ret
+EXPORT(task_cpu_switch);

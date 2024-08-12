@@ -4,6 +4,8 @@
 #ifndef ARCH_AARCH64_ASM_ENTRY_DEFS_H
 #define ARCH_AARCH64_ASM_ENTRY_DEFS_H
 
+// TODO(dstechenko): add comments here
+
 #define ENTRY_STACK_FRAME_SIZE (34 * 8)
 
 #define ENTRY_SYN_INVALID_EL1t 0
