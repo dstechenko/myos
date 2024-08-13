@@ -4,7 +4,7 @@
 #include <asm/cpu.h>
 #include <asm/proc-regs.h>
 
-#include <kernel/allocator.h>
+#include <kernel/alloc.h>
 #include <kernel/assert.h>
 #include <kernel/config.h>
 #include <kernel/error.h>

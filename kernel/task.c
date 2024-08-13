@@ -1,7 +1,7 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#include <kernel/allocator.h>
+#include <kernel/alloc.h>
 #include <kernel/assert.h>
 #include <kernel/log.h>
 #include <kernel/task.h>

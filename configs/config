@@ -25,4 +25,5 @@ SCHEDULER_STACK_SIZE   2048
 SCHEDULER_PRIORITY     1
 
 ALLOC_BUDDY            false
-ALLOC_LINEAR           true
+ALLOC_DUMMY            true
+ALLOC_LINEAR           false

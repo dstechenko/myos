@@ -12,6 +12,6 @@
 
 void *alloc(size_t size, uint8_t flags);
 void *alloc_zero(size_t size, uint8_t flags);
-void alloc_free(const void *obj);
+void alloc_free(const void *ptr);
 
 #endif // !KERNEL_ALLOCATOR_H
