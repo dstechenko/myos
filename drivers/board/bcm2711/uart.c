@@ -9,6 +9,8 @@
 
 static SPIN_LOCK_INIT(lock);
 
+// TODO(dstechenko): unify both UARTs into one header and different impls via config
+
 #if CONFIG_ENABLED(CONFIG_BCM2711_UART_USE_MINI)
 #include "uart-mini.h"
 #else  // !CONFIG_ENABLED(CONFIG_BCM2711_UART_USE_MINI)
