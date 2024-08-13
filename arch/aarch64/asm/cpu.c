@@ -33,7 +33,7 @@ enum cpu_mode cpu_get_mode(void) {
   }
 }
 
-bool cpu_is_primary(void) { return cpu_get_core() == CONFIG_BOOT_CPU_PRIMARY_INDEX; }
+bool cpu_is_primary(void) { return cpu_get_core() == CONFIG_CPU_PRIMARY_INDEX; }
 
 void cpu_set_user_pt(const uintptr_t pt) {
   barrier_data_sync();
