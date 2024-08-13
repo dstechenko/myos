@@ -96,6 +96,10 @@ entry_kernel_from_boot:
   // Should not reach it, but if we do - halt.
   b entry_halt_core
 
+// TODO(dstechenko): figure this out
+// balign 2048 for table
+// balign  128 for entries
+
 .align 11
 entry_ex_vector:
   entry_ex entry_syn_invalid_el1t
