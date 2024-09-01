@@ -1,8 +1,8 @@
 // Copyright (C) Dmytro Stechenko
 // License: http://www.gnu.org/licenses/gpl.html
 
-#ifndef KERNEL_ALLOCATOR_H
-#define KERNEL_ALLOCATOR_H
+#ifndef KERNEL_ALLOC_H
+#define KERNEL_ALLOC_H
 
 #include <kernel/bits.h>
 #include <kernel/types.h>
@@ -14,4 +14,4 @@ void *alloc(size_t size, uint8_t flags);
 void *alloc_zero(size_t size, uint8_t flags);
 void alloc_free(const void *ptr);
 
-#endif // !KERNEL_ALLOCATOR_H
+#endif // !KERNEL_ALLOC_H

@@ -8,8 +8,6 @@
 #include <kernel/page.h>
 #include <kernel/ptrs.h>
 
-#if CONFIG_ENABLED(CONFIG_ALLOC_DUMMY)
-
 void *alloc(const size_t size, const uint8_t flags) {
   (void)flags;
   (void)size;
@@ -18,9 +16,9 @@ void *alloc(const size_t size, const uint8_t flags) {
   ASSERT(size <= PAGE_SIZE);
 
   if (flags & ALLOC_USER) {
-    return (void *)page_get_kernel();
+    return (void *)page_get_kernel(/* order = */ 0);
   } else {
-    return (void *)page_get_kernel();
+    return (void *)page_get_kernel(/* order = */ 0);
   }
 }
 
@@ -33,5 +31,3 @@ void *alloc_zero(const size_t size, const uint8_t flags) {
 }
 
 void alloc_free(const void *ptr) { page_put(PTR_TO_ADR(ptr)); }
-
-#endif  // CONFIG_ENABLED(CONFIG_ALLOC_DUMMY))

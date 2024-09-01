@@ -148,7 +148,7 @@ static uintptr_t map_table(uintptr_t *table, size_t shift, uintptr_t vaddr, bool
     ret = table[index] & PAGE_MASK;
   } else {
     *created = true;
-    uintptr_t next_table = page_get();
+    uintptr_t next_table = page_get(/* order = */ 0);
     // TODO(dstechenko): fix memzero on pages
     memzero(phys_to_virt_array(next_table), PAGE_SIZE);
     table[index] = next_table | MMU_TYPE_PAGE_TABLE;
@@ -193,7 +193,7 @@ static void map_kernel_range(const uintptr_t pgd, uintptr_t begin, const uintptr
 }
 
 void page_init_tables(void) {
-  const uintptr_t pgd = page_get();
+  const uintptr_t pgd = page_get(/* order = */ 0);
 
   // TODO(dstechenko): fix memzero on pages
   memzero(phys_to_virt_array(pgd), PAGE_SIZE);
@@ -217,7 +217,7 @@ void page_map_user(struct task *task, struct page page) {
   ASSERT(memory->context);
 
   if (!memory->context->pgd) {
-    memory->context->pgd = page_get();
+    memory->context->pgd = page_get(/* order = */ 0);
     // TODO(dstechenko): fix memzero on pages
     memzero(phys_to_virt_array(memory->context->pgd), PAGE_SIZE);
     memory->kernel_pages[memory->kernel_pages_count++] = phys_to_virt_page(memory->context->pgd);

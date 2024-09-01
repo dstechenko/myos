@@ -68,12 +68,12 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   ASSERT(current_regs);
 
   // TODO(dstechenko): make these pages data
-  page = page_get_user(current, 1 * PAGE_SIZE);
+  page = page_get_user(current, 1 * PAGE_SIZE, /* order = */ 0);
   current->user_stack = (void *)PAGE_SIZE;
   page_clear_cache(page);
 
   // TODO(dstechenko): make these pages executable
-  page = page_get_user(current, 2 * PAGE_SIZE);
+  page = page_get_user(current, 2 * PAGE_SIZE, /* order = */ 0);
   memcpy(ADR_TO_PTR(page), ADR_TO_PTR(text), size);
   page_clear_cache(page);
 

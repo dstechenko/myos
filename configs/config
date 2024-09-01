@@ -23,7 +23,3 @@ TIMER_TICK_FREQ        100
 SCHEDULER_TASKS        64
 SCHEDULER_STACK_SIZE   2048
 SCHEDULER_PRIORITY     1
-
-ALLOC_BUDDY            false
-ALLOC_DUMMY            true
-ALLOC_LINEAR           false
