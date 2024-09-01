@@ -8,6 +8,9 @@
 
 #include <kernel/types.h>
 
+#define PAGE_KERNEL BIT(0)
+#define PAGE_ATOMIC BIT(1)
+
 struct task;
 
 struct page {

@@ -16,7 +16,7 @@ SECTIONS(section_kernel_bss);
 SECTIONS(section_user);
 
 void sections_init(void) {
-  memzero(ADR_TO_PTR(SECTIONS_START(section_kernel_bss)), SECTIONS_LENGTH(section_kernel_bss));
+  memory_zero(ADR_TO_PTR(SECTIONS_START(section_kernel_bss)), SECTIONS_LENGTH(section_kernel_bss));
 }
 
 void sections_debug(void) {

@@ -4,11 +4,11 @@
 #include <asm/cpu.h>
 #include <asm/proc-regs.h>
 
-#include <kernel/alloc.h>
 #include <kernel/assert.h>
 #include <kernel/config.h>
 #include <kernel/error.h>
 #include <kernel/memory-ops.h>
+#include <kernel/memory.h>
 #include <kernel/ptrs.h>
 #include <kernel/task.h>
 
@@ -30,15 +30,15 @@ int task_init(struct task *task) {
   ASSERT(task);
 
   ASSERT(sizeof(struct task_context));
-  task->context = alloc_zero(sizeof(struct task_context), ALLOC_KERNEL);
+  task->context = memory_zalloc(sizeof(struct task_context), PAGE_KERNEL);
   if (!task->context) return -ENOMEM;
 
   ASSERT(sizeof(struct page_context));
-  task->memory.context = alloc_zero(sizeof(struct page_context), ALLOC_KERNEL);
+  task->memory.context = memory_zalloc(sizeof(struct page_context), PAGE_KERNEL);
   if (!task->memory.context) return -ENOMEM;
 
   ASSERT(TASK_STACK_SIZE);
-  task->stack = alloc_zero(TASK_STACK_SIZE, ALLOC_KERNEL);
+  task->stack = memory_zalloc(TASK_STACK_SIZE, PAGE_KERNEL);
   if (!task->stack) return -ENOMEM;
 
   return 0;
@@ -74,7 +74,7 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
 
   // TODO(dstechenko): make these pages executable
   page = page_get_user(current, 2 * PAGE_SIZE, /* order = */ 0);
-  memcpy(ADR_TO_PTR(page), ADR_TO_PTR(text), size);
+  memory_copy(ADR_TO_PTR(page), ADR_TO_PTR(text), size);
   page_clear_cache(page);
 
   current_regs->sp = (uint64_t)current->user_stack + TASK_STACK_SIZE;

@@ -4,7 +4,7 @@
 #include <kernel/assert.h>
 #include <kernel/memory-ops.h>
 
-void *memcpy(void *dst, const void *src, const size_t cnt) {
+void *memory_copy(void *dst, const void *src, const size_t cnt) {
   size_t tmp;
   uint8_t *out = dst;
   const uint8_t *in = src;
@@ -20,7 +20,7 @@ void *memcpy(void *dst, const void *src, const size_t cnt) {
   return dst;
 }
 
-void *memset(void *dst, const uint8_t val, const size_t cnt) {
+void *memory_set(void *dst, const uint8_t val, const size_t cnt) {
   size_t tmp;
   uint8_t *out = dst;
 
@@ -34,4 +34,4 @@ void *memset(void *dst, const uint8_t val, const size_t cnt) {
   return dst;
 }
 
-void *memzero(void *dst, const size_t cnt) { return memset(dst, 0, cnt); }
+void *memory_zero(void *dst, const size_t cnt) { return memory_set(dst, 0, cnt); }
