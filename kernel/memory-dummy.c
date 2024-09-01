@@ -26,4 +26,4 @@ void *memory_zalloc(const size_t size, const pageflags_t flags) {
   return obj;
 }
 
-void memory_free(const void *ptr) { page_put(PTR_TO_ADR(ptr)); }
+void memory_free(const void *ptr) { page_free(PTR_TO_ADR(ptr)); }

@@ -6,6 +6,7 @@
 
 #include <kernel/assert.h>
 #include <kernel/config.h>
+#include <kernel/page.h>
 #include <kernel/ptrs.h>
 #include <kernel/types.h>
 
@@ -21,8 +22,11 @@ struct page_metadata {
 
 static struct page_metadata pages[PAGE_COUNT];
 
-uintptr_t page_get(size_t order) {
+uintptr_t page_alloc(const size_t order, const pageflags_t flags) {
   size_t i;
+
+  (void)order;
+  (void)flags;
 
   for (i = 0; i < sizeof(pages); i++)
     if (!pages[i].used) {
@@ -33,7 +37,7 @@ uintptr_t page_get(size_t order) {
   return PTR_TO_ADR(NULL);
 }
 
-void page_put(const uintptr_t page) {
+void page_free(const uintptr_t page) {
   if (page) pages[PAGE_TO_INDEX(page)].used = false;
 }
 

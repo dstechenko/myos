@@ -8,10 +8,9 @@
 
 #include <kernel/types.h>
 
-ALIAS(pageflags_t, uint64_t);
-
 #define PF_KERNEL BIT(0)
 #define PF_ATOMIC BIT(1)
+ALIAS(pageflags_t, uint64_t);
 
 struct task;
 
@@ -25,8 +24,8 @@ void page_init_sections(void);
 void page_init_tables(void);
 void page_debug(size_t limit);
 
-uintptr_t page_get(size_t order, pageflags_t);
-void page_put(uintptr_t page);
+uintptr_t page_alloc(size_t order, pageflags_t flags);
+void page_free(uintptr_t page);
 void page_reserve_range(uintptr_t begin, uintptr_t end);
 
 uintptr_t page_get_kernel(size_t order);
