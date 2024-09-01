@@ -30,15 +30,15 @@ int task_init(struct task *task) {
   ASSERT(task);
 
   ASSERT(sizeof(struct task_context));
-  task->context = memory_zalloc(sizeof(struct task_context), PAGE_KERNEL);
+  task->context = memory_zalloc(sizeof(struct task_context), PF_KERNEL);
   if (!task->context) return -ENOMEM;
 
   ASSERT(sizeof(struct page_context));
-  task->memory.context = memory_zalloc(sizeof(struct page_context), PAGE_KERNEL);
+  task->memory.context = memory_zalloc(sizeof(struct page_context), PF_KERNEL);
   if (!task->memory.context) return -ENOMEM;
 
   ASSERT(TASK_STACK_SIZE);
-  task->stack = memory_zalloc(TASK_STACK_SIZE, PAGE_KERNEL);
+  task->stack = memory_zalloc(TASK_STACK_SIZE, PF_KERNEL);
   if (!task->stack) return -ENOMEM;
 
   return 0;

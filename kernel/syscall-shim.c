@@ -14,7 +14,7 @@
 
 uintptr_t syscall_alloc_shim(const size_t size) {
   ASSERT(size);
-  return NULL;
+  return (uintptr_t)NULL;
 }
 
 int syscall_clone_shim(void) { return fork_task(PTR_TO_ADR(NULL), FORK_USER); }

@@ -19,7 +19,7 @@ void page_init(void) {
 }
 
 uintptr_t page_get_kernel(const size_t order) {
-  uintptr_t paddr = page_get(order);
+  uintptr_t paddr = page_get(order, PF_KERNEL);
   return paddr ? phys_to_virt(paddr) : paddr;
 }
 
@@ -28,7 +28,7 @@ uintptr_t page_get_user(struct task *task, const uintptr_t vaddr, size_t order) 
   uintptr_t paddr, page;
 
   ASSERT(task);
-  paddr = page_get(order);
+  paddr = page_get(order, PF_KERNEL);
   if (paddr == NULL) return NULL;
 
   page_map_user(task, (struct page){.vaddr = vaddr, .paddr = paddr});

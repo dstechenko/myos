@@ -8,8 +8,8 @@
 #include <kernel/types.h>
 #include <kernel/page.h>
 
-void *memory_alloc(size_t size, uint8_t flags);
-void *memory_zalloc(size_t size, uint8_t flags);
+void *memory_alloc(size_t size, pageflags_t flags);
+void *memory_zalloc(size_t size, pageflags_t flags);
 void memory_free(const void *ptr);
 
 #endif // !KERNEL_MEMORY_H

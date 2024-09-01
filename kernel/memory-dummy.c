@@ -8,7 +8,7 @@
 #include <kernel/page.h>
 #include <kernel/ptrs.h>
 
-void *memory_alloc(const size_t size, const uint8_t flags) {
+void *memory_alloc(const size_t size, const pageflags_t flags) {
   (void)flags;
   (void)size;
 
@@ -18,7 +18,7 @@ void *memory_alloc(const size_t size, const uint8_t flags) {
   return (void *)page_get_kernel(/* order = */ 0);
 }
 
-void *memory_zalloc(const size_t size, const uint8_t flags) {
+void *memory_zalloc(const size_t size, const pageflags_t flags) {
   void *obj = memory_alloc(size, flags);
 
   if (obj) memory_zero(obj, size);

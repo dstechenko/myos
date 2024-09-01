@@ -15,7 +15,7 @@ int fork_task(const uintptr_t pc, const uint8_t flags) {
 
   task_preempt_disable();
   ASSERT(sizeof(struct task));
-  task = memory_zalloc(sizeof(struct task), PAGE_KERNEL);
+  task = memory_zalloc(sizeof(struct task), PF_KERNEL);
   if (!task) return -ENOMEM;
 
   err = fork_task_context(task, pc, flags);
