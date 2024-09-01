@@ -40,4 +40,21 @@ void page_cache_clear(uintptr_t page);
 uintptr_t phys_to_virt(uintptr_t paddr);
 uintptr_t virt_to_phys(uintptr_t vaddr);
 
+/////////////////////////////////////////////////////////////////////////////////////
+
+/* ALIAS(pagestate_t, uint64_t); */
+
+/* struct page { */
+/*   pagestate_t state; */
+/*   atomic32_t refs; */
+/*   struct list_head free; */
+/* }; */
+
+/* void page_init_alloc(void); */
+/* struct page page_alloc(size_t order, pageflags_t flags); */
+/* void page_free(struct page *page); */
+
+/* uintptr_t page_to_phys(struct page *page); */
+/* struct page *phys_to_page(uintptr_t page); */
+
 #endif // !KERNEL_PAGE_H
