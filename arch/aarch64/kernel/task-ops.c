@@ -70,12 +70,12 @@ int task_move_to_user(const uintptr_t pc, const uintptr_t text, const size_t siz
   // TODO(dstechenko): make these pages data
   page = page_get_user(current, 1 * PAGE_SIZE, /* order = */ 0);
   current->user_stack = (void *)PAGE_SIZE;
-  page_clear_cache(page);
+  page_cache_clear(page);
 
   // TODO(dstechenko): make these pages executable
   page = page_get_user(current, 2 * PAGE_SIZE, /* order = */ 0);
   memory_copy(ADR_TO_PTR(page), ADR_TO_PTR(text), size);
-  page_clear_cache(page);
+  page_cache_clear(page);
 
   current_regs->sp = (uint64_t)current->user_stack + TASK_STACK_SIZE;
   current_regs->pc = (uint64_t)(2 * PAGE_SIZE);

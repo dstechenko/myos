@@ -33,12 +33,12 @@ uintptr_t page_get_user(struct task *task, const uintptr_t vaddr, size_t order) 
 
   page_map_user(task, (struct page){.vaddr = vaddr, .paddr = paddr});
   page = phys_to_virt(paddr);
-  page_clear_cache(page);
+  page_cache_clear(page);
 
   return page;
 }
 
-int page_copy_user_all(const struct task *src, struct task *dst) {
+int page_copy_user(const struct task *src, struct task *dst) {
   size_t src_count;
   const struct page *src_pages;
 
@@ -56,7 +56,7 @@ int page_copy_user_all(const struct task *src, struct task *dst) {
   return 0;
 }
 
-void page_clear_cache(const uintptr_t vaddr) {
+void page_cache_clear(const uintptr_t vaddr) {
   for (uintptr_t ptr = vaddr; ptr < vaddr + PAGE_SIZE; ptr += CONFIG_CACHE_LINE) {
     cache_inv_data(ptr);
     cache_inv_inst(ptr);
