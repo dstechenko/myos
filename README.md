@@ -5,6 +5,9 @@ Current:
 - Build armstubs/config out of the project files
 
 Next:
+- Add atomic flag shortcut
+- Add spinlock dmb barrier
+- Add wfe/sev for spinlock yield loops
 - Make kernel fail on NULL access
 - Add SMP capability to task module (locks, per cpu queues)
 - Add irq handlers on each core using local timers
