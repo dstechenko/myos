@@ -18,23 +18,22 @@ void page_init(void) {
   page_init_tables();
 }
 
-uintptr_t page_get_kernel(size_t order) {
+uintptr_t page_get_kernel(const size_t order) {
   uintptr_t paddr = page_get(order);
-
   return paddr ? phys_to_virt(paddr) : paddr;
 }
 
-// TODO(dstecheko): use pages, use last available vaddr for task?
+// TODO(dstecheko): track available pages for a process instead of arg
 uintptr_t page_get_user(struct task *task, const uintptr_t vaddr, size_t order) {
   uintptr_t paddr, page;
 
   ASSERT(task);
-
   paddr = page_get(order);
-  if (paddr) page_map_user(task, (struct page){.vaddr = vaddr, .paddr = paddr});
+  if (paddr == NULL) return NULL;
 
-  page = paddr ? phys_to_virt(paddr) : paddr;
-  if (page) page_clear_cache(page);
+  page_map_user(task, (struct page){.vaddr = vaddr, .paddr = paddr});
+  page = phys_to_virt(paddr);
+  page_clear_cache(page);
 
   return page;
 }
