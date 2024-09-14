@@ -6,20 +6,19 @@ PHYSICAL_MEMORY_END           0
 PHYSICAL_DEVICE_MEMORY_START  0
 PHYSICAL_DEVICE_MEMORY_END    0
 
-DEBUG                  false
-DEBUG_TRAP             false
-LOG_LEVEL              1
+DEBUG                         false
+DEBUG_TRAP                    false
+LOG_LEVEL                     1
 
-SYSTEM_64BIT           false
-SYSTEM_32BIT           false
-SYSTEM_16BIT           false
+SYSTEM_64BIT                  false
+SYSTEM_32BIT                  false
+SYSTEM_16BIT                  false
 
-SMP_ENABLED            true
-MMU_ENABLED            true
-TEST_ON_BOOT           true
+KERNEL_TEST_ON_BOOT           true
+KERNEL_SCHEDULER_TASKS        64
+KERNEL_SCHEDULER_STACK_SIZE   2048
+KERNEL_SCHEDULER_PRIORITY     1
+KERNEL_SMP_ENABLED            true
+KERNEL_MMU_ENABLED            true
 
-TIMER_TICK_FREQ        100
-
-SCHEDULER_TASKS        64
-SCHEDULER_STACK_SIZE   2048
-SCHEDULER_PRIORITY     1
+SYSTEM_TIMER_FREQ             100

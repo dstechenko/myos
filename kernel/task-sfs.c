@@ -9,7 +9,7 @@
 
 #include "task-main.h"
 
-#define TASKS_TOTAL CONFIG_SCHEDULER_TASKS
+#define TASKS_TOTAL CONFIG_KERNEL_SCHEDULER_TASKS
 
 static uint64_t tasks_next_id = 1;
 static struct task tasks_main = INIT_TASK_MAIN(tasks_main);

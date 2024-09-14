@@ -308,7 +308,7 @@ static void test_kernel(void) {
 static void test_user(void) {}
 
 void test_init(void) {
-#if CONFIG_ENABLED(CONFIG_TEST_ON_BOOT)
+#if CONFIG_ENABLED(CONFIG_KERNEL_TEST_ON_BOOT)
   test_drivers();
   test_kernel();
   test_user();

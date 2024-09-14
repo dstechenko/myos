@@ -32,7 +32,7 @@ void uart_pl001_init(void) {
   mbox[4] = 8;
   // UART clock with 4Mhz and cleared turbo.
   mbox[5] = 2;
-  mbox[6] = CONFIG_SYSTEM_CLOCK_FREQ;
+  mbox[6] = CONFIG_BCM2711_SYSTEM_CLOCK_FREQ;
   mbox[7] = 0;
   mbox[8] = MBOX_TAG_LAST;
 
@@ -57,7 +57,7 @@ void uart_pl001_init(void) {
   // Clear pending interrupts.
   mmio_write32(UART_PL001_ICR, 0x7FF);
   // Set integer_reg  = (system_clock_freq / (16 * baudrate)).
-  reg = CONFIG_SYSTEM_CLOCK_FREQ / (16 * CONFIG_UART_BAUDRATE);
+  reg = CONFIG_BCM2711_SYSTEM_CLOCK_FREQ / (16 * CONFIG_BCM2711_UART_BAUDRATE);
   mmio_write32(UART_PL001_IBRD, reg);
   // Set fraction_reg = (fractional_part * 64) + 0.5.
   // Let's try with 0 and if not - revisit to fix.
