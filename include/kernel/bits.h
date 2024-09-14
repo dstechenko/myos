@@ -24,7 +24,4 @@
 #define SELECT_BIT(v, i) (((v) & BIT(i)) >> (i))
 #define SELECT_BITS(v, i, b) (((v) & (b)) >> (i))
 
-#define ENABLE_BIT(v, i) ((v) | BIT(i))
-#define DISABLE_BIT(v, i) ((v) & (~BIT(i)))
-
 #endif // !KERNEL_BITS_H

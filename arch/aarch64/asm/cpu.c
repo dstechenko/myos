@@ -10,15 +10,9 @@
 #include <kernel/task.h>
 #include <kernel/types.h>
 
-uint32_t cpu_get_level(void) {
-  const uint32_t el = registers_get_pstate_el();
-  return REGISTERS_PSTATE_SELECT_EL(el);
-}
+uint32_t cpu_get_level(void) { return REGISTERS_PSTATE_EL(registers_get_pstate_el()); }
 
-uint32_t cpu_get_core(void) {
-  const uint32_t mpidr = registers_get_mpidr_el1();
-  return REGISTERS_MPIDR_SELECT_AFF0(mpidr);
-}
+uint32_t cpu_get_core(void) { return REGISTERS_MPIDR_AFF0(registers_get_mpidr_el1()); }
 
 void cpu_yield(void) { task_schedule(); }
 

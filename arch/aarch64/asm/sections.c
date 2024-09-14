@@ -2,7 +2,6 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <asm/sections.h>
-
 #include <kernel/log.h>
 #include <kernel/memory-ops.h>
 #include <kernel/ptrs.h>

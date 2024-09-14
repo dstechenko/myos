@@ -7,7 +7,7 @@
 
 #include <kernel/types.h>
 
-ALIAS(irqflags_t, uint32_t);
+ALIAS(irqflags_t, unsigned long);
 
 void irq_local_init(void);
 void irq_local_enable(void);
