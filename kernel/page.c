@@ -50,7 +50,7 @@ int page_copy_user(const struct task *src, struct task *dst) {
   for (size_t i = 0; i < src_count; i++) {
     uintptr_t page = page_get_user(dst, src_pages[i].vaddr, /* order = */ 0);
     if (!page) return -ENOMEM;
-    memory_copy(ADR_TO_PTR(page), ADR_TO_PTR(src_pages[i].vaddr), PAGE_SIZE - 1);
+    memcpy(ADR_TO_PTR(page), ADR_TO_PTR(src_pages[i].vaddr), PAGE_SIZE - 1);
   }
 
   return 0;

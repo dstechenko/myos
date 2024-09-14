@@ -10,10 +10,6 @@
 #include <kernel/list.h>
 #include <kernel/types.h>
 
-#define PF_KERNEL BIT(0)
-#define PF_ATOMIC BIT(1)
-ALIAS(pageflags_t, uint64_t);
-
 struct task;
 
 struct page {

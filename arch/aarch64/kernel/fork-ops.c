@@ -2,14 +2,13 @@
 // License: http://www.gnu.org/licenses/gpl.html
 
 #include <asm/proc-regs.h>
-
 #include <kernel/assert.h>
 #include <kernel/config.h>
 #include <kernel/fork.h>
-#include <kernel/memory-ops.h>
 #include <kernel/page.h>
 #include <kernel/task.h>
-#include <kernel/types.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #include "task-context.h"
 
@@ -37,7 +36,7 @@ int fork_task_context(struct task *forked, const uintptr_t pc, const uint8_t fla
     ASSERT(current);
     current_regs = task_get_proc_regs(current);
     ASSERT(current_regs);
-    memory_copy(current_regs, forked_regs, sizeof(struct proc_regs));
+    *forked_regs = *current_regs;
     forked_regs->regs[0] = 0;
     page_copy_user(current, forked);
   }

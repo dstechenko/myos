@@ -3,6 +3,7 @@
 
 #include <asm/delay.h>
 
+#include <kernel/alloc.h>
 #include <kernel/assert.h>
 #include <kernel/fork.h>
 #include <kernel/print.h>
