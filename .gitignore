@@ -1,7 +1,7 @@
 # Copyright (C) Dmytro Stechenko
 # License: http://www.gnu.org/licenses/gpl.html
 
-
+*.code-workspace
 out/
 tools/cc/
 .gdb_history
